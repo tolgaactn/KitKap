@@ -8,7 +8,7 @@ namespace Kitkap.Entity.ViewModels.TransactionViewModels
 {
     public class CreateTransactionViewModel
     {
-        public int BookId { get; set; }
+        public int ProductId { get; set; }
         public string SenderId { get; set; }
         public string ReceiverId { get; set; }
         public DateTime TransactionDate { get; set; }

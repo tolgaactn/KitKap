@@ -33,35 +33,35 @@ namespace KitKap.Service.Services
                 throw new Exception("Gönderici ya da kullanıcı bulunamadı");
             }
 
-            var book = await _uow.GetRepository<Book>().GetByIdAsync(model.BookId);
+            var product = await _uow.GetRepository<Product>().GetByIdAsync(model.ProductId);
 
-            if(book.IsAvailable == false)
+            if(product.IsAvailable == false)
             {
-                throw new Exception("Kitap satılmış");
+                throw new Exception("Ürün satılmış");
             }
 
-            if(book == null)
+            if(product == null)
             {
                 throw new Exception("Kitap bulunamadı");
             }
-            if (book.BookPoint > receiver.Balance)
+            if (product.Price > receiver.Balance)
                 throw new Exception("Alıcı bakiyesi yetersiz");
 
             var transaction = new Transaction
             {
-                BookId = model.BookId,
+                ProductId = model.ProductId,
                 SenderId = model.SenderId,
                 ReceiverId = model.ReceiverId,
                 TransactionDate = model.TransactionDate,
-                Status = "İşlem Başarılı, Kitap Gönderilmeli.",
-                PointTransferred = book.BookPoint,
+                Status = "İşlem Başarılı, ürüm Gönderilmeli.",
+                PointTransferred = product.Price,
                 
                 
             };
-            book.IsAvailable = false;
+            product.IsAvailable = false;
 
-            sender.Balance += book.BookPoint;
-            receiver.Balance -= book.BookPoint;
+            sender.Balance += product.Price;
+            receiver.Balance -= product.Price;
 
             await _uow.GetRepository<Transaction>().CreateAsync(transaction);
 

@@ -10,8 +10,7 @@ namespace Kitkap.Entity.Entities
     public class Transaction
     {
         public int TransactionId { get; set; }
-        public int BookId { get; set; }
-        
+        public int ProductId { get; set; }
         public string SenderId { get; set; }
         public string ReceiverId { get; set; }
         public DateTime TransactionDate { get; set; }
@@ -19,7 +18,7 @@ namespace Kitkap.Entity.Entities
         public int TrackingCode { get; set; }
         public Decimal PointTransferred { get; set; }
 
-        public Book Book { get; set; }
+        public Product Product { get; set; }
 
 
     }

@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_UILayout.cshtml";
+}
+
+<main class="main">
+    @await Component.InvokeAsync("_ProductListBannerComponentPartial")
+
+    @await Component.InvokeAsync("_ProductListBreadcrumbComponentPartial")
+
+    <div class="bg-white">
+        <div class="container">
+            <div class="row main-content">
+                <div class="col-lg-9">
+                    @await Component.InvokeAsync("_ProductListStickyHeaderComponentPartial")<!-- End sticky.header -->
+
+                    @await Component.InvokeAsync("_ProductListProductsComponentPartial")<!-- End .row -->
+                    @await Component.InvokeAsync("_ProductListPaginationComponentPartial")<!-- toolbox-pagination.row -->
+                </div><!-- End .col-lg-9 -->
+
+                <div class="sidebar-overlay"></div>
+                <aside class="sidebar-shop col-lg-3 order-lg-first mobile-sidebar">
+                    <div class="sidebar-wrapper">
+
+                        @await Component.InvokeAsync("_ProductListCategoryFilterComponentPartial")<!-- End category.widget -->
+
+                        @await Component.InvokeAsync("_ProductListPriceFilterComponentPartial")<!-- End price.widget -->
+
+                        @await Component.InvokeAsync("_ProductListDateFilterComponentPartial")<!-- End date.widget -->
+                        @await Component.InvokeAsync("_ProductListSizeFilterComponentPartial")<!-- End size.widget -->
+
+                        @await Component.InvokeAsync("_ProductListFeaturedComponentPartial")<!-- End .widget -->
+                    </div><!-- End .sidebar-wrapper -->
+                </aside><!-- End .col-lg-3 -->
+            </div><!-- End .row -->
+        </div><!-- End .container -->
+    </div>
+</main>
+

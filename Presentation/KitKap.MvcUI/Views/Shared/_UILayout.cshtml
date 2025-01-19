@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+@await Component.InvokeAsync("_HeadUILayoutComponentPartial")
+
+<body class="boxed" style="margin:0px">
+    <div class="page-wrapper">
+        
+        @await Component.InvokeAsync("_TopbarUILayoutComponentPartial")
+        @await Component.InvokeAsync("_NavbarUILayoutComponentPartial")
+        <!-- End .header -->
+
+        <div class="container-fluid">
+            <main role="main" class="main">
+                @RenderBody()
+            </main>
+        </div>
+
+        @await Component.InvokeAsync("_FooterUILayoutComponentPartial")<!-- End .footer -->
+    </div><!-- End .page-wrapper -->
+
+    <div class="loading-overlay">
+        <div class="bounce-loader">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </div>
+
+    <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+    @await Component.InvokeAsync("_MobileUILayoutComponentPartial")<!-- End .mobile-menu-container -->
+
+    @await Component.InvokeAsync("_MobileNavbarUILayoutComponentPartial")
+    
+
+    @await Component.InvokeAsync("_NewsletterPopupUILayoutComponentPartial")<!-- End .newsletter-popup -->
+
+    <a id="scroll-top" href="#top" title="Top" role="button"><i class="icon-angle-up"></i></a>
+
+    @await Component.InvokeAsync("_ScriptUILayoutComponentPartial")
+
+</body>
+
+</html>

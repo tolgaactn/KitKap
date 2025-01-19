@@ -71,7 +71,12 @@ namespace KitKap.DataAccess.Repositories
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task UpdateAsync(T entity)
+		public async Task<T> GetByIdAsync(long id)
+		{
+			return await _dbSet.FindAsync(id);
+		}
+
+		public async Task UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
         }

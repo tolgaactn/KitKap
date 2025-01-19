@@ -21,4 +21,8 @@
     <ProjectReference Include="..\..\..\Infrastructures\KitKap.Service\KitKap.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\kitkap\assets\images\demoes\demo35\products\zoom\" />
+  </ItemGroup>
+
 </Project>

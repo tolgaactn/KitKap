@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewData["Title"] = "ProductDetail";
+    Layout = "~/Views/Shared/_UILayout.cshtml";
+}
+
+<main class="main">
+    
+    @await Component.InvokeAsync("_ProductListBreadcrumbComponentPartial")
+    <div class="bg-white">
+        <div class="container">
+            <div class="row main-content">
+                <div class="col-lg-9 product-sidebar-right">
+                    <div class="product-single-container product-single-default">
+                        <div class="cart-message d-none">
+                            <strong class="single-cart-notice">“The Night Before”</strong>
+                            <span>has been added to your cart.</span>
+                        </div>
+
+                        <div class="row">
+                            @await Component.InvokeAsync("_ProductDetailImagesComponentPartial") <!-- End .product-single-gallery -->
+                            @await Component.InvokeAsync("_ProductDetailsComponentPartial") <!-- End .product-single-details -->
+                        </div><!-- End .row -->
+                    </div><!-- End .product-single-container -->
+                    @await Component.InvokeAsync("_ProductDetailDescriptionsAndInformationComponentPartial")<!-- End .product-single-tabs -->
+                    <!-- End .product-single-tabs -->
+                </div><!-- End .col-lg-9 -->
+
+                <div class="sidebar-overlay"></div>
+                <div class="sidebar-toggle custom-sidebar-toggle"><i class="fas fa-sliders-h"></i></div>
+                @await Component.InvokeAsync("_ProductDetailSidebarComponentPartial") <!-- End .col-md-3 -->
+            </div><!-- End .row -->
+            @await Component.InvokeAsync("_ProductDetailRelatedProductsComponentPartial") <!-- End .products-section -->
+        </div>
+    </div>
+</main><!-- End .main -->

@@ -10,7 +10,9 @@ namespace Kitkap.Entity.Entities
     {
         public int CategoryId { get; set; }
         public string Name { get; set; }
-
-        public List<Book> Books { get; set; }
+        public string Description { get; set; }
+        public int? ParentCategoryId { get; set; }
+        public Category ParentCategory { get; set; }
+        public ICollection<Category> SubCategories { get; set; }
     }
 }

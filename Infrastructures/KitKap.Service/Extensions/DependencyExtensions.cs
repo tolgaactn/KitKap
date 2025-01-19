@@ -78,7 +78,7 @@ namespace KitKap.Service.Extensions
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<IAccountService, AccountService>();

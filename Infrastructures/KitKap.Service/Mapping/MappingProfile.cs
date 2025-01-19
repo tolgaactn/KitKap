@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Kitkap.Entity.Entities;
 using Kitkap.Entity.ViewModels.AddressViewModels;
-using Kitkap.Entity.ViewModels.BookViewModels;
+using Kitkap.Entity.ViewModels.ProductViewModels;
 using Kitkap.Entity.ViewModels.CategoryViewModels;
 using Kitkap.Entity.ViewModels.TransactionViewModels;
 using Kitkap.Entity.ViewModels.UserViewModels;
@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kitkap.Entity.ViewModels.BookViewModels;
+using Kitkap.Entity.ViewModels.ProductViewModels.OtherTypesViewModels;
 
 namespace KitKap.Service.Mapping
 {
@@ -18,12 +20,12 @@ namespace KitKap.Service.Mapping
     {
         public MappingProfile() 
         {
-            CreateMap<Book, RequestBookViewModel>().ReverseMap();
-            CreateMap<Book, CreateBookViewModel>().ReverseMap();
-            CreateMap<Book, UpdateBookViewModel>().ReverseMap();
-            CreateMap<Book, RemoveBookViewModel>().ReverseMap();
-            CreateMap<Book, GetByIdBookViewModel>().ReverseMap();
-            CreateMap<Book, GetByOwnerIdViewModel>().ReverseMap();
+            CreateMap<Product, RequestProductViewModel>().ReverseMap();
+            CreateMap<Product, CreateProductViewModel>().ReverseMap();
+            CreateMap<Product, UpdateProductViewModel>().ReverseMap();
+            CreateMap<Product, RemoveProductViewModel>().ReverseMap();
+            CreateMap<Product, GetByIdProductViewModel>().ReverseMap();
+            CreateMap<Product, GetByOwnerIdViewModel>().ReverseMap();
 
             CreateMap<Category, RequestCategoryViewModel>().ReverseMap();
             CreateMap<Category, CreateCategoryViewModel>().ReverseMap();
@@ -47,6 +49,9 @@ namespace KitKap.Service.Mapping
             CreateMap<AppUser, LoginUserViewModel>().ReverseMap();
             CreateMap<AppUser, RegisterUserViewModel>().ReverseMap();
             CreateMap<AppUser, RequestUserViewModel>().ReverseMap();
+
+            CreateMap<Book, UpdateBookViewModel>().IncludeBase<Product,UpdateProductViewModel>().ReverseMap();
+            
         }
     }
 }
