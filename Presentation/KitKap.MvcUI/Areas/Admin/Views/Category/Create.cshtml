@@ -1,0 +1,69 @@
+﻿@using 
+@model CreateCategoryViewModel
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-content-wrap">
+    <div class="flex items-center flex-wrap justify-between gap20 mb-27">
+        <h3>Kategori Oluştur</h3>
+        <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+            <li>
+                <a href="index.html"><div class="text-tiny">Gösterge Paneli</div></a>
+            </li>
+            <li>
+                <i class="icon-chevron-right"></i>
+            </li>
+            <li>
+                <a href="#"><div class="text-tiny">Kategori</div></a>
+            </li>
+            <li>
+                <i class="icon-chevron-right"></i>
+            </li>
+            <li>
+                <div class="text-tiny">Yeni Kategori</div>
+            </li>
+        </ul>
+    </div>
+    <!-- new-category -->
+    
+
+    <div class="wg-box">
+        <form asp-action="Create" asp-controller="Category" enctype="multipart/form-data" class="form-new-product form-style-1">
+            <fieldset class="name">
+                <div class="body-title">Kategori Adı <span class="tf-color-1">*</span></div>
+                <input class="flex-grow" type="text" placeholder="Kategori Adı" asp-for="Name" class="form-control" aria-required="true" required />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </fieldset>
+
+            <fieldset class="name">
+                <div class="body-title">Açıklama <span class="tf-color-1">*</span></div>
+                <input class="flex-grow" type="text" placeholder="Kategori Açıklaması" asp-for="Description" class="form-control" aria-required="true" required />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </fieldset>
+
+            <fieldset class="category">
+                <div class="body-title">Parent Kategori Seçin (İsteğe Bağlı)</div>
+                <div class="select flex-grow">
+                    <select asp-for="ParentCategoryId" class="form-control">
+                        <option value="">Parent kategori yok</option>
+                        @foreach (var category in Model.Categories)
+                        {
+                            <option value="@category.Value">@category.Text</option>
+                        }
+                    </select>
+                    <span asp-validation-for="ParentCategoryId" class="text-danger"></span>
+                </div>
+            </fieldset>
+
+            <div class="bot">
+                <div></div>
+                <button class="tf-button w208" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- /new-category -->
+</div>
+

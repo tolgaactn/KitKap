@@ -18,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using KitKap.Service.Jwt;
+using Microsoft.AspNetCore.Identity;
 
 namespace KitKap.Service.Extensions
 {

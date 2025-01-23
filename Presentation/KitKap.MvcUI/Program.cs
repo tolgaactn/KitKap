@@ -1,5 +1,6 @@
 using KitKap.DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
+using KitKap.Service.Extensions; // Doðru namespace
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ builder.Services.AddDbContext<KitKapDbContext>(
         options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("ConnStr")
     ));
+
+builder.Services.AddExtensions(builder.Configuration);
 
 var app = builder.Build();
 
@@ -32,9 +35,9 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapControllerRoute(
+ app.MapControllerRoute(
 	  name: "areas",
-	  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+	  pattern: "{area:exists}/{controller=Category}/{action=Index}/{id?}");
 
 
 app.Run();

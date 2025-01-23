@@ -30,7 +30,7 @@ namespace KitKap.Service.Services
 
         public async Task DeleteAsync(RemoveCategoryViewModel model)
         {
-            var category = await _uow.GetRepository<Category>().GetByIdAsync(model.CategoryId);
+            var category = await _uow.GetRepository<Category>().GetByIdAsync(model.Id);
 
             if (category == null)
                 throw new KeyNotFoundException("Bu id'de kategori bulunamadı");
@@ -52,7 +52,7 @@ namespace KitKap.Service.Services
 
         public async Task UpdateAsync(UpdateCategoryViewModel model)
         {
-            var category = await _uow.GetRepository<Category>().GetByIdAsync(model.CategoryId);
+            var category = await _uow.GetRepository<Category>().GetByIdAsync(model.Id);
 
             if (category == null)
                 throw new KeyNotFoundException("Kategori bulunamadı ");

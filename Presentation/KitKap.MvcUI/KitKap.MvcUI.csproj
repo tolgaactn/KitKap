@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -7,17 +7,197 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\atemplate\**" />
+    <Content Remove="wwwroot\atemplate\**" />
+    <EmbeddedResource Remove="wwwroot\atemplate\**" />
+    <None Remove="wwwroot\atemplate\**" />
+  </ItemGroup>
+	
+  <ItemGroup>
     <ProjectReference Include="..\..\Infrastructures\KitKap.Service\KitKap.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\Admin\Views\Shared\Components\_AdminLayoutHeadComponentPartial\" />
     <Folder Include="wwwroot\template\assets\images\demoes\demo35\products\zoom\" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\adminTemplate\css\style.css.map" />
+    <None Include="wwwroot\adminTemplate\icon\demo-files\demo.js" />
+    <None Include="wwwroot\adminTemplate\icon\fonts\icomoon.svg" />
+    <None Include="wwwroot\adminTemplate\images\close.svg" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\apexcharts.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-1.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-10.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-11.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-12.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-13.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-14.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-15.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-16.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-17.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-18.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-19.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-2.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-20.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-21.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-22.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-3.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-4.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-5.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-6.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-7.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-8.js" />
+    <None Include="wwwroot\adminTemplate\js\apexcharts\line-chart-9.js" />
+    <None Include="wwwroot\adminTemplate\js\bootstrap-select.min.js" />
+    <None Include="wwwroot\adminTemplate\js\bootstrap.min.js" />
+    <None Include="wwwroot\adminTemplate\js\carousel.js" />
+    <None Include="wwwroot\adminTemplate\js\jquery.min.js" />
+    <None Include="wwwroot\adminTemplate\js\jvectormap-1.2.2.min.js" />
+    <None Include="wwwroot\adminTemplate\js\jvectormap-us-lcc.js" />
+    <None Include="wwwroot\adminTemplate\js\jvectormap.js" />
+    <None Include="wwwroot\adminTemplate\js\main.js" />
+    <None Include="wwwroot\adminTemplate\js\morris.js" />
+    <None Include="wwwroot\adminTemplate\js\morris.min.js" />
+    <None Include="wwwroot\adminTemplate\js\raphael.min.js" />
+    <None Include="wwwroot\adminTemplate\js\swiper-bundle.min.js" />
+    <None Include="wwwroot\adminTemplate\js\switcher.js" />
+    <None Include="wwwroot\adminTemplate\js\theme-settings.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\jquery.tinymce.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\langs\readme.md" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\advlist\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\anchor\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\autolink\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\autoresize\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\autosave\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\bbcode\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\charmap\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\codesample\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\code\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\colorpicker\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\contextmenu\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\directionality\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\emoticons\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\example\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\example_dependency\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\fullpage\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\fullscreen\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\hr\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\imagetools\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\image\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\importcss\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\insertdatetime\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\layer\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\legacyoutput\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\link\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\lists\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\media\moxieplayer.swf" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\media\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\nonbreaking\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\noneditable\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\pagebreak\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\paste\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\preview\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\print\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\save\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\searchreplace\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\spellchecker\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\tabfocus\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\table\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\template\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\textcolor\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\textpattern\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\visualblocks\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\visualchars\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\plugins\wordcount\plugin.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\skins\lightgray\fonts\tinymce-small.svg" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\skins\lightgray\fonts\tinymce.svg" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\config\bolt\atomic.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\config\bolt\bootstrap-atomic.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\config\bolt\bootstrap-browser.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\config\bolt\bootstrap-demo.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\config\bolt\bootstrap-prod.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\config\bolt\browser.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\config\bolt\demo.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\config\bolt\prod.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\config\dent\depend.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\scratch\compile\bootstrap.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\scratch\compile\theme.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\scratch\inline\theme.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\scratch\inline\theme.raw.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\demo\js\tinymce\inlite\Demo.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\alien\Arr.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\alien\Bookmark.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\alien\Unlink.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\alien\Uuid.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\core\Actions.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\core\Convert.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\core\ElementMatcher.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\core\Layout.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\core\Matcher.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\core\Measure.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\core\PredicateId.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\core\SelectionMatcher.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\core\SkinLoader.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\core\UrlType.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\file\Conversions.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\file\Picker.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\Theme.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\ui\Buttons.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\ui\Forms.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\ui\Panel.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\main\js\tinymce\inlite\ui\Toolbar.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\.eslintrc" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\atomic\alien\ArrTest.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\atomic\alien\UuidTest.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\atomic\core\ConvertTest.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\atomic\core\MatcherTest.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\atomic\core\UrlTypeTest.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\browser\alien\BookmarkTest.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\browser\alien\UnlinkTest.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\browser\core\ActionsTest.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\browser\core\ElementMatcher.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\browser\core\LayoutTest.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\browser\core\MeasureTest.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\browser\core\PredicateIdTest.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\browser\core\SelectionMatcherTest.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\browser\file\ConversionsTest.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\browser\file\SelectionMatcher.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\src\test\js\browser\ThemeTest.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\inlite\theme.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\themes\modern\theme.min.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\tinymce-custom.js" />
+    <None Include="wwwroot\adminTemplate\js\tinymce\tinymce.min.js" />
+    <None Include="wwwroot\adminTemplate\js\zoom.js" />
+    <None Include="wwwroot\adminTemplate\readme" />
+    <None Include="wwwroot\adminTemplate\scss\abstracts\_index.scss" />
+    <None Include="wwwroot\adminTemplate\scss\abstracts\_mixin.scss" />
+    <None Include="wwwroot\adminTemplate\scss\abstracts\_variable.scss" />
+    <None Include="wwwroot\adminTemplate\scss\app.scss" />
+    <None Include="wwwroot\adminTemplate\scss\component\_button.scss" />
+    <None Include="wwwroot\adminTemplate\scss\component\_form.scss" />
+    <None Include="wwwroot\adminTemplate\scss\component\_header.scss" />
+    <None Include="wwwroot\adminTemplate\scss\component\_index.scss" />
+    <None Include="wwwroot\adminTemplate\scss\component\_menu-left.scss" />
+    <None Include="wwwroot\adminTemplate\scss\component\_popup.scss" />
+    <None Include="wwwroot\adminTemplate\scss\component\_product.scss" />
+    <None Include="wwwroot\adminTemplate\scss\component\_sections.scss" />
+    <None Include="wwwroot\adminTemplate\scss\component\_table.scss" />
+    <None Include="wwwroot\adminTemplate\scss\component\_tabs.scss" />
+    <None Include="wwwroot\adminTemplate\scss\widgets.scss" />
+    <None Include="wwwroot\adminTemplate\scss\_darkmode.scss" />
+    <None Include="wwwroot\adminTemplate\scss\_reset.scss" />
+    <None Include="wwwroot\adminTemplate\scss\_responsive.scss" />
+    <None Include="wwwroot\adminTemplate\scss\_theme-settings.scss" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
   </ItemGroup>
 

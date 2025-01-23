@@ -31,6 +31,14 @@ namespace KitKap.DataAccess.Contexts
                 .Property(t => t.PointTransferred)
                 .HasPrecision(8, 2);
 
+            modelBuilder.Entity<Category>().HasData(
+                
+                new Category { Id=1, Name= "Kitap", Description="Kitapların olduğu kategori"},
+                new Category { Id=2, Name= "Teknoloji", Description="Teknolojilerin  olduğu kategori"},
+                new Category { Id=3, Name= "Roman", Description="Romanların olduğu kategori", ParentCategoryId=1}
+
+                );
+
             base.OnModelCreating(modelBuilder);
         }
     }

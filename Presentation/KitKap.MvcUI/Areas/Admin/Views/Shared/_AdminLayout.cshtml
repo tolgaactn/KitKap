@@ -1,13 +1,48 @@
 ﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-</head>
-<body>
-    <div>
-        @RenderBody()
+@await Component.InvokeAsync("_AdminLayoutHeadComponentPartial")
+
+<body class="body">
+
+    <!-- #wrapper -->
+    <div id="wrapper">
+        <!-- #page -->
+        <div id="page" class="">
+            <!-- layout-wrap -->
+            <div class="layout-wrap">
+                <!-- preload -->
+                @await Component.InvokeAsync("_AdminLayoutPreloadComponentPartial")
+                <!-- /preload -->
+                <!-- section-menu-left -->
+                @await Component.InvokeAsync("_AdminLayoutSectionMenuLeftComponentPartial")
+                <!-- /section-menu-left -->
+                <!-- section-content-right -->
+                <div class="section-content-right">
+                    <!-- header-dashboard -->
+                    @await Component.InvokeAsync("_AdminLayoutHeaderComponentPartial")
+                    <!-- /header-dashboard -->
+                    <!-- main-content -->
+                    <div class="main-content">
+                        <!-- main-content-wrap -->
+                        @RenderBody()
+                        <!-- /main-content-wrap -->
+                        <!-- bottom-page -->
+                        @await Component.InvokeAsync("_AdminLayoutBottomComponentPartial")
+                        <!-- /bottom-page -->
+                    </div>
+                    <!-- /main-content -->
+                </div>
+                <!-- /section-content-right -->
+            </div>
+            <!-- /layout-wrap -->
+        </div>
+        <!-- /#page -->
     </div>
+    <!-- /#wrapper -->
+    <!-- Javascript -->
+    @await Component.InvokeAsync("_AdminLayoutJsComponentPartial")
+
 </body>
+
 </html>

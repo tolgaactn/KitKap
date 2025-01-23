@@ -8,10 +8,11 @@ namespace Kitkap.Entity.Entities
 {
     public class Category
     {
-        public int CategoryId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int? ParentCategoryId { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
         public Category ParentCategory { get; set; }
         public ICollection<Category> SubCategories { get; set; }
     }
