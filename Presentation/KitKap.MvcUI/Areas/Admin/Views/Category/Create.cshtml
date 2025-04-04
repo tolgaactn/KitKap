@@ -1,5 +1,4 @@
-﻿@using 
-@model CreateCategoryViewModel
+﻿@model CreateCategoryViewModel
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
@@ -30,16 +29,17 @@
     
 
     <div class="wg-box">
-        <form asp-action="Create" asp-controller="Category" enctype="multipart/form-data" class="form-new-product form-style-1">
+        <form asp-action="Create" asp-controller="Category" asp-area="Admin" method="post" class="form-new-product form-style-1">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <fieldset class="name">
                 <div class="body-title">Kategori Adı <span class="tf-color-1">*</span></div>
-                <input class="flex-grow" type="text" placeholder="Kategori Adı" asp-for="Name" class="form-control" aria-required="true" required />
+                <input type="text" placeholder="Kategori Adı" asp-for="Name" class="form-control" aria-required="true" required />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </fieldset>
 
-            <fieldset class="name">
+            <fieldset class="name" >
                 <div class="body-title">Açıklama <span class="tf-color-1">*</span></div>
-                <input class="flex-grow" type="text" placeholder="Kategori Açıklaması" asp-for="Description" class="form-control" aria-required="true" required />
+                <input type="text" placeholder="Kategori Açıklaması" asp-for="Description" class="form-control" aria-required="true" required />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </fieldset>
 
@@ -48,9 +48,9 @@
                 <div class="select flex-grow">
                     <select asp-for="ParentCategoryId" class="form-control">
                         <option value="">Parent kategori yok</option>
-                        @foreach (var category in Model.Categories)
+                        @foreach (var category in ViewBag.Categories)
                         {
-                            <option value="@category.Value">@category.Text</option>
+                            <option value="@category.Id">@category.Name</option>
                         }
                     </select>
                     <span asp-validation-for="ParentCategoryId" class="text-danger"></span>
@@ -59,10 +59,11 @@
 
             <div class="bot">
                 <div></div>
-                <button class="tf-button w208" type="submit">Save</button>
+                <button class="tf-button w208" type="submit">Kaydet</button>
             </div>
         </form>
     </div>
+
 
     <!-- /new-category -->
 </div>

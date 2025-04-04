@@ -80,5 +80,7 @@ namespace KitKap.DataAccess.Repositories
         {
             _dbSet.Update(entity);
         }
+
+       
     }
 }

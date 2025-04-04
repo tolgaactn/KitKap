@@ -4,17 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kitkap.Entity.Entities
+namespace Kitkap.Service.Dtos.AddressDtos
 {
-    public class Category
+    public class UpdateCategoryDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public bool IsDeleted { get; set; }
         public int? ParentCategoryId { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public Category ParentCategory { get; set; }
-        public ICollection<Category> SubCategories { get; set; }
     }
 }

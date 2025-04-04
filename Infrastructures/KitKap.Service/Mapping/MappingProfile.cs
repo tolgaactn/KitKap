@@ -1,18 +1,12 @@
 ﻿using AutoMapper;
 using Kitkap.Entity.Entities;
-using Kitkap.Entity.ViewModels.AddressViewModels;
-using Kitkap.Entity.ViewModels.ProductViewModels;
-using Kitkap.Entity.ViewModels.CategoryViewModels;
-using Kitkap.Entity.ViewModels.TransactionViewModels;
-using Kitkap.Entity.ViewModels.UserViewModels;
 using KitKap.DataAccess.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Kitkap.Entity.ViewModels.BookViewModels;
-using Kitkap.Entity.ViewModels.ProductViewModels.OtherTypesViewModels;
+using Kitkap.Service.Dtos.AddressDtos;
 
 namespace KitKap.Service.Mapping
 {
@@ -20,37 +14,39 @@ namespace KitKap.Service.Mapping
     {
         public MappingProfile() 
         {
-            CreateMap<Product, RequestProductViewModel>().ReverseMap();
-            CreateMap<Product, CreateProductViewModel>().ReverseMap();
-            CreateMap<Product, UpdateProductViewModel>().ReverseMap();
-            CreateMap<Product, RemoveProductViewModel>().ReverseMap();
-            CreateMap<Product, GetByIdProductViewModel>().ReverseMap();
-            CreateMap<Product, GetByOwnerIdViewModel>().ReverseMap();
+            CreateMap<Product, RequestProductDto>().ReverseMap();
+            CreateMap<Product, CreateProductDto>().ReverseMap();
+            CreateMap<Product, UpdateProductDto>().ReverseMap();
+            CreateMap<Product, RemoveProductDto>().ReverseMap();
+            CreateMap<Product, GetByIdProductDto>().ReverseMap();
+            CreateMap<Product, GetByOwnerIdDto>().ReverseMap();
 
-            CreateMap<Category, RequestCategoryViewModel>().ReverseMap();
-            CreateMap<Category, CreateCategoryViewModel>().ReverseMap();
-            CreateMap<Category, UpdateCategoryViewModel>().ReverseMap();
-            CreateMap<Category, RemoveCategoryViewModel>().ReverseMap();
-            CreateMap<Category, GetByIdCategoryViewModel>().ReverseMap();
+            CreateMap<Category, RequestCategoryDto>().ReverseMap();
+            CreateMap<Category, CreateCategoryDto>().ReverseMap();
+            CreateMap<Category, UpdateCategoryDto>().ReverseMap();
+            CreateMap<Category, RemoveCategoryDto>().ReverseMap();
+            CreateMap<Category, GetByIdCategoryDto>().ReverseMap();
 
-            CreateMap<Transaction, RequestTransactionViewModel>().ReverseMap();
-            CreateMap<Transaction, CreateTransactionViewModel>().ReverseMap();
-            CreateMap<Transaction, UpdateTransactionViewModel>().ReverseMap();
-            CreateMap<Transaction, RemoveTransactionViewModel>().ReverseMap();
-            CreateMap<Transaction, GetByIdTransactionViewModel>().ReverseMap();
+            CreateMap<Transaction, RequestTransactionDto>().ReverseMap();
+            CreateMap<Transaction, CreateTransactionDto>().ReverseMap();
+            CreateMap<Transaction, UpdateTransactionDto>().ReverseMap();
+            CreateMap<Transaction, RemoveTransactionDto>().ReverseMap();
+            CreateMap<Transaction, GetByIdTransactionDto>().ReverseMap();
 
-            CreateMap<Address, RequestAddressViewModel>().ReverseMap();
-            CreateMap<Address, CreateAddressViewModel>().ReverseMap();
-            CreateMap<Address, UpdateAddressViewModel>().ReverseMap();
-            CreateMap<Address, RemoveAddressViewModel>().ReverseMap();
-            CreateMap<Address, GetByIdAddressViewModel>().ReverseMap();
+            CreateMap<Address, RequestAddressDto>().ReverseMap();
+            CreateMap<Address, CreateAddressDto>().ReverseMap();
+            CreateMap<Address, UpdateAddressDto>().ReverseMap();
+            CreateMap<Address, RemoveAddressDto>().ReverseMap();
+            CreateMap<Address, GetByIdAddressDto>().ReverseMap();
 
-            CreateMap<AppUser, GetByIdUserViewModel>().ReverseMap();
-            CreateMap<AppUser, LoginUserViewModel>().ReverseMap();
-            CreateMap<AppUser, RegisterUserViewModel>().ReverseMap();
-            CreateMap<AppUser, RequestUserViewModel>().ReverseMap();
+            CreateMap<AppUser, GetByIdUserDto>().ReverseMap();
+            CreateMap<AppUser, LoginUserDto>().ReverseMap();
+            CreateMap<AppUser, RegisterUserDto>().ReverseMap();
+            CreateMap<AppUser, RequestUserDto>().ReverseMap();
 
-            CreateMap<Book, UpdateBookViewModel>().IncludeBase<Product,UpdateProductViewModel>().ReverseMap();
+            CreateMap<Book, UpdateBookDto>().IncludeBase<Product,UpdateProductDto>().ReverseMap();
+
+            
             
         }
     }
