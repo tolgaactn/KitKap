@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using KitKap.Service.Jwt;
 using Microsoft.AspNetCore.Identity;
 using KitKap.Service.Services.Concretes;
+using KitKap.Service.Services.Interfaces;
 
 namespace KitKap.Service.Extensions
 {
@@ -85,6 +86,7 @@ namespace KitKap.Service.Extensions
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITransactionService, TransactionService>();
+            services.AddScoped<IAboutService, AboutService>();
            // services.AddScoped(typeof(IAccountService), typeof(AccountService));
 
             services.AddAutoMapper(typeof(MappingProfile));

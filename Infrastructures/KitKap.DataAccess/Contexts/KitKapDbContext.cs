@@ -19,13 +19,12 @@ namespace KitKap.DataAccess.Contexts
         public DbSet<Category> Categories { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductImage> ProductImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>()
-                    .Property(p => p.Price)
-                    .HasPrecision(6, 2); // 18 toplam basamak, 2 ondalıklı basamak
+       .Property(p => p.Price)
+       .HasPrecision(6, 2); // 18 toplam basamak, 2 ondalıklı basamak
 
             // PointTransferred için precision ve scale belirleme
             modelBuilder.Entity<Transaction>()
@@ -44,6 +43,10 @@ namespace KitKap.DataAccess.Contexts
                 new Category { Id=2, Name= "Teknoloji", Description="Teknolojilerin  olduğu kategori"},
                 new Category { Id=3, Name= "Roman", Description="Romanların olduğu kategori", ParentCategoryId=1}
 
+                );
+            modelBuilder.Entity<About>().HasData(
+
+                new About { AboutId = 1, Description = "as", Address = "dsd", Email = "sdas", Phone = "sdwq" }
                 );
 
             base.OnModelCreating(modelBuilder);

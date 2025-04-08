@@ -42,10 +42,10 @@ namespace KitKap.Service.Services
             await _uow.CommitAsync();
         }
 
-        public async Task<IEnumerable<RequestCategoryDto>> GetAllCategories()
+        public async Task<IEnumerable<ResultCategoryDto>> GetAllCategories()
         {
             var list = await _uow.GetRepository<Category>().GetAllAsync();
-            return _mapper.Map<List<RequestCategoryDto>>(list);
+            return _mapper.Map<List<ResultCategoryDto>>(list);
         }
 
         public async Task<GetByIdCategoryDto> GetByIdCategory(int id)

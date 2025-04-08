@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kitkap.Service.Dtos.AddressDtos;
+using KitKap.Service.Dtos.AboutDtos;
 
 namespace KitKap.Service.Mapping
 {
@@ -21,7 +22,7 @@ namespace KitKap.Service.Mapping
             CreateMap<Product, GetByIdProductDto>().ReverseMap();
             CreateMap<Product, GetByOwnerIdDto>().ReverseMap();
 
-            CreateMap<Category, RequestCategoryDto>().ReverseMap();
+            CreateMap<Category, ResultCategoryDto>().ReverseMap();
             CreateMap<Category, CreateCategoryDto>().ReverseMap();
             CreateMap<Category, UpdateCategoryDto>().ReverseMap();
             CreateMap<Category, RemoveCategoryDto>().ReverseMap();
@@ -43,6 +44,11 @@ namespace KitKap.Service.Mapping
             CreateMap<AppUser, LoginUserDto>().ReverseMap();
             CreateMap<AppUser, RegisterUserDto>().ReverseMap();
             CreateMap<AppUser, RequestUserDto>().ReverseMap();
+
+            CreateMap<About, ResultAboutDto>().ReverseMap();
+            CreateMap<About, CreateAboutDto>().ReverseMap();
+            CreateMap<About, UpdateAboutDto>().ReverseMap();
+            CreateMap<About, GetByIdAboutDto>().ReverseMap();
 
             CreateMap<Book, UpdateBookDto>().IncludeBase<Product,UpdateProductDto>().ReverseMap();
 

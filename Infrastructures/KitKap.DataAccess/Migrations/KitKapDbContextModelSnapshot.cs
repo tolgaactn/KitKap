@@ -106,6 +106,45 @@ namespace KitKap.DataAccess.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Kitkap.Entity.Entities.About", b =>
+                {
+                    b.Property<int>("AboutId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AboutId"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AboutId");
+
+                    b.ToTable("Abouts");
+
+                    b.HasData(
+                        new
+                        {
+                            AboutId = 1,
+                            Address = "dsd",
+                            Description = "as",
+                            Email = "sdas",
+                            Phone = "sdwq"
+                        });
+                });
+
             modelBuilder.Entity("Kitkap.Entity.Entities.Address", b =>
                 {
                     b.Property<int>("AddressId")

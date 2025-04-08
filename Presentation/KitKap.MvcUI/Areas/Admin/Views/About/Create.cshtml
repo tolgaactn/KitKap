@@ -1,0 +1,68 @@
+﻿@model CreateAboutViewModel
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-content-wrap">
+    <div class="flex items-center flex-wrap justify-between gap20 mb-27">
+        <h3>Hakkında Oluştur</h3>
+        <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+            <li>
+                <a href="index.html"><div class="text-tiny">Gösterge Paneli</div></a>
+            </li>
+            <li>
+                <i class="icon-chevron-right"></i>
+            </li>
+            <li>
+                <a href="#"><div class="text-tiny">Hakkında</div></a>
+            </li>
+            <li>
+                <i class="icon-chevron-right"></i>
+            </li>
+            <li>
+                <div class="text-tiny">Yeni Hakkında</div>
+            </li>
+        </ul>
+    </div>
+    <!-- new-category -->
+
+
+    <div class="wg-box">
+        <form asp-action="Create" asp-controller="About" asp-area="Admin" method="post" class="form-new-product form-style-1">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <fieldset class="name">
+                <div class="body-title">Açıklama <span class="tf-color-1">*</span></div>
+                <input type="text" placeholder="Description" asp-for="Description" class="form-control" aria-required="true" required />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </fieldset>
+
+            <fieldset class="name">
+                <div class="body-title">Adres <span class="tf-color-1">*</span></div>
+                <input type="text" placeholder="Adres" asp-for="Address" class="form-control" aria-required="true" required />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </fieldset>
+
+            <fieldset class="name">
+                <div class="body-title">Email <span class="tf-color-1">*</span></div>
+                <input type="text" placeholder="Email" asp-for="Email" class="form-control" aria-required="true" required />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </fieldset>
+
+            <fieldset class="name">
+                <div class="body-title">Telefon <span class="tf-color-1">*</span></div>
+                <input type="text" placeholder="Telefon" asp-for="Phone" class="form-control" aria-required="true" required />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </fieldset>
+
+            <div class="bot">
+                <div></div>
+                <button class="tf-button w208" type="submit">Kaydet</button>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- /new-category -->
+</div>
+
