@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KitKap.DataAccess.Migrations
 {
     [DbContext(typeof(KitKapDbContext))]
-    [Migration("20250122134103_Initial")]
+    [Migration("20250408162618_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -132,6 +132,9 @@ namespace KitKap.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PostCode")
                         .HasColumnType("int");
 
@@ -152,9 +155,15 @@ namespace KitKap.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -168,6 +177,33 @@ namespace KitKap.DataAccess.Migrations
                     b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(2025, 4, 8, 19, 26, 17, 823, DateTimeKind.Local).AddTicks(9577),
+                            Description = "Kitapların olduğu kategori",
+                            IsDeleted = false,
+                            Name = "Kitap"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTime(2025, 4, 8, 19, 26, 17, 823, DateTimeKind.Local).AddTicks(9593),
+                            Description = "Teknolojilerin  olduğu kategori",
+                            IsDeleted = false,
+                            Name = "Teknoloji"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedDate = new DateTime(2025, 4, 8, 19, 26, 17, 823, DateTimeKind.Local).AddTicks(9595),
+                            Description = "Romanların olduğu kategori",
+                            IsDeleted = false,
+                            Name = "Roman",
+                            ParentCategoryId = 1
+                        });
                 });
 
             modelBuilder.Entity("Kitkap.Entity.Entities.Product", b =>
@@ -181,6 +217,12 @@ namespace KitKap.DataAccess.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -189,9 +231,6 @@ namespace KitKap.DataAccess.Migrations
                         .IsRequired()
                         .HasMaxLength(8)
                         .HasColumnType("nvarchar(8)");
-
-                    b.Property<bool>("IsAvailable")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -202,18 +241,26 @@ namespace KitKap.DataAccess.Migrations
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Price")
                         .HasPrecision(6, 2)
                         .HasColumnType("decimal(6,2)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<int>("Stock")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Products");
 
@@ -224,27 +271,39 @@ namespace KitKap.DataAccess.Migrations
 
             modelBuilder.Entity("Kitkap.Entity.Entities.ProductImage", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("AltText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
-                    b.Property<long>("ProductId1")
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("ProductId")
                         .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId1");
+                    b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImage");
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("Kitkap.Entity.Entities.Transaction", b =>
@@ -427,9 +486,6 @@ namespace KitKap.DataAccess.Migrations
                 {
                     b.HasBaseType("Kitkap.Entity.Entities.Product");
 
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Author")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -447,8 +503,6 @@ namespace KitKap.DataAccess.Migrations
 
                     b.Property<DateTime>("PublicationDate")
                         .HasColumnType("datetime2");
-
-                    b.HasIndex("AppUserId");
 
                     b.HasDiscriminator().HasValue("Book");
                 });
@@ -479,6 +533,12 @@ namespace KitKap.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("KitKap.DataAccess.Identity.AppUser", null)
+                        .WithMany("Products")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
                 });
 
@@ -486,7 +546,7 @@ namespace KitKap.DataAccess.Migrations
                 {
                     b.HasOne("Kitkap.Entity.Entities.Product", "Product")
                         .WithMany("ProductImages")
-                        .HasForeignKey("ProductId1")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -555,16 +615,9 @@ namespace KitKap.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Kitkap.Entity.Entities.Book", b =>
-                {
-                    b.HasOne("KitKap.DataAccess.Identity.AppUser", null)
-                        .WithMany("Books")
-                        .HasForeignKey("AppUserId");
-                });
-
             modelBuilder.Entity("KitKap.DataAccess.Identity.AppUser", b =>
                 {
-                    b.Navigation("Books");
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Kitkap.Entity.Entities.Category", b =>

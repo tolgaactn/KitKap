@@ -6,6 +6,7 @@ using Kitkap.Service.Dtos.AddressDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,7 +41,13 @@ namespace KitKap.Service.Services
 
         public async Task<IEnumerable<RequestProductDto>> GetAllProducts()
         {
-            var list = await _uow.GetRepository<Product>().GetAllAsync();
+            var list = await _uow.GetRepository<Product>().GetAll(
+         includes: new Expression<Func<Product, object>>[]
+         {
+            p => p.ProductImages
+         }
+     );
+
             return _mapper.Map<List<RequestProductDto>>(list);
         }
 
@@ -73,7 +80,7 @@ namespace KitKap.Service.Services
             product.Description = model.Description;
             product.Price = model.Price;
             product.Stock = model.Stock;
-            product.IsAvailable = model.IsAvailable;
+            product.Status = model.Status;
             product.OwnerId = model.OwnerId;
             product.CategoryId = model.CategoryId;
             product.IsDeleted = model.IsDeleted;

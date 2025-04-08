@@ -15,7 +15,7 @@ namespace KitKap.DataAccess.Identity
         public int? AddressId { get; set; }
         public Address Address { get; set; }
         public decimal Balance {  get; set; }
-        public List<Book> Books { get; set; }
+        public List<Product> Products { get; set; }
 
 
         public bool IsActived { get; set; } = true;

@@ -35,7 +35,7 @@ namespace KitKap.Service.Services.Concretes
 
             var product = await _uow.GetRepository<Product>().GetByIdAsync(model.ProductId);
 
-            if (product.IsAvailable == false)
+            if (product.Status == 0)
             {
                 throw new Exception("Ürün satılmış");
             }
@@ -58,7 +58,7 @@ namespace KitKap.Service.Services.Concretes
 
 
             };
-            product.IsAvailable = false;
+            product.Status = 0;
 
             sender.Balance += product.Price;
             receiver.Balance -= product.Price;

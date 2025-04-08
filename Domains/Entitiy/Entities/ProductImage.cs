@@ -8,10 +8,14 @@ namespace Kitkap.Entity.Entities
 {
 	public class ProductImage
 	{
-		public int Id { get; set; }
+		public long Id { get; set; }
 		public string ImageUrl { get; set; }
-
-		public int ProductId { get; set; }
-		public Product Product { get; set; }
+		public long ProductId { get; set; }
+        public string? AltText { get; set; }
+        public bool IsMain { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public Product Product { get; set; }
 	}
 }
