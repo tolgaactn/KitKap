@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KitKap.DataAccess.Migrations
 {
     [DbContext(typeof(KitKapDbContext))]
-<<<<<<<< HEAD:Infrastructures/KitKap.DataAccess/Migrations/20250408162618_Initial.Designer.cs
-    [Migration("20250408162618_Initial")]
-    partial class Initial
-========
-    [Migration("20250407164345_AddedAbout")]
-    partial class AddedAbout
->>>>>>>> 20afc95148b2254c9e596e0bf44cbbdcbaab4efd:Infrastructures/KitKap.DataAccess/Migrations/20250407164345_AddedAbout.Designer.cs
+    [Migration("20250408185544_AfterGithub")]
+    partial class AfterGithub
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -226,11 +221,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-<<<<<<<< HEAD:Infrastructures/KitKap.DataAccess/Migrations/20250408162618_Initial.Designer.cs
-                            CreatedDate = new DateTime(2025, 4, 8, 19, 26, 17, 823, DateTimeKind.Local).AddTicks(9577),
-========
-                            CreatedDate = new DateTime(2025, 4, 7, 19, 43, 44, 591, DateTimeKind.Local).AddTicks(9337),
->>>>>>>> 20afc95148b2254c9e596e0bf44cbbdcbaab4efd:Infrastructures/KitKap.DataAccess/Migrations/20250407164345_AddedAbout.Designer.cs
+                            CreatedDate = new DateTime(2025, 4, 8, 21, 55, 43, 327, DateTimeKind.Local).AddTicks(4472),
                             Description = "Kitapların olduğu kategori",
                             IsDeleted = false,
                             Name = "Kitap"
@@ -238,11 +229,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 2,
-<<<<<<<< HEAD:Infrastructures/KitKap.DataAccess/Migrations/20250408162618_Initial.Designer.cs
-                            CreatedDate = new DateTime(2025, 4, 8, 19, 26, 17, 823, DateTimeKind.Local).AddTicks(9593),
-========
-                            CreatedDate = new DateTime(2025, 4, 7, 19, 43, 44, 591, DateTimeKind.Local).AddTicks(9358),
->>>>>>>> 20afc95148b2254c9e596e0bf44cbbdcbaab4efd:Infrastructures/KitKap.DataAccess/Migrations/20250407164345_AddedAbout.Designer.cs
+                            CreatedDate = new DateTime(2025, 4, 8, 21, 55, 43, 327, DateTimeKind.Local).AddTicks(4483),
                             Description = "Teknolojilerin  olduğu kategori",
                             IsDeleted = false,
                             Name = "Teknoloji"
@@ -250,11 +237,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 3,
-<<<<<<<< HEAD:Infrastructures/KitKap.DataAccess/Migrations/20250408162618_Initial.Designer.cs
-                            CreatedDate = new DateTime(2025, 4, 8, 19, 26, 17, 823, DateTimeKind.Local).AddTicks(9595),
-========
-                            CreatedDate = new DateTime(2025, 4, 7, 19, 43, 44, 591, DateTimeKind.Local).AddTicks(9359),
->>>>>>>> 20afc95148b2254c9e596e0bf44cbbdcbaab4efd:Infrastructures/KitKap.DataAccess/Migrations/20250407164345_AddedAbout.Designer.cs
+                            CreatedDate = new DateTime(2025, 4, 8, 21, 55, 43, 327, DateTimeKind.Local).AddTicks(4484),
                             Description = "Romanların olduğu kategori",
                             IsDeleted = false,
                             Name = "Roman",

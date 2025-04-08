@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KitKap.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedAbout : Migration
+    public partial class AfterGithub : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -318,27 +318,18 @@ namespace KitKap.DataAccess.Migrations
                 });
 
             migrationBuilder.InsertData(
-<<<<<<<< HEAD:Infrastructures/KitKap.DataAccess/Migrations/20250408162618_Initial.cs
-========
                 table: "Abouts",
                 columns: new[] { "AboutId", "Address", "Description", "Email", "Phone" },
                 values: new object[] { 1, "dsd", "as", "sdas", "sdwq" });
 
             migrationBuilder.InsertData(
->>>>>>>> 20afc95148b2254c9e596e0bf44cbbdcbaab4efd:Infrastructures/KitKap.DataAccess/Migrations/20250407164345_AddedAbout.cs
                 table: "Categories",
                 columns: new[] { "Id", "CreatedDate", "Description", "IsDeleted", "Name", "ParentCategoryId" },
                 values: new object[,]
                 {
-<<<<<<<< HEAD:Infrastructures/KitKap.DataAccess/Migrations/20250408162618_Initial.cs
-                    { 1, new DateTime(2025, 4, 8, 19, 26, 17, 823, DateTimeKind.Local).AddTicks(9577), "Kitapların olduğu kategori", false, "Kitap", null },
-                    { 2, new DateTime(2025, 4, 8, 19, 26, 17, 823, DateTimeKind.Local).AddTicks(9593), "Teknolojilerin  olduğu kategori", false, "Teknoloji", null },
-                    { 3, new DateTime(2025, 4, 8, 19, 26, 17, 823, DateTimeKind.Local).AddTicks(9595), "Romanların olduğu kategori", false, "Roman", 1 }
-========
-                    { 1, new DateTime(2025, 4, 7, 19, 43, 44, 591, DateTimeKind.Local).AddTicks(9337), "Kitapların olduğu kategori", false, "Kitap", null },
-                    { 2, new DateTime(2025, 4, 7, 19, 43, 44, 591, DateTimeKind.Local).AddTicks(9358), "Teknolojilerin  olduğu kategori", false, "Teknoloji", null },
-                    { 3, new DateTime(2025, 4, 7, 19, 43, 44, 591, DateTimeKind.Local).AddTicks(9359), "Romanların olduğu kategori", false, "Roman", 1 }
->>>>>>>> 20afc95148b2254c9e596e0bf44cbbdcbaab4efd:Infrastructures/KitKap.DataAccess/Migrations/20250407164345_AddedAbout.cs
+                    { 1, new DateTime(2025, 4, 8, 21, 55, 43, 327, DateTimeKind.Local).AddTicks(4472), "Kitapların olduğu kategori", false, "Kitap", null },
+                    { 2, new DateTime(2025, 4, 8, 21, 55, 43, 327, DateTimeKind.Local).AddTicks(4483), "Teknolojilerin  olduğu kategori", false, "Teknoloji", null },
+                    { 3, new DateTime(2025, 4, 8, 21, 55, 43, 327, DateTimeKind.Local).AddTicks(4484), "Romanların olduğu kategori", false, "Roman", 1 }
                 });
 
             migrationBuilder.CreateIndex(

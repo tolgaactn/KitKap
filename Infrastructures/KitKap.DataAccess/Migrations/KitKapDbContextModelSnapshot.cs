@@ -218,7 +218,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2025, 4, 8, 19, 26, 17, 823, DateTimeKind.Local).AddTicks(9577),
+                            CreatedDate = new DateTime(2025, 4, 8, 21, 55, 43, 327, DateTimeKind.Local).AddTicks(4472),
                             Description = "Kitapların olduğu kategori",
                             IsDeleted = false,
                             Name = "Kitap"
@@ -226,7 +226,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2025, 4, 8, 19, 26, 17, 823, DateTimeKind.Local).AddTicks(9593),
+                            CreatedDate = new DateTime(2025, 4, 8, 21, 55, 43, 327, DateTimeKind.Local).AddTicks(4483),
                             Description = "Teknolojilerin  olduğu kategori",
                             IsDeleted = false,
                             Name = "Teknoloji"
@@ -234,7 +234,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2025, 4, 8, 19, 26, 17, 823, DateTimeKind.Local).AddTicks(9595),
+                            CreatedDate = new DateTime(2025, 4, 8, 21, 55, 43, 327, DateTimeKind.Local).AddTicks(4484),
                             Description = "Romanların olduğu kategori",
                             IsDeleted = false,
                             Name = "Roman",

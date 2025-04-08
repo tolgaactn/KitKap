@@ -19,12 +19,16 @@ namespace KitKap.DataAccess.Contexts
         public DbSet<Category> Categories { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<About> Abouts { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>()
-       .Property(p => p.Price)
-       .HasPrecision(6, 2); // 18 toplam basamak, 2 ondalıklı basamak
+                    .Property(p => p.Price)
+                    .HasPrecision(6, 2); // 18 toplam basamak, 2 ondalıklı basamak
 
             // PointTransferred için precision ve scale belirleme
             modelBuilder.Entity<Transaction>()
