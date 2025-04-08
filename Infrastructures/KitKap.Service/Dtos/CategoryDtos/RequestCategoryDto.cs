@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kitkap.Service.Dtos.AddressDtos
 {
-    public class RequestCategoryDto
+    public class ResultCategoryDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

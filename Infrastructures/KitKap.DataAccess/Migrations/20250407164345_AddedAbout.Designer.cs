@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KitKap.DataAccess.Migrations
 {
     [DbContext(typeof(KitKapDbContext))]
-    [Migration("20250122134103_Initial")]
-    partial class Initial
+    [Migration("20250407164345_AddedAbout")]
+    partial class AddedAbout
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -109,6 +109,45 @@ namespace KitKap.DataAccess.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Kitkap.Entity.Entities.About", b =>
+                {
+                    b.Property<int>("AboutId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AboutId"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AboutId");
+
+                    b.ToTable("Abouts");
+
+                    b.HasData(
+                        new
+                        {
+                            AboutId = 1,
+                            Address = "dsd",
+                            Description = "as",
+                            Email = "sdas",
+                            Phone = "sdwq"
+                        });
+                });
+
             modelBuilder.Entity("Kitkap.Entity.Entities.Address", b =>
                 {
                     b.Property<int>("AddressId")
@@ -132,6 +171,9 @@ namespace KitKap.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PostCode")
                         .HasColumnType("int");
 
@@ -152,9 +194,15 @@ namespace KitKap.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -168,6 +216,33 @@ namespace KitKap.DataAccess.Migrations
                     b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(2025, 4, 7, 19, 43, 44, 591, DateTimeKind.Local).AddTicks(9337),
+                            Description = "Kitapların olduğu kategori",
+                            IsDeleted = false,
+                            Name = "Kitap"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTime(2025, 4, 7, 19, 43, 44, 591, DateTimeKind.Local).AddTicks(9358),
+                            Description = "Teknolojilerin  olduğu kategori",
+                            IsDeleted = false,
+                            Name = "Teknoloji"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedDate = new DateTime(2025, 4, 7, 19, 43, 44, 591, DateTimeKind.Local).AddTicks(9359),
+                            Description = "Romanların olduğu kategori",
+                            IsDeleted = false,
+                            Name = "Roman",
+                            ParentCategoryId = 1
+                        });
                 });
 
             modelBuilder.Entity("Kitkap.Entity.Entities.Product", b =>

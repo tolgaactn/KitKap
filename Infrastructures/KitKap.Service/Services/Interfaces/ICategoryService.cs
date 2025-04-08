@@ -9,7 +9,7 @@ namespace Kitkap.Entity.Services
 {
     public interface ICategoryService
     {
-        Task<IEnumerable<RequestCategoryDto>> GetAllCategories();
+        Task<IEnumerable<ResultCategoryDto>> GetAllCategories();
         Task<GetByIdCategoryDto> GetByIdCategory(int id);
         Task AddAsync(CreateCategoryDto model);
         Task DeleteAsync(int id);

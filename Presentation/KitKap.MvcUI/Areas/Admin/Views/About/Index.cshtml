@@ -1,0 +1,71 @@
+﻿@model IEnumerable<AboutViewModel>
+
+@{
+    ViewData["Title"] = "Hakkında Listesi";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-content-inner">
+    <!-- main-content-wrap -->
+    <div class="main-content-wrap">
+        <div class="flex items-center flex-wrap justify-between gap20 mb-27">
+            <h3>@ViewData["Title"]</h3>
+            <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+                <li>
+                    <a href="/admin/home/index"><div class="text-tiny">Anasayfa</div></a>
+                </li>
+                <li>
+                    <i class="icon-chevron-right"></i>
+                </li>
+                <li>
+                    <a href="#"><div class="text-tiny">Kategoriler</div></a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="wg-box">
+            <div class="flex items-center justify-between gap10 flex-wrap">
+                <a class="tf-button style-1 w208" href="/admin/About/Create"><i class="icon-plus"></i>Yeni Kategori Ekle</a>
+            </div>
+            <div class="wg-table table-all-category">
+                <ul class="table-title flex gap20 mb-14">
+                    <li><div class="body-title">Kategori</div></li>
+                    <li><div class="body-title">Üst - Kategori</div></li>
+                    <li><div class="body-title">Açıklama</div></li>
+                    <li><div class="body-title">Aktif-Pasif</div></li>
+                    <li><div class="body-title">Oluşturma Tarihi</div></li>
+                    <li><div class="body-title">Eylem</div></li>
+                </ul>
+
+                <ul class="flex flex-column">
+                    @foreach (var about in Model)
+                    {
+                        <li class="product-item gap14">
+                            <div class="flex items-center justify-between gap20 flex-grow">
+                                <div class="name">
+                                    <a href="#" class="body-title-2">@about.Address</a>
+                                </div>
+                                <div class="body-text">@about.AboutId</div>
+                                <div class="body-text">@about.Address</div>
+                                <div class="body-text">@about.Email</div>
+                                <div class="body-text">@about.Phone</div>
+                                <div class="list-icon-function">
+                                    <a asp-controller="Category" asp-action="Edit" asp-route-id="@about.AboutId" class="item edit">
+                                        <i class="icon-edit-3"></i>
+                                    </a>
+                                    <form method="post" asp-action="Delete" asp-controller="Category" asp-area="Admin" asp-route-id="@about.AboutId" onsubmit="return confirm('Bu kategoriyi silmek istediğinizden emin misiniz?');">
+
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="icon-trash-2"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

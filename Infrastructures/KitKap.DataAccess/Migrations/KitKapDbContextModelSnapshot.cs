@@ -106,6 +106,45 @@ namespace KitKap.DataAccess.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Kitkap.Entity.Entities.About", b =>
+                {
+                    b.Property<int>("AboutId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AboutId"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AboutId");
+
+                    b.ToTable("Abouts");
+
+                    b.HasData(
+                        new
+                        {
+                            AboutId = 1,
+                            Address = "dsd",
+                            Description = "as",
+                            Email = "sdas",
+                            Phone = "sdwq"
+                        });
+                });
+
             modelBuilder.Entity("Kitkap.Entity.Entities.Address", b =>
                 {
                     b.Property<int>("AddressId")
@@ -179,7 +218,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2025, 1, 26, 16, 50, 4, 4, DateTimeKind.Local).AddTicks(4983),
+                            CreatedDate = new DateTime(2025, 4, 7, 19, 43, 44, 591, DateTimeKind.Local).AddTicks(9337),
                             Description = "Kitapların olduğu kategori",
                             IsDeleted = false,
                             Name = "Kitap"
@@ -187,7 +226,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2025, 1, 26, 16, 50, 4, 4, DateTimeKind.Local).AddTicks(4999),
+                            CreatedDate = new DateTime(2025, 4, 7, 19, 43, 44, 591, DateTimeKind.Local).AddTicks(9358),
                             Description = "Teknolojilerin  olduğu kategori",
                             IsDeleted = false,
                             Name = "Teknoloji"
@@ -195,7 +234,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2025, 1, 26, 16, 50, 4, 4, DateTimeKind.Local).AddTicks(5000),
+                            CreatedDate = new DateTime(2025, 4, 7, 19, 43, 44, 591, DateTimeKind.Local).AddTicks(9359),
                             Description = "Romanların olduğu kategori",
                             IsDeleted = false,
                             Name = "Roman",

@@ -19,6 +19,8 @@ namespace KitKap.DataAccess.Contexts
         public DbSet<Category> Categories { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<About> Abouts { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +39,10 @@ namespace KitKap.DataAccess.Contexts
                 new Category { Id=2, Name= "Teknoloji", Description="Teknolojilerin  olduğu kategori"},
                 new Category { Id=3, Name= "Roman", Description="Romanların olduğu kategori", ParentCategoryId=1}
 
+                );
+            modelBuilder.Entity<About>().HasData(
+
+                new About { AboutId = 1, Description = "as", Address = "dsd", Email = "sdas", Phone = "sdwq" }
                 );
 
             base.OnModelCreating(modelBuilder);
