@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KitKap.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AfterGithub : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -327,9 +327,9 @@ namespace KitKap.DataAccess.Migrations
                 columns: new[] { "Id", "CreatedDate", "Description", "IsDeleted", "Name", "ParentCategoryId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 8, 21, 55, 43, 327, DateTimeKind.Local).AddTicks(4472), "Kitapların olduğu kategori", false, "Kitap", null },
-                    { 2, new DateTime(2025, 4, 8, 21, 55, 43, 327, DateTimeKind.Local).AddTicks(4483), "Teknolojilerin  olduğu kategori", false, "Teknoloji", null },
-                    { 3, new DateTime(2025, 4, 8, 21, 55, 43, 327, DateTimeKind.Local).AddTicks(4484), "Romanların olduğu kategori", false, "Roman", 1 }
+                    { 1, new DateTime(2025, 4, 8, 22, 30, 21, 982, DateTimeKind.Local).AddTicks(6200), "Kitapların olduğu kategori", false, "Kitap", null },
+                    { 2, new DateTime(2025, 4, 8, 22, 30, 21, 982, DateTimeKind.Local).AddTicks(6224), "Teknolojilerin  olduğu kategori", false, "Teknoloji", null },
+                    { 3, new DateTime(2025, 4, 8, 22, 30, 21, 982, DateTimeKind.Local).AddTicks(6225), "Romanların olduğu kategori", false, "Roman", 1 }
                 });
 
             migrationBuilder.CreateIndex(
