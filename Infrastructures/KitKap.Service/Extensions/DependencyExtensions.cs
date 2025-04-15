@@ -21,6 +21,7 @@ using KitKap.Service.Jwt;
 using Microsoft.AspNetCore.Identity;
 using KitKap.Service.Services.Concretes;
 using KitKap.Service.Services.Interfaces;
+using Kitkap.Service.Services;
 
 namespace KitKap.Service.Extensions
 {
