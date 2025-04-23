@@ -1,9 +1,12 @@
 ﻿using Kitkap.Service.Dtos.AddressDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using KitKap.Service.Services;
 using KitKap.MvcUI.Areas.Admin.ViewModels.ProductViewModels;
 using Kitkap.Entity.Services;
+using Kitkap.Service.Services;
+using Humanizer;
+using Kitkap.Entity.Entities;
+
 
 namespace KitKap.MvcUI.Areas.Admin.Controllers
 {
@@ -12,8 +15,8 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
     [Route("Admin/[controller]/[action]/{id?}")]
     public class ProductController : Controller
     {
-        private readonly IProductService _productService;
-        private readonly ICategoryService _categoryService;
+        public readonly IProductService _productService;
+        public readonly ICategoryService _categoryService;
 
         public ProductController(IProductService productService, ICategoryService categoryService)
         {
@@ -41,7 +44,7 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
                 Price = dto.Price,
                 Stock = dto.Stock,
                 IsDeleted = dto.IsDeleted,
-                ImageUrl = dto.ProductImages.FirstOrDefault()?.ImageUrl ?? "/template/assets/images/default-product.png"
+                ImageUrl = dto.ProductImages.FirstOrDefault(img => img.IsMain && !img.IsDeleted)?.ImageUrl ?? "/template/assets/images/default-product.png"
             }).ToList();
 
             return View(viewModels);
@@ -57,16 +60,43 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateProductViewModel model, List<IFormFile> ProductImages)
+        public async Task<IActionResult> Create(CreateProductViewModel model)
         {
             
 
 
             if (ModelState.IsValid)
             {
+                // Ürün resimlerini kaydetmek için liste
+                var productImageDtos = new List<CreateProductImageDto>();
+
+                if (model.ProductImageFiles != null && model.ProductImageFiles.Any())
+                {
+                    foreach (var file in model.ProductImageFiles)
+                    {
+                        // Dosya adını ve yolunu belirle
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/products", fileName);
+
+                        // Kaydet
+                        using (var stream = new FileStream(uploadPath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+
+                        // DTO oluştur
+                        productImageDtos.Add(new CreateProductImageDto
+                        {
+                            ImageUrl = "/uploads/products/" + fileName,
+                            AltText = "", // Dilersen buraya modelden alabilirsin
+                            IsDefault = false // Dilersen ilkini true yapabilirsin
+                        });
+                    }
+                }
+
+                // Ana ürün DTO
                 var product = new CreateProductDto
                 {
-
                     Name = model.Name,
                     Description = model.Description,
                     CategoryId = model.CategoryId,
@@ -74,9 +104,8 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
                     OwnerId = model.OwnerId,
                     Price = model.Price,
                     Stock = model.Stock,
-                    IsDeleted = model.IsDeleted
-                    
-
+                    IsDeleted = model.IsDeleted,
+                    ProductImages = productImageDtos
                 };
                 await _productService.AddAsync(product);
 

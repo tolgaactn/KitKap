@@ -34,10 +34,11 @@
     <div class="form-group">
         <label asp-for="Status">Stok Durumu</label>
         <select asp-for="Status" class="form-control">
-            <option value="true">Var</option>
-            <option value="false">Yok</option>
+            <option value="1">Var</option>
+            <option value="0">Yok</option>
         </select>
     </div>
+
 
     <div class="form-group">
         <label asp-for="OwnerId">Sahip ID</label>
@@ -66,7 +67,7 @@
 
     <div class="form-group">
         <label>Ürün Görselleri</label>
-        <input type="file" name="ProductImages" class="form-control" multiple />
+        <input asp-for="ProductImageFiles" type="file" class="form-control" multiple />
     </div>
 
     <button type="submit" class="btn btn-primary">Kaydet</button>

@@ -22,6 +22,8 @@ namespace KitKap.Service.Mapping
             CreateMap<Product, GetByIdProductDto>().ReverseMap();
             CreateMap<Product, GetByOwnerIdDto>().ReverseMap();
 
+            CreateMap<ProductImage, CreateProductImageDto>().ReverseMap();
+
             CreateMap<Category, ResultCategoryDto>().ReverseMap();
             CreateMap<Category, CreateCategoryDto>().ReverseMap();
             CreateMap<Category, UpdateCategoryDto>().ReverseMap();

@@ -3,6 +3,7 @@ using Kitkap.Entity.Entities;
 using Kitkap.Entity.Services;
 using Kitkap.Entity.UnitOfWorks;
 using Kitkap.Service.Dtos.AddressDtos;
+using Kitkap.Service.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,11 +43,7 @@ namespace KitKap.Service.Services
         public async Task<IEnumerable<RequestProductDto>> GetAllProducts()
         {
             var list = await _uow.GetRepository<Product>().GetAll(
-         includes: new Expression<Func<Product, object>>[]
-         {
-            p => p.ProductImages
-         }
-     );
+          includes: new[] { (Expression<Func<Product, object>>)(p => p.ProductImages) });
 
             return _mapper.Map<List<RequestProductDto>>(list);
         }
