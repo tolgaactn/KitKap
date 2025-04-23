@@ -2,12 +2,12 @@
     <div class="col-6 col-sm-4 col-lg-3">
         <div class="product-default inner-quickview inner-icon">
             <figure>
-                <a href="demo25-product.html">
+                <a asp-controller="ProductList" asp-action="ProductDetail">
                     <img src="~/template/assets/images/demoes/demo25/products/product-1.jpg"
-                         width="217" height="217" alt="product">
+                         width="217" height="217" alt="Geceden Önce" title="Geceden Önce">
                 </a>
                 <div class="label-group">
-                    <div class="product-label label-hot">HOT</div>
+                    <div class="product-label label-hot">Popüler</div>
                 </div>
                 <div class="btn-icon-group">
                     <a href="demo25-product.html"
@@ -15,23 +15,22 @@
                         <i class="icon-shopping-cart"></i>
                     </a>
                 </div>
-                <a href="ajax/product-quick-view.html" class="btn-quickview"
-                   title="Quick View">
-                    Quick
-                    View
+                <a asp-controller="ProductList" asp-action="ProductDetail" class="btn-quickview"
+                   title="Hızlı Gözat">
+                    Hızlı Gözat
                 </a>
             </figure>
             <div class="product-details">
                 <div class="category-wrap">
                     <div class="category-list">
-                        <a href="demo25-shop.html" class="product-category">category</a>
+                        <a href="#" class="product-category">Roman</a>
                     </div>
                     <a href="wishlist.html" class="btn-icon-wish">
                         <i class="icon-heart"></i>
                     </a>
                 </div>
                 <h3 class="product-title">
-                    <a href="demo25-product.html">The Night Before</a>
+                    <a asp-controller="ProductList" asp-action="ProductDetail">Geceden Önce</a>
                 </h3>
                 <div class="ratings-container">
                     <div class="product-ratings">
@@ -40,7 +39,7 @@
                     </div><!-- End .product-ratings -->
                 </div><!-- End .product-container -->
                 <div class="price-box">
-                    <span class="product-price">$299.0</span>
+                    <span class="product-price">300 &#x20BA;</span>
                 </div><!-- End .price-box -->
             </div><!-- End .product-details -->
         </div>
