@@ -8,6 +8,7 @@ namespace KitKap.MvcUI.Areas.Admin.ViewModels.ProductViewModels
         public long Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string CategoryName { get; set; } // 👈 yeni eklenen alan
         public decimal Price { get; set; }
         public int Stock { get; set; }
         public string OwnerId { get; set; }
