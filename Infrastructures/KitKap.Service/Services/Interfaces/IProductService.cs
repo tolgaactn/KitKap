@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kitkap.Entity.Services
+namespace Kitkap.Service.Services
 {
     public interface IProductService
     {
