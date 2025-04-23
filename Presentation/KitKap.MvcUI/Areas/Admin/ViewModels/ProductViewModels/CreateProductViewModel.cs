@@ -21,5 +21,6 @@ namespace KitKap.MvcUI.Areas.Admin.ViewModels.ProductViewModels
 
         [NotMapped]
         public List<IFormFile> ProductImageFiles { get; set; }
+        public int? MainImageIndex { get; set; } // Kaçıncı görsel ana olarak işaretlendi}
     }
 }

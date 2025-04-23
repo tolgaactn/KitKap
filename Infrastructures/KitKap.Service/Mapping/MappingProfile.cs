@@ -15,7 +15,7 @@ namespace KitKap.Service.Mapping
     {
         public MappingProfile() 
         {
-            CreateMap<Product, RequestProductDto>().ReverseMap();
+            CreateMap<Product, RequestProductDto>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name)); ;
             CreateMap<Product, CreateProductDto>().ReverseMap();
             CreateMap<Product, UpdateProductDto>().ReverseMap();
             CreateMap<Product, RemoveProductDto>().ReverseMap();

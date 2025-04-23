@@ -43,7 +43,11 @@ namespace KitKap.Service.Services
         public async Task<IEnumerable<RequestProductDto>> GetAllProducts()
         {
             var list = await _uow.GetRepository<Product>().GetAll(
-          includes: new[] { (Expression<Func<Product, object>>)(p => p.ProductImages) });
+          includes: new Expression<Func<Product, object>>[]
+        {
+            p => p.ProductImages,
+            p => p.Category
+        });
 
             return _mapper.Map<List<RequestProductDto>>(list);
         }

@@ -44,7 +44,8 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
                 Price = dto.Price,
                 Stock = dto.Stock,
                 IsDeleted = dto.IsDeleted,
-                ImageUrl = dto.ProductImages.FirstOrDefault(img => img.IsMain && !img.IsDeleted)?.ImageUrl ?? "/template/assets/images/default-product.png"
+                ImageUrl = dto.ProductImages.FirstOrDefault(img => img.IsMain && !img.IsDeleted)?.ImageUrl ?? "/template/assets/images/default-product.png",
+                CategoryName = dto.CategoryName
             }).ToList();
 
             return View(viewModels);
@@ -58,43 +59,35 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
             ViewBag.Categories = categories;
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> Create(CreateProductViewModel model)
         {
-            
-
-
             if (ModelState.IsValid)
             {
-                // Ürün resimlerini kaydetmek için liste
                 var productImageDtos = new List<CreateProductImageDto>();
 
                 if (model.ProductImageFiles != null && model.ProductImageFiles.Any())
                 {
-                    foreach (var file in model.ProductImageFiles)
+                    for (int i = 0; i < model.ProductImageFiles.Count; i++)
                     {
-                        // Dosya adını ve yolunu belirle
+                        var file = model.ProductImageFiles[i];
                         var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                         var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/products", fileName);
 
-                        // Kaydet
                         using (var stream = new FileStream(uploadPath, FileMode.Create))
                         {
                             await file.CopyToAsync(stream);
                         }
 
-                        // DTO oluştur
                         productImageDtos.Add(new CreateProductImageDto
                         {
                             ImageUrl = "/uploads/products/" + fileName,
-                            AltText = "", // Dilersen buraya modelden alabilirsin
-                            IsDefault = false // Dilersen ilkini true yapabilirsin
+                            AltText = "", // İstersen ViewModel'den al
+                            IsMain = model.MainImageIndex == i // ✨ Ana görseli belirliyoruz
                         });
                     }
                 }
 
-                // Ana ürün DTO
                 var product = new CreateProductDto
                 {
                     Name = model.Name,
@@ -107,16 +100,15 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
                     IsDeleted = model.IsDeleted,
                     ProductImages = productImageDtos
                 };
-                await _productService.AddAsync(product);
 
+                await _productService.AddAsync(product);
                 return RedirectToAction("Index");
             }
 
-            var products = await _productService.GetAllProducts();
-            ViewBag.Categories = products;
-
+            ViewBag.Categories = await _categoryService.GetAllCategories();
             return View(model);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
