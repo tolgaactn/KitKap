@@ -4,6 +4,7 @@ using Kitkap.Entity.Services;
 using Kitkap.Entity.UnitOfWorks;
 using Kitkap.Service.Dtos.AddressDtos;
 using Kitkap.Service.Services;
+using KitKap.Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace KitKap.Service.Services
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
+        private readonly IProductImageService _productImageService;
 
         public ProductService(IUnitOfWork uow, IMapper mapper)
         {
@@ -32,12 +34,16 @@ namespace KitKap.Service.Services
 
         public async Task DeleteAsync(RemoveProductDto model)
         {
-            var Product = await _uow.GetRepository<Product>().GetByIdAsync(model.Id);
+            var product = await _uow.GetRepository<Product>().GetByIdAsync(model.Id);
 
-            if (Product == null)
+            if (product == null)
                 throw new KeyNotFoundException("Kitap bulunamadı");
 
-            await _uow.GetRepository<Product>().DeleteAsync(Product);
+            product.IsDeleted = true;
+
+            await _uow.GetRepository<Product>().UpdateAsync(product);
+
+            await _uow.CommitAsync();
         }
 
         public async Task<IEnumerable<RequestProductDto>> GetAllProducts()
@@ -55,6 +61,7 @@ namespace KitKap.Service.Services
         public async Task<GetByIdProductDto> GetByIdProduct(long id)
         {
             var Product = await _uow.GetRepository<Product>().GetByIdAsync(id);
+
             return _mapper.Map<GetByIdProductDto>(Product);
             
         }

@@ -21,7 +21,12 @@ namespace KitKap.DataAccess.Repositories
             _dbSet = _context.Set<T>();
         }
 
-        
+        public async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+
+        }
+
         public async Task CreateAsync(T entity)
         {
             await _dbSet.AddAsync(entity);

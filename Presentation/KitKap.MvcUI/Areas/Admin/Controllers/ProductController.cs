@@ -6,6 +6,9 @@ using Kitkap.Entity.Services;
 using Kitkap.Service.Services;
 using Humanizer;
 using Kitkap.Entity.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using KitKap.Service.Services.Interfaces;
+using KitKap.MvcUI.Areas.Admin.ViewModels.ProductImagesViewModels;
 
 
 namespace KitKap.MvcUI.Areas.Admin.Controllers
@@ -17,11 +20,13 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
     {
         public readonly IProductService _productService;
         public readonly ICategoryService _categoryService;
+        public readonly IProductImageService _productImageService;
 
-        public ProductController(IProductService productService, ICategoryService categoryService)
+        public ProductController(IProductService productService, ICategoryService categoryService, IProductImageService productImageService)
         {
             _productService = productService;
             _categoryService = categoryService;
+            _productImageService = productImageService;
         }
 
         public async Task<IActionResult> Index()
@@ -111,7 +116,7 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(long id)
         {
             var dto = new RemoveProductDto { Id = id };
              
@@ -121,62 +126,92 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(long id)
         {
             var productDto = await _productService.GetByIdProduct(id);
 
+            var productImages = await _productImageService.GetByIdProductImagesAsync(id);
             if (productDto == null)
             {
                 return NotFound();
             }
 
-            // categoryDto'yu CategoryViewModel'e dönüştürüyoruz
-            var model = new ProductViewModel
+            var model = new EditProductViewModel
             {
                 Id = productDto.Id,
                 Name = productDto.Name,
                 Description = productDto.Description,
-                CategoryId = productDto.CategoryId,
-                Status = productDto.Status,
-                OwnerId = productDto.OwnerId,
                 Price = productDto.Price,
                 Stock = productDto.Stock,
-                IsDeleted = productDto.IsDeleted
+                CategoryId = productDto.CategoryId,
+                Status = productDto.Status,
+                IsDeleted = productDto.IsDeleted,
+                OwnerId = productDto.OwnerId,
+                ExistingImages = productImages
+                    .Where(x => !x.IsDeleted)
+                    .Select(x => new ExistingProductImageViewModel
+                    {
+                        Id = x.Id,
+                        ImageUrl = x.ImageUrl,
+                        AltText = x.AltText,
+                        IsMain = x.IsMain
+                    })
+                    .ToList()
             };
 
-            return View(model); // Düzenleme sayfasını gösterir
-        }
-
-        // Update (Düzenlenmiş kategoriyi kaydeder)
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ProductViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-
-                var existingProduct = new UpdateProductDto
-                {
-                    Id = model.Id,
-                    CategoryId = model.CategoryId,
-                    Description = model.Description,
-                    Status = model.Status,
-                    IsDeleted= model.IsDeleted,
-                    Name = model.Name,
-                    OwnerId = model.OwnerId,
-                    Price = model.Price,
-                    Stock = model.Stock
-                };
-
-
-                await _productService.UpdateAsync(existingProduct); // Güncellemeyi servis üzerinden yap
-
-                return RedirectToAction("Index");
-            }
-
-            // Model valid değilse, tekrar edit sayfasına dön
+            ViewBag.Categories = new SelectList(await _categoryService.GetAllCategories(), "Id", "Name");
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditProductViewModel model)
+        {
+            var productImages = await _productImageService.GetByIdProductImagesAsync(model.Id);
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Categories = new SelectList(await _categoryService.GetAllCategories(), "Id", "Name");
+                return View(model);
+            }
+
+            // 1. Ürünü Güncelle
+            var updateProductDto = new UpdateProductDto
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Description = model.Description,
+                Price = model.Price,
+                Stock = model.Stock,
+                CategoryId = model.CategoryId,
+                Status = model.Status,
+                IsDeleted = model.IsDeleted,
+                OwnerId = model.OwnerId
+            };
+
+            await _productService.UpdateAsync(updateProductDto);
+
+            // 2. Seçilen Ana Fotoğrafı Güncelle
+            if (model.SelectedMainImageId.HasValue)
+            {
+                await _productImageService.SetMainImageAsync(model.SelectedMainImageId.Value, model.Id);
+                
+            }
+
+            // 3. Silinmek İstenen Fotoğrafları İşaretle
+            if (model.ImagesToDelete != null && model.ImagesToDelete.Any())
+            {
+                await _productImageService.MarkAsDeletedAsync(model.ImagesToDelete);
+            }
+
+            // 4. Yeni Fotoğrafları Ekle
+            if (model.NewProductImages != null && model.NewProductImages.Any())
+            {
+                await _productImageService.AddImagesAsync(model.Id, model.NewProductImages);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
 
     }
 }
