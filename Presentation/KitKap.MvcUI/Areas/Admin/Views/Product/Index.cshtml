@@ -112,12 +112,15 @@
                                     <div class="item eye">
                                         <i class="icon-eye"></i>
                                     </div>
-                                    <div class="item edit">
+                                    <a class="item edit" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id">
                                         <i class="icon-edit-3"></i>
-                                    </div>
-                                    <div class="item trash">
-                                        <i class="icon-trash-2"></i>
-                                    </div>
+                                    </a>
+                                    <form method="post" asp-action="Delete" asp-controller="Product" asp-area="Admin" asp-route-id="@product.Id" onsubmit="return confirm('Bu kategoriyi silmek istediğinizden emin misiniz?');">
+
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="icon-trash-2"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </li>

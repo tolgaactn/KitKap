@@ -88,6 +88,8 @@ namespace KitKap.Service.Extensions
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IAboutService, AboutService>();
+            services.AddScoped<IProductImageService, ProductImageService>();
+            services.AddScoped<IFileService, FileService>();
            // services.AddScoped(typeof(IAccountService), typeof(AccountService));
 
             services.AddAutoMapper(typeof(MappingProfile));
