@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kitkap.Service.Dtos.AddressDtos;
 using KitKap.Service.Dtos.AboutDtos;
-using Kitkap.Service.Dtos.UserDtos;
+using KitKap.Service.Dtos.ProductImagesDtos;
 
 namespace KitKap.Service.Mapping
 {
@@ -16,7 +16,7 @@ namespace KitKap.Service.Mapping
     {
         public MappingProfile() 
         {
-            CreateMap<Product, RequestProductDto>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name)); ;
+            CreateMap<Product, RequestProductDto>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
             CreateMap<Product, CreateProductDto>().ReverseMap();
             CreateMap<Product, UpdateProductDto>().ReverseMap();
             CreateMap<Product, RemoveProductDto>().ReverseMap();
@@ -24,6 +24,7 @@ namespace KitKap.Service.Mapping
             CreateMap<Product, GetByOwnerIdDto>().ReverseMap();
 
             CreateMap<ProductImage, CreateProductImageDto>().ReverseMap();
+            CreateMap<ProductImage, RequestProductImageDto>().ReverseMap();
 
             CreateMap<Category, ResultCategoryDto>().ReverseMap();
             CreateMap<Category, CreateCategoryDto>().ReverseMap();
