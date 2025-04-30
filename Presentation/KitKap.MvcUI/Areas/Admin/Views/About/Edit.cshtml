@@ -1,6 +1,7 @@
-﻿@model CreateAboutViewModel
+﻿@model AboutViewModel
+
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -9,7 +10,7 @@
     <!-- main-content-wrap -->
     <div class="main-content-wrap">
         <div class="flex items-center flex-wrap justify-between gap20 mb-27">
-            <h3>Hakkında Oluştur</h3>
+            <h3>Hakkında Düzenle</h3>
             <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
                 <li>
                     <a href="/Admin/AdminHome/Index"><div class="text-tiny">Anasayfa</div></a>
@@ -24,29 +25,38 @@
                     <i class="icon-chevron-right"></i>
                 </li>
                 <li>
-                    <div class="text-tiny">Yeni Hakkında</div>
+                    <div class="text-tiny">Hakkında Listesi</div>
                 </li>
             </ul>
         </div>
         <!-- new-attribute -->
         <div class="wg-box">
-            <form class="form-new-product form-style-1" asp-action="Create" asp-controller="About" asp-area="Admin" method="post">
+            <form class="form-new-product form-style-1" asp-action="Edit" asp-controller="About" asp-area="Admin" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <fieldset class="name">
+                    <div class="body-title">Id <span class="tf-color-1">*</span> </div>
+                    <input class="flex-grow" asp-for="AboutId" type="text" tabindex="0">
+                    <span asp-validation-for="AboutId" class="text-danger"></span>
+                </fieldset>
                 <fieldset class="name">
                     <div class="body-title">Açıklama <span class="tf-color-1">*</span> </div>
                     <textarea class="flex-grow" asp-for="Description" placeholder="Açıklama" tabindex="0" aria-required="true" required=""></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
                 </fieldset>
                 <fieldset class="name">
                     <div class="body-title">Adres <span class="tf-color-1">*</span> </div>
-                    <input class="flex-grow" asp-for="Address" type="text" placeholder="Adres"  tabindex="0" value="" aria-required="true" required="">
+                    <input class="flex-grow" asp-for="Address" type="text" tabindex="0">
+                    <span asp-validation-for="Address" class="text-danger"></span>
                 </fieldset>
                 <fieldset class="name">
                     <div class="body-title">E-mail <span class="tf-color-1">*</span> </div>
-                    <input class="flex-grow" asp-for="Email" type="email" placeholder="E-mail"  tabindex="0" value="" aria-required="true" required="">
+                    <input class="flex-grow" asp-for="Email" type="email" tabindex="0">
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </fieldset>
                 <fieldset class="name">
                     <div class="body-title">Telefon <span class="tf-color-1">*</span> </div>
-                    <input class="flex-grow" asp-for="Phone" type="text" placeholder="Telefon"  tabindex="0" value="" aria-required="true" required="">
+                    <input class="flex-grow" asp-for="Phone" type="text" tabindex="0">
+                    <span asp-validation-for="Phone" class="text-danger"></span>
                 </fieldset>
                 <div class="bot">
                     <div></div>
@@ -60,3 +70,4 @@
     <!-- /main-content-wrap -->
 </div>
 <!-- /main-content-wrap -->
+

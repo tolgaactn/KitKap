@@ -20,12 +20,8 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
             }
 
             [HttpGet]
-            public async Task<IActionResult> Index()
+            public async Task<IActionResult> Index(string? search)
             {
-                ViewBag.v1 = "Ana Sayfa";
-                ViewBag.v2 = "Kategoriler";
-                ViewBag.v3 = "Tüm Kategoriler";
-                ViewBag.v0 = "Kategori İşlemleri";
 
                 var AboutDtos = await _aboutService.GetAllAboutAsync();
 
@@ -37,6 +33,25 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
                     Email = dto.Email,
                     Phone = dto.Phone
                 }).ToList();
+
+                ViewData["TotalCount"] = viewModels.Count();
+
+                //if (!string.IsNullOrWhiteSpace(search))
+                //{
+                //    if (int.TryParse(search.Trim(), out int Id))
+                //    {
+                //        viewModels = viewModels.Where(a => a.AboutId == Id).ToList();
+                //    }
+                //    else
+                //    {
+                //        viewModels = viewModels.Where(a => a.Description.ToLower().Contains(search.ToLower().Trim())).ToList();
+                //    }                    
+                //} Id ye veya descriptiona göre search yapıyor (yani id 1 ve description 1 olursa verimizde sadece id 1 olanı gösteriyor)
+
+                if(!string.IsNullOrWhiteSpace(search))
+                {
+                    viewModels = viewModels.Where(a => (a.Description != null && a.Description.ToLower().Contains(search.ToLower().Trim())) || (int.TryParse(search.Trim(), out int Id) && a.AboutId == Id)).ToList();
+                }
 
                 return View(viewModels);
             }

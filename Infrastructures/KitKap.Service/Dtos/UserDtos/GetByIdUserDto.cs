@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kitkap.Service.Dtos.AddressDtos
+namespace Kitkap.Service.Dtos.UserDtos
 {
     public class GetByIdUserDto
     {

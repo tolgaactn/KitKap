@@ -39,7 +39,7 @@ namespace KitKap.Service.Services.Concretes
 
                 //About.IsDeleted = true;
 
-                await _uow.GetRepository<About>().UpdateAsync(About);
+                await _uow.GetRepository<About>().DeleteAsync(About);
 
                 await _uow.CommitAsync();
             }
@@ -63,10 +63,10 @@ namespace KitKap.Service.Services.Concretes
                 if (About == null)
                     throw new KeyNotFoundException("Hakkında bulunamadı ");
 
-                About.Address = About.Address;
-                About.Description = About.Description;
-                About.Email = About.Email;
-                About.Phone = About.Phone;
+                About.Address = updateAboutDto.Address;
+                About.Description = updateAboutDto.Description;
+                About.Email = updateAboutDto.Email;
+                About.Phone = updateAboutDto.Phone;
 
                 await _uow.GetRepository<About>().UpdateAsync(About);
 

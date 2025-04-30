@@ -1,8 +1,7 @@
-﻿@model ProductListViewModel
+﻿@model ProductDetailViewModel
 
 <div class="col-md-6 product-single-details font2">
-    <h1 class="product-title">Geceden önce</h1>
-
+  <h1 class="product-title">@Model.Name</h1>
     <div class="product-nav">
         <div class="product-prev">
             <a href="#">
@@ -11,10 +10,10 @@
                 <span class="product-popup">
                     <span class="box-content">
                         <img alt="product" width="150" height="150"
-                             src="assets/images/demoes/demo25/products/product-3.jpg"
+                             src="~/template/assets/images/demoes/demo25/products/product-3.jpg"
                              style="padding-top: 0px;">
 
-                        <span>Ask Again Yes</span>
+                        <span>Yeniden Sor, Evet</span>
                     </span>
                 </span>
             </a>
@@ -27,10 +26,10 @@
                 <span class="product-popup">
                     <span class="box-content">
                         <img alt="product" width="150" height="150"
-                             src="assets/images/demoes/demo25/products/product-4.jpg"
+                             src="~/template/assets/images/demoes/demo25/products/product-4.jpg"
                              style="padding-top: 0px;">
 
-                        <span>The Butterfly Garden</span>
+                        <span>Kelebek Bahçesi</span>
                     </span>
                 </span>
             </a>
@@ -49,20 +48,12 @@
     <hr class="short-divider">
 
     <div class="price-box">
-        <span class="product-price">$299.0</span>
+        <span class="product-price">@Model.Price &#x20BA;</span>
     </div><!-- End .price-box -->
 
     <div class="product-desc">
         <p>
-            Pellentesque habitant morbi tristique senectus et netus et malesuada
-            fames
-            ac turpis
-            egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor
-            sit
-            amet,
-            ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi
-            vitae est.
-            Mauris placerat eleifend leo.
+            @Model.Description
         </p>
     </div><!-- End .product-desc -->
 
@@ -71,7 +62,14 @@
         <li>
             AVAILABILITY:
             <strong>
-                <a href="#" class="product-category">10 IN STOCK</a>
+                <a href="#" class="product-category">@Model.Stock</a>
+            </strong>
+        </li>
+
+        <li>
+            Category:
+            <strong>
+                <a href="#" class="product-category">@Model.CategoryName</a>
             </strong>
         </li>
 
