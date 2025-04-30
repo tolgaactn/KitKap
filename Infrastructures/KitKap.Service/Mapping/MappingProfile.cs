@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Kitkap.Service.Dtos.AddressDtos;
 using KitKap.Service.Dtos.AboutDtos;
 using KitKap.Service.Dtos.ProductImagesDtos;
+using Kitkap.Service.Dtos.UserDtos;
 
 namespace KitKap.Service.Mapping
 {
