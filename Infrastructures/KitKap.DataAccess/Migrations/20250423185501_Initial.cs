@@ -327,9 +327,9 @@ namespace KitKap.DataAccess.Migrations
                 columns: new[] { "Id", "CreatedDate", "Description", "IsDeleted", "Name", "ParentCategoryId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 8, 22, 30, 21, 982, DateTimeKind.Local).AddTicks(6200), "Kitapların olduğu kategori", false, "Kitap", null },
-                    { 2, new DateTime(2025, 4, 8, 22, 30, 21, 982, DateTimeKind.Local).AddTicks(6224), "Teknolojilerin  olduğu kategori", false, "Teknoloji", null },
-                    { 3, new DateTime(2025, 4, 8, 22, 30, 21, 982, DateTimeKind.Local).AddTicks(6225), "Romanların olduğu kategori", false, "Roman", 1 }
+                    { 1, new DateTime(2025, 4, 23, 21, 55, 0, 707, DateTimeKind.Local).AddTicks(5700), "Kitapların olduğu kategori", false, "Kitap", null },
+                    { 2, new DateTime(2025, 4, 23, 21, 55, 0, 707, DateTimeKind.Local).AddTicks(5715), "Teknolojilerin  olduğu kategori", false, "Teknoloji", null },
+                    { 3, new DateTime(2025, 4, 23, 21, 55, 0, 707, DateTimeKind.Local).AddTicks(5716), "Romanların olduğu kategori", false, "Roman", 1 }
                 });
 
             migrationBuilder.CreateIndex(

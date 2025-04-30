@@ -19,14 +19,10 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
         {
             _categoryService = categoryService;
         }
-		
 
-        public async Task <IActionResult> Index()
+        [HttpGet]
+        public async Task <IActionResult> Index(string? search)
 		{
-			ViewBag.v1 = "Ana Sayfa";
-			ViewBag.v2 = "Kategoriler";
-			ViewBag.v3 = "Tüm Kategoriler";
-			ViewBag.v0 = "Kategori İşlemleri";
 
             var categoryDtos = await _categoryService.GetAllCategories();
 
@@ -39,6 +35,13 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
 				ParentCategoryId = dto.ParentCategoryId,
                 IsDeleted = dto.IsDeleted
 			}).ToList();
+
+            ViewData["TotalCount"] = viewModels.Count();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                viewModels = viewModels.Where(a => (a.Name != null && a.Name.ToLower().Contains(search.ToLower().Trim())) || (int.TryParse(search.Trim(), out int categoryId) && a.Id == categoryId)).ToList();
+            }
 
             return View(viewModels);
         }
@@ -60,7 +63,7 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
 				Name = model.Name,
 				Description = model.Description,
 				ParentCategoryId = model.ParentCategoryId,
-				CreatedDate = DateTime.Now 
+				CreatedDate = DateTime.Now
 			
 			};
 			await _categoryService.AddAsync(category);
@@ -99,7 +102,8 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
                 Name = categoryDto.Name,
                 Description = categoryDto.Description,
                 ParentCategoryId = categoryDto.ParentCategoryId,
-                CreatedDate = categoryDto.CreatedDate
+                CreatedDate = categoryDto.CreatedDate,
+                IsDeleted = categoryDto.IsDeleted
             };
 
             return View(model); // Düzenleme sayfasını gösterir
@@ -110,6 +114,7 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CategoryViewModel model)
         {
+
             if (ModelState.IsValid)
             {
                 
@@ -119,7 +124,8 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
                     CreatedDate = model.CreatedDate,
                     Description = model.Description,
                     Name = model.Name,
-                    ParentCategoryId = model.ParentCategoryId
+                    ParentCategoryId = model.ParentCategoryId,
+                    IsDeleted = model.IsDeleted,
                 };
 
 

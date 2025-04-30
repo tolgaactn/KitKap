@@ -14,6 +14,7 @@ namespace Kitkap.Entity.Repositories
         Task<T> GetByIdAsync(int id);
         Task<T> GetByIdAsync(string id);
         Task<T> GetByIdAsync(long id);
+        Task<T> GetByIdAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null, params Expression<Func<T, object>>[] includes);
         Task<T> Get(Expression<Func<T, bool>> filter);
         Task CreateAsync(T entity);
         Task UpdateAsync(T entity);

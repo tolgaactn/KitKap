@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -60,11 +61,16 @@ namespace KitKap.Service.Services
 
         public async Task<GetByIdProductDto> GetByIdProduct(long id)
         {
-            var Product = await _uow.GetRepository<Product>().GetByIdAsync(id);
-
+            var Product = await _uow.GetRepository<Product>().GetByIdAsync(filter: x => x.Id == id, includes: new Expression<Func<Product, object>>[]
+                 {
+                c => c.ProductImages,
+                c => c.Category,
+                });
             return _mapper.Map<GetByIdProductDto>(Product);
             
         }
+
+
 
         public async Task<IEnumerable<GetByOwnerIdDto>> GetByOwnerIdProductsAsync(string id)
         {

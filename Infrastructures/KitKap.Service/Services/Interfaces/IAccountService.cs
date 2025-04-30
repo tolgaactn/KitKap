@@ -1,5 +1,6 @@
 ﻿
 using Kitkap.Service.Dtos.AddressDtos;
+using Kitkap.Service.Dtos.UserDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

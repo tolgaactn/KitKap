@@ -1,10 +1,12 @@
-﻿<aside class="sidebar-product col-lg-3 mobile-sidebar">
+﻿@model ProductDetailViewModel
+
+<aside class="sidebar-product col-lg-3 mobile-sidebar">
     <div class="sidebar-wrapper">
         <div class="widget widget-info">
             <h3 class="widget-title m-b-3">Satıcı</h3>
 
             <div class="widget-body bg-gray">
-                <h4 class="font2 text-dark line-height-1 m-b-1">Keşanlı</h4>
+                <h4 class="font2 text-dark line-height-1 m-b-1">@Model.OwnerUserName</h4>
                 <p class="font2 font-weight-normal line-height-1 ls-0 text-uppercase">
                     12
                     Kitap
