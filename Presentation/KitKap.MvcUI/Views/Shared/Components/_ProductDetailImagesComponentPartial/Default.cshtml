@@ -7,12 +7,15 @@
         </div>
 
         <div class="product-single-carousel owl-carousel owl-theme show-nav-hover">
-            <div class="product-item">
-                <img class="product-single-image"
-                     src="@Model.ImageUrl"
-                     data-zoom-image="@Model.ImageUrl"
-                     width="468" height="468" alt="@Model.Name" />
-            </div>
+            @foreach (var imageUrl in Model.ImageUrls)
+            {
+                <div class="product-item">
+                    <img class="product-single-image"
+                    src="@imageUrl"
+                    data-zoom-image="@imageUrl"
+                    width="468" height="468" alt="product" />
+                </div>
+            }
         </div>
         <!-- End .product-single-carousel -->
         <span class="prod-full-screen">
@@ -21,9 +24,12 @@
     </div>
 
     <div class="prod-thumbnail owl-dots">
-        <div class="owl-dot">
-            <img src="@Model.ImageUrl"
-                 width="110" height="110" alt="@Model.Name" />
-        </div>
+        @foreach (var imageUrl in Model.ImageUrls)
+        {
+            <div class="owl-dot">
+                <img src="@imageUrl"
+                width="110" height="110" alt="product-thumbnail" />
+            </div>
+        }
     </div>
 </div>

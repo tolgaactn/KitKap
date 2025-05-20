@@ -1,278 +1,54 @@
-﻿<div class="products-section pt-0 pb-5">
+﻿@model List<ProductListViewModel>
+
+<div class="products-section pt-0 pb-5">
     <h2 class="section-title pb-3 m-b-4">Kullanıcılar Bunları da Satın aldı</h2>
-
     <div class="products-slider 5col owl-carousel owl-theme dots-top dots-small">
-        <div class="product-default inner-quickview inner-icon">
-            <figure>
-                <a href="demo25-product.html">
-                    <img src="~/template/assets/images/demoes/demo25/products/product-3.jpg" width="217"
+        @foreach (var item in Model)
+        {
+            <div class="product-default inner-quickview inner-icon">
+                <figure>
+                <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@item.Id">
+                    <img src="@item.ImageUrl" width="217"
                          height="217" alt="product">
                 </a>
                 <div class="label-group">
-                    <div class="product-label label-hot">HOT</div>
+                    <div class="product-label label-hot">Popüler</div>
                 </div>
                 <div class="btn-icon-group">
-                    <a href="demo25-product.html"
+                    <a href="#"
                        class="btn-icon btn-add-cart product-type-simple">
                         <i class="icon-shopping-cart"></i>
                     </a>
                 </div>
-                <a href="ajax/product-quick-view.html" class="btn-quickview"
+                <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@item.Id" class="btn-quickview"
                    title="Quick View">
-                    Quick
-                    View
+                    Hızlı Gözat
                 </a>
-            </figure>
-            <div class="product-details">
-                <div class="category-wrap">
-                    <div class="category-list">
-                        <a href="demo25-shop.html" class="product-category">category</a>
+                </figure>
+                <div class="product-details">
+                    <div class="category-wrap">
+                        <div class="category-list">
+                            <a href="#" class="product-category">@item.CategoryName</a>
+                        </div>
+                        <a href="#" title="Add to Wishlist" class="btn-icon-wish">
+                            <i class="icon-heart"></i>
+                        </a>
                     </div>
-                    <a href="wishlist.html" title="Add to Wishlist" class="btn-icon-wish">
-                        <i class="icon-heart"></i>
-                    </a>
-                </div>
-                <h3 class="product-title">
-                    <a href="demo25-product.html">Evet için sor</a>
-                </h3>
-                <div class="ratings-container">
-                    <div class="product-ratings">
-                        <span class="ratings" style="width:0%"></span><!-- End .ratings -->
-                        <span class="tooltiptext tooltip-top"></span>
-                    </div><!-- End .product-ratings -->
-                </div><!-- End .product-container -->
-                <div class="price-box">
-                    <span class="old-price">199.0</span>
-                    <span class="product-price">159.0</span>
-                </div><!-- End .price-box -->
-            </div><!-- End .product-details -->
-        </div>
-
-        <div class="product-default inner-quickview inner-icon">
-            <figure>
-                <a href="demo25-product.html">
-                    <img src="~/template/assets/images/demoes/demo25/products/product-2.jpg" width="217"
-                         height="217" alt="product">
-                </a>
-                <div class="label-group">
-                    <div class="product-label label-hot">HOT</div>
-                </div>
-                <div class="btn-icon-group">
-                    <a href="demo25-product.html"
-                       class="btn-icon btn-add-cart product-type-simple">
-                        <i class="icon-shopping-cart"></i>
-                    </a>
-                </div>
-                <a href="ajax/product-quick-view.html" class="btn-quickview"
-                   title="Quick View">
-                    Quick
-                    View
-                </a>
-            </figure>
-            <div class="product-details">
-                <div class="category-wrap">
-                    <div class="category-list">
-                        <a href="demo25-shop.html" class="product-category">category</a>
-                    </div>
-                    <a href="wishlist.html" title="Add to Wishlist" class="btn-icon-wish">
-                        <i class="icon-heart"></i>
-                    </a>
-                </div>
-                <h3 class="product-title">
-                    <a href="demo25-product.html">Call an Audible</a>
-                </h3>
-                <div class="ratings-container">
-                    <div class="product-ratings">
-                        <span class="ratings" style="width:0%"></span><!-- End .ratings -->
-                        <span class="tooltiptext tooltip-top"></span>
-                    </div><!-- End .product-ratings -->
-                </div><!-- End .product-container -->
-                <div class="price-box">
-                    <span class="product-price">$299.0</span>
-                </div><!-- End .price-box -->
-            </div><!-- End .product-details -->
-        </div>
-
-        <div class="product-default inner-quickview inner-icon">
-            <figure>
-                <a href="demo25-product.html">
-                    <img src="~/template/assets/images/demoes/demo25/products/product-6.jpg" width="217"
-                         height="217" alt="product">
-                </a>
-                <div class="label-group">
-                    <div class="product-label label-hot">HOT</div>
-                </div>
-                <div class="btn-icon-group">
-                    <a href="demo25-product.html"
-                       class="btn-icon btn-add-cart product-type-simple">
-                        <i class="icon-shopping-cart"></i>
-                    </a>
-                </div>
-                <a href="ajax/product-quick-view.html" class="btn-quickview"
-                   title="Quick View">
-                    Quick
-                    View
-                </a>
-            </figure>
-            <div class="product-details">
-                <div class="category-wrap">
-                    <div class="category-list">
-                        <a href="demo25-shop.html" class="product-category">category</a>
-                    </div>
-                    <a href="wishlist.html" title="Add to Wishlist" class="btn-icon-wish">
-                        <i class="icon-heart"></i>
-                    </a>
-                </div>
-                <h3 class="product-title">
-                    <a href="demo25-product.html">Grey</a>
-                </h3>
-                <div class="ratings-container">
-                    <div class="product-ratings">
-                        <span class="ratings" style="width:80%"></span><!-- End .ratings -->
-                        <span class="tooltiptext tooltip-top"></span>
-                    </div><!-- End .product-ratings -->
-                </div><!-- End .product-container -->
-                <div class="price-box">
-                    <span class="product-price">$55.0</span>
-                </div><!-- End .price-box -->
-            </div><!-- End .product-details -->
-        </div>
-
-        <div class="product-default inner-quickview inner-icon">
-            <figure>
-                <a href="demo25-product.html">
-                    <img src="~/template/assets/images/demoes/demo25/products/product-8.jpg" width="217"
-                         height="217" alt="product">
-                </a>
-                <div class="label-group">
-                    <div class="product-label label-sale">-35%</div>
-                </div>
-                <div class="btn-icon-group">
-                    <a href="demo25-product.html"
-                       class="btn-icon btn-add-cart product-type-simple">
-                        <i class="icon-shopping-cart"></i>
-                    </a>
-                </div>
-                <a href="ajax/product-quick-view.html" class="btn-quickview"
-                   title="Quick View">
-                    Quick
-                    View
-                </a>
-            </figure>
-            <div class="product-details">
-                <div class="category-wrap">
-                    <div class="category-list">
-                        <a href="demo25-shop.html" class="product-category">category</a>
-                    </div>
-                    <a href="wishlist.html" title="Add to Wishlist" class="btn-icon-wish">
-                        <i class="icon-heart"></i>
-                    </a>
-                </div>
-                <h3 class="product-title">
-                    <a href="demo25-product.html">I'll Never Tell</a>
-                </h3>
-                <div class="ratings-container">
-                    <div class="product-ratings">
-                        <span class="ratings" style="width:0%"></span><!-- End .ratings -->
-                        <span class="tooltiptext tooltip-top"></span>
-                    </div><!-- End .product-ratings -->
-                </div><!-- End .product-container -->
-                <div class="price-box">
-                    <span class="old-price">$199.0</span>
-                    <span class="product-price">$129.0</span>
-                </div><!-- End .price-box -->
-            </div><!-- End .product-details -->
-        </div>
-
-        <div class="product-default inner-quickview inner-icon">
-            <figure>
-                <a href="demo25-product.html">
-                    <img src="~/template/assets/images/demoes/demo25/products/product-7.jpg" width="217"
-                         height="217" alt="product">
-                </a>
-                <div class="label-group">
-                    <div class="product-label label-sale">-35%</div>
-                </div>
-                <div class="btn-icon-group">
-                    <a href="demo25-product.html" class="btn-icon btn-add-cart">
-                        <i class="fa fa-arrow-right"></i>
-                    </a>
-                </div>
-                <a href="ajax/product-quick-view.html" class="btn-quickview"
-                   title="Quick View">
-                    Quick
-                    View
-                </a>
-            </figure>
-            <div class="product-details">
-                <div class="category-wrap">
-                    <div class="category-list">
-                        <a href="demo25-shop.html" class="product-category">category</a>
-                    </div>
-                    <a href="wishlist.html" title="Add to Wishlist" class="btn-icon-wish">
-                        <i class="icon-heart"></i>
-                    </a>
-                </div>
-                <h3 class="product-title">
-                    <a href="demo25-product.html">On Earth We're Briefly Gorgeous</a>
-                </h3>
-                <div class="ratings-container">
-                    <div class="product-ratings">
-                        <span class="ratings" style="width:80%"></span><!-- End .ratings -->
-                        <span class="tooltiptext tooltip-top"></span>
-                    </div><!-- End .product-ratings -->
-                </div><!-- End .product-container -->
-                <div class="price-box">
-                    <span class="old-price">$199.0</span>
-                    <span class="product-price">$129.0</span>
-                </div><!-- End .price-box -->
-            </div><!-- End .product-details -->
-        </div>
-
-        <div class="product-default inner-quickview inner-icon">
-            <figure>
-                <a href="demo25-product.html">
-                    <img src="~/template/assets/images/demoes/demo25/products/product-10.jpg" width="217"
-                         height="217" alt="product">
-                </a>
-                <div class="label-group">
-                    <div class="product-label label-sale">-17%</div>
-                </div>
-                <div class="btn-icon-group">
-                    <a href="demo25-product.html"
-                       class="btn-icon btn-add-cart product-type-simple">
-                        <i class="icon-shopping-cart"></i>
-                    </a>
-                </div>
-                <a href="ajax/product-quick-view.html" class="btn-quickview"
-                   title="Quick View">
-                    Quick
-                    View
-                </a>
-            </figure>
-            <div class="product-details">
-                <div class="category-wrap">
-                    <div class="category-list">
-                        <a href="demo25-shop.html" class="product-category">category</a>
-                    </div>
-                    <a href="wishlist.html" title="Add to Wishlist" class="btn-icon-wish">
-                        <i class="icon-heart"></i>
-                    </a>
-                </div>
-                <h3 class="product-title">
-                    <a href="demo25-product.html">Queen Bee</a>
-                </h3>
-                <div class="ratings-container">
-                    <div class="product-ratings">
-                        <span class="ratings" style="width:0%"></span><!-- End .ratings -->
-                        <span class="tooltiptext tooltip-top"></span>
-                    </div><!-- End .product-ratings -->
-                </div><!-- End .product-container -->
-                <div class="price-box">
-                    <span class="old-price">$59.0</span>
-                    <span class="product-price">$49.0</span>
-                </div><!-- End .price-box -->
-            </div><!-- End .product-details -->
-        </div>
+                    <h3 class="product-title">
+                        <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@item.Id">@item.Name</a>
+                    </h3>
+                    <div class="ratings-container">
+                        <div class="product-ratings">
+                            <span class="ratings" style="width:0%"></span><!-- End .ratings -->
+                            <span class="tooltiptext tooltip-top"></span>
+                        </div><!-- End .product-ratings -->
+                    </div><!-- End .product-container -->
+                    <div class="price-box">
+                        <span class="product-price">@item.Price &#x20BA;</span>
+                    </div><!-- End .price-box -->
+                </div><!-- End .product-details -->
+            </div>
+        }
+        <!-- End .product-details -->
     </div><!-- End .products-slider -->
 </div>

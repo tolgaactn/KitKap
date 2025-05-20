@@ -10,6 +10,7 @@ using Kitkap.Service.Dtos.AddressDtos;
 using KitKap.Service.Dtos.AboutDtos;
 using KitKap.Service.Dtos.ProductImagesDtos;
 using Kitkap.Service.Dtos.UserDtos;
+using KitKap.Service.Dtos.ShoppingCartDetailDtos;
 
 namespace KitKap.Service.Mapping
 {
@@ -21,7 +22,8 @@ namespace KitKap.Service.Mapping
             CreateMap<Product, CreateProductDto>().ReverseMap();
             CreateMap<Product, UpdateProductDto>().ReverseMap();
             CreateMap<Product, RemoveProductDto>().ReverseMap();
-            CreateMap<Product, GetByIdProductDto>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name)); ;
+            CreateMap<Product, GetByIdProductDto>().Include<Book, GetByIdProductDto>().ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
+            CreateMap<Book, GetByIdProductDto>();
             CreateMap<Product, GetByOwnerIdDto>().ReverseMap();
 
             CreateMap<ProductImage, CreateProductImageDto>().ReverseMap();
@@ -57,8 +59,10 @@ namespace KitKap.Service.Mapping
 
             CreateMap<Book, UpdateBookDto>().IncludeBase<Product,UpdateProductDto>().ReverseMap();
 
-            
-            
+            CreateMap<ShoppingCartDetail, ResultShoppingCartDetailDto>().ReverseMap();
+
+
+
         }
     }
 }

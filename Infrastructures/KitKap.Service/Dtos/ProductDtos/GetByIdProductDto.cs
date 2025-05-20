@@ -23,6 +23,12 @@ namespace Kitkap.Service.Dtos.AddressDtos
         public DateTime? UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 
+        public string? Author { get; set; }
+        public int? ISBN { get; set; }
+        public DateTime? PublicationDate { get; set; }
+        public string? Language { get; set; }
+        public string? Condition { get; set; }
+
         public ProductStatus Status { get; set; }
         public Category Category { get; set; }
         public ICollection<ProductImage> ProductImages { get; set; }

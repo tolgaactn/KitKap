@@ -67,7 +67,7 @@ namespace KitKap.Service.Services
                 c => c.Category,
                 });
             return _mapper.Map<GetByIdProductDto>(Product);
-            
+
         }
 
 

@@ -1,0 +1,11 @@
+﻿@model ProductDetailViewModel
+
+<nav aria-label="breadcrumb" class="breadcrumb-nav">
+    <div class="container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
+            <li class="breadcrumb-item"><a asp-controller="ProductList" asp-action="Index">Kitaplar</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@Model.Id">@Model.Name</a></li>
+        </ol>
+    </div>
+</nav>

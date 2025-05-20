@@ -9,6 +9,7 @@ using Kitkap.Entity.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using KitKap.Service.Services.Interfaces;
 using KitKap.MvcUI.Areas.Admin.ViewModels.ProductImagesViewModels;
+using KitKap.Service.Dtos.ProductDtos;
 
 
 namespace KitKap.MvcUI.Areas.Admin.Controllers
@@ -29,12 +30,8 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
             _productImageService = productImageService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? search)
         {
-            ViewBag.v1 = "Ana Sayfa";
-            ViewBag.v2 = "Ürünler";
-            ViewBag.v3 = "Ürün Listesi";
-            ViewBag.v0 = "Ürün İşlemleri";
 
             var productDtos = await _productService.GetAllProducts();
 
@@ -52,6 +49,13 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
                 ImageUrl = dto.ProductImages.FirstOrDefault(img => img.IsMain && !img.IsDeleted)?.ImageUrl ?? "/template/assets/images/default-product.png",
                 CategoryName = dto.CategoryName
             }).ToList();
+
+            ViewData["TotalCount"] = viewModels.Count();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                viewModels = viewModels.Where(a => (a.Name != null && a.Name.ToLower().Contains(search.ToLower().Trim())) || (int.TryParse(search.Trim(), out int productId) && a.Id == productId)).ToList();
+            }
 
             return View(viewModels);
         }
@@ -212,6 +216,30 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> ProductDetail(long id)
+        {
+            var productDto = await _productService.GetByIdProduct(id);
 
+            var productImages = await _productImageService.GetByIdProductImagesAsync(id);
+
+            if (productDto == null)
+            {
+                return NotFound();
+            }
+
+            var model = new AdminProductDetailViewModel
+            {
+                Id = productDto.Id,
+                Name = productDto.Name,
+                Description = productDto.Description,
+                Price = productDto.Price,
+                Stock = productDto.Stock,
+                CategoryName = productDto.CategoryName,
+                ImageUrl = productDto.ProductImages.FirstOrDefault(img => img.IsMain && !img.IsDeleted)?.ImageUrl ?? "/template/assets/images/default-product.png",
+                ImageUrls = productImages.Where(img => !img.IsDeleted).Select(img => img.ImageUrl).ToList()
+            };
+
+            return View(model);
+        }
     }
 }
