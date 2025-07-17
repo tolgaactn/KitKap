@@ -5,83 +5,172 @@
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>Ürünü Düzenle</h2>
-
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="OwnerId" />
-    <input type="hidden" asp-for="Status" />
-    <input type="hidden" asp-for="IsDeleted" />
-
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Price"></label>
-        <input asp-for="Price" type="number" class="form-control" />
-        <span asp-validation-for="Price" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Stock"></label>
-        <input asp-for="Stock" type="number" class="form-control" />
-        <span asp-validation-for="Stock" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="CategoryId">Kategori</label>
-        <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories"></select>
-    </div>
-
-    <div class="form-group">
-        <label>Mevcut Görseller</label>
-        <div class="row">
-            @if (Model.ExistingImages != null && Model.ExistingImages.Any())
-            {
-                foreach (var image in Model.ExistingImages)
-                {
-                    <div class="col-md-3 text-center mb-3">
-                        <img src="@image.ImageUrl" class="img-thumbnail" style="height: 150px;" />
-
-                        <div class="form-check mt-2">
-                            <input asp-for="SelectedMainImageId"
-                                   class="form-check-input"
-                                   type="radio"
-                                   value="@image.Id"
-                                   checked="@(image.IsMain ? "checked" : null)" />
-                            <label class="form-check-label">Ana Görsel Yap</label>
-                        </div>
-
-                        <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" name="ImagesToDelete" value="@image.Id" />
-                            <label class="form-check-label text-danger">Sil</label>
-                        </div>
-                    </div>
-                }
-            }
-            else
-            {
-                <p>Ürüne ait görsel bulunmamaktadır.</p>
-            }
+<!-- main-content-wrap -->
+<div class="main-content-inner">
+    <!-- main-content-wrap -->
+    <div class="main-content-wrap">
+        <div class="flex items-center flex-wrap justify-between gap20 mb-27">
+            <h3>Ürünü Düzenle</h3>
+            <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+                <li>
+                    <a href="/Admin/AdminHome/Index"><div class="text-tiny">Anasayfa</div></a>
+                </li>
+                <li>
+                    <i class="icon-chevron-right"></i>
+                </li>
+                <li>
+                    <a href="#"><div class="text-tiny">E-Ticaret</div></a>
+                </li>
+                <li>
+                    <i class="icon-chevron-right"></i>
+                </li>
+                <li>
+                    <div class="text-tiny">Ürün Listesi</div>
+                </li>
+            </ul>
         </div>
-    </div>
+        <!-- new-attribute -->
+        <div class="wg-box">
+            <form class="form-new-product form-style-1" asp-action="Edit" asp-controller="Product" asp-area="Admin" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="OwnerId" />
+                <input type="hidden" asp-for="Status" />
+                <input type="hidden" asp-for="IsDeleted" />
+                <fieldset class="name">
+                    <div class="body-title">Id <span class="tf-color-1">*</span> </div>
+                    <input class="flex-grow" asp-for="Id" type="text" tabindex="0">
+                    <span asp-validation-for="Id" class="text-danger"></span>
+                </fieldset>
+                <fieldset class="name">
+                    <div class="body-title">Ürün Adı <span class="tf-color-1">*</span> </div>
+                    <input class="flex-grow" asp-for="Name" type="text" tabindex="0">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </fieldset>
+                <fieldset class="name">
+                    <div class="body-title">Açıklama <span class="tf-color-1">*</span> </div>
+                    <textarea class="flex-grow" asp-for="Description" placeholder="Açıklama" tabindex="0" aria-required="true" required=""></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </fieldset>
+                <fieldset class="name">
+                    <div class="body-title">Fiyat <span class="tf-color-1">*</span> </div>
+                    <input class="flex-grow" asp-for="Price" type="number" tabindex="0">
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </fieldset>
+                <fieldset class="name">
+                    <div class="body-title">Stok <span class="tf-color-1">*</span> </div>
+                    <input class="flex-grow" asp-for="Stock" type="number" tabindex="0">
+                    <span asp-validation-for="Stock" class="text-danger"></span>
+                </fieldset>
+                <fieldset class="name">
+                    <div class="body-title">Kategori</div>
+                    <div class="select flex-grow">
+                        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class=""></select>
+                    </div>
+                </fieldset>
+                <fieldset class="name">
+                    <div class="body-title">Mevcut Görseller</div>
+                    <div class="row">
+                        @if (Model.ExistingImages != null && Model.ExistingImages.Any())
+                        {
+                            foreach (var image in Model.ExistingImages)
+                            {
+                                <div class="col-sm-6 col-md-4 col-lg-3 mb-4 d-flex flex-column align-items-center">
+                                    <img src="@image.ImageUrl" class="img-fluid img-thumbnail mb-2" style="height: 150px; object-fit: cover;" alt="Ürün Görseli" />
 
-    <div class="form-group mt-4">
-        <label>Yeni Görseller Yükle</label>
-        <input asp-for="NewProductImages" type="file" multiple class="form-control" />
+                                    <div class="radio-buttons mt-2">
+                                        <div class="item mb-10">
+                                            <input asp-for="SelectedMainImageId"
+                                               class=""
+                                               type="radio"
+                                               value="@image.Id"
+                                               checked="@(image.IsMain ? "checked" : null)"
+                                               id="mainImage_@image.Id" />
+                                            <label class="" for="mainImage_@image.Id">
+                                                <span class="body-title-2">Ana Görsel Yap</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="wrap-checkbox">
+                                        <ul class="table-title flex gap20 mb-14">
+                                            <li class="countries-item">
+                                                <div class="mb-10 block-not-available">
+                                                    <input class="checkbox-item"
+                                                           type="checkbox"
+                                                           name="ImagesToDelete"
+                                                           value="@image.Id"
+                                                           id="deleteImage_@image.Id" />Sil
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="col-12">
+                                <p class="text-muted">Ürüne ait görsel bulunmamaktadır.</p>
+                            </div>
+                        }
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="body-title">Yeni Görseller Yükle</div>
+                    <div class="row">
+                    <label class="tf-button-funtion" for="newImages" style="cursor: pointer;">
+                        <i class="icon-upload-cloud"></i>
+                        <span class="body-title">Görselleri Seç</span>
+                        <input asp-for="NewProductImages" id="newImages" type="file" multiple style="display:none" />
+                    </label>
+                    <div class="w-100"></div>
+                    <!-- Yeni resimler burada görünecek -->
+                    <div id="newImagesPreview" class="row mt-3"></div>
+                    </div>
+                </fieldset>                    
+                <div class="bot">
+                    <div></div>
+                    <button class="tf-button w208" type="submit">Kaydet</button>
+                    <a class="tf-button w208" href="/Admin/Product/Index">İptal</a>
+                </div>
+            </form>
+        </div>
+        <!-- /new-category -->
     </div>
+    <!-- /main-content-wrap -->
+</div>
+<!-- /main-content-wrap -->
 
-    <div class="mt-4">
-        <button type="submit" class="btn btn-success">Kaydet</button>
-        <a asp-action="Index" class="btn btn-secondary">İptal</a>
-    </div>
-</form>
+<style>
+    /* Önizleme resimleri için ekstra stil */
+    .preview-image {
+        height: 150px;
+        object-fit: cover;
+    }
+</style>
+
+<script>
+    document.getElementById('newImages').addEventListener('change', function(e) {
+        const previewContainer = document.getElementById('newImagesPreview');
+        previewContainer.innerHTML = '';
+
+        Array.from(e.target.files).forEach(file => {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                const colDiv = document.createElement('div');
+                // Bootstrap grid class'larını ekliyoruz
+                colDiv.className = 'col-sm-6 col-md-4 col-lg-3 mb-4 d-flex flex-column align-items-center';
+
+                colDiv.innerHTML = `
+                    <img src="${event.target.result}"
+                         class="img-fluid img-thumbnail preview-image"
+                         alt="Yeni yüklenen görsel">
+                `;
+
+                previewContainer.appendChild(colDiv);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    });
+</script>

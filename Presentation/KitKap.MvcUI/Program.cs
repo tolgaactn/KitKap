@@ -12,7 +12,8 @@ builder.Services.AddDbContext<KitKapDbContext>(
         options.UseSqlServer(builder.Configuration.GetConnectionString("ConnStr")
     ));
 
-builder.Services.AddExtensions(builder.Configuration);
+builder.Services.AddExtensions(builder.Configuration, builder.Environment);
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -30,6 +31,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
