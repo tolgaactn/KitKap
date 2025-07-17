@@ -23,54 +23,104 @@ namespace KitKap.Service.Services.Concretes
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
-        private readonly IConfiguration _configuration;
         private readonly JwtSettings _jwtSettings;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountService(UserManager<AppUser> userManager, IMapper mapper, IConfiguration configuration, IOptions<JwtSettings> jwtSettings)
+        public AccountService(UserManager<AppUser> userManager, IMapper mapper, IOptions<JwtSettings> jwtSettings, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _mapper = mapper;
-            _configuration = configuration;
             _jwtSettings = jwtSettings.Value;
+            _signInManager = signInManager;
         }
 
         public async Task<string> CreateUserAsync(RegisterUserDto model)
         {
-            string message = string.Empty;
-            AppUser user = new AppUser()
+            var existingUser = await _userManager.FindByEmailAsync(model.Email);
+            if (existingUser != null)
             {
+                return "Bu email adresi zaten kayıtlı.";
+            }
 
+            AppUser user = new AppUser
+            {
                 UserName = model.UserName,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Email = model.Email,
+                //PhoneNumber = model.PhoneNumber,
                 Balance = 0,
-                PhoneNumber = model.PhoneNumber
+                IsActived = true
             };
-            var identityResult = await _userManager.CreateAsync(user, model.ConfirmPassword);
 
-            if (identityResult.Succeeded)
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
             {
-                message = "OK";
+                // Varsayılan rol ata
+                await _userManager.AddToRoleAsync(user, "BireyselMusteri");
+                return "OK";
             }
-            else
+
+            return string.Join(", ", result.Errors.Select(e => e.Description));
+        }
+
+        public async Task<AuthResponse> LoginAsync(LoginUserDto model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+                return new AuthResponse { IsSuccessful = false, Errors = new List<string> { "Email bulunamadı" } };
+
+            var passwordValid = await _userManager.CheckPasswordAsync(user, model.Password);
+            if (!passwordValid)
+                return new AuthResponse { IsSuccessful = false, Errors = new List<string> { "Şifre yanlış" } };
+
+
+            if (!user.IsActived)
             {
-                foreach (var error in identityResult.Errors)
-                {
-                    message = error.Description;
-                }
+                throw new Exception("Hesabınız pasif durumdadır.");
             }
-            return message;
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Name, user.UserName)
+        };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddMinutes(_jwtSettings.ExpiresInMinutes);
+
+            var token = new JwtSecurityToken(
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                claims: claims,
+                expires: expires,
+                signingCredentials: creds
+            );
+
+            return new AuthResponse
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiration = expires,
+                UserName = user.UserName,
+                IsSuccessful = true
+            };
         }
 
         public async Task<GetByIdUserDto> FindById(string id)
         {
-
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
-            {
-                throw new Exception("Kullanıcı bulunamadı");
-            }
+                throw new Exception("Kullanıcı bulunamadı.");
             return _mapper.Map<GetByIdUserDto>(user);
         }
 
@@ -80,77 +130,46 @@ namespace KitKap.Service.Services.Concretes
             return _mapper.Map<List<RequestUserDto>>(users);
         }
 
-        public async Task<AuthResponse> LoginAsync(LoginUserDto model)
-        {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
-            {
-                throw new Exception("Giriş başarısız");
-            }
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_jwtSettings.Secret);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email)
-        }),
-                Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiresInMinutes),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                Issuer = _jwtSettings.Issuer,
-                Audience = _jwtSettings.Audience
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-
-            return new AuthResponse
-            {
-                Token = tokenString,
-                Expiration = tokenDescriptor.Expires ?? DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiresInMinutes),
-                UserName = user.UserName
-            };
-        }
-
         public async Task DeactivateUserAsync(DeactivateUserDto model)
         {
             var user = await _userManager.FindByIdAsync(model.Id);
-
             if (user == null)
-            {
-                throw new Exception("Bu id'de kişi tanımlı değil");
-            }
+                throw new Exception("Kullanıcı bulunamadı.");
+
             user.IsActived = false;
             await _userManager.UpdateAsync(user);
-
         }
 
         public async Task UpdateUserAsync(UpdateUserDto model)
         {
             var user = await _userManager.FindByIdAsync(model.Id);
             if (user == null)
-            {
-                throw new Exception("Bu id'de kişi tanımlı değil");
-            }
+                throw new Exception("Kullanıcı bulunamadı.");
+
             user.UserName = model.UserName;
-            user.AddressId = model.AddressId;
             user.Email = model.Email;
+            user.PhoneNumber = model.PhoneNumber;
             user.Balance = model.Balance;
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-            user.PhoneNumber = model.PhoneNumber;
+            user.AddressId = model.AddressId;
 
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
                 var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                throw new Exception($"Kullanıcı güncellenemedi. Hatalar: {errors}");
+                throw new Exception($"Güncelleme başarısız: {errors}");
             }
         }
-
-
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
+        }
+        public async Task<IList<string>> GetRolesAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            return await _userManager.GetRolesAsync(user);
+        }
     }
+
 }

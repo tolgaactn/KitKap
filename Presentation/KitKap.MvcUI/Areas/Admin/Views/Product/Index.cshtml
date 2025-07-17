@@ -93,40 +93,41 @@
                         <ul class="flex flex-column">
                             @foreach (var product in Model)
                             {
-                                <li class="product-item gap14">
-                                    <div class="image no-bg">
-                                        <img src="@product.ImageUrl" alt="">
+                        <li class="product-item gap14">
+                            <!-- Ürün Görseli -->
+                            <div class="image no-bg">
+                                <img src="@product.ImageUrl" alt="" style="width: 40px; height: 40px; object-fit: cover;">
+                            </div>
+
+                            <!-- Diğer Bilgiler (hepsi tek 'flex' içinde) -->
+                            <div class="flex items-center justify-between gap20 flex-grow">
+                                <div class="name">
+                                    <a href="product-list.html" class="body-title-2">@product.Name</a>
+                                </div>
+                                <div class="body-text">@product.Id</div>
+                                <div class="body-text">@product.Price</div>
+                                <div class="body-text">@product.Stock</div>
+                                <div class="body-text">@product.Status</div>
+                                <div class="body-text">@product.CategoryName</div>
+
+                                <!-- Butonlar -->
+                                <div class="list-icon-function">
+                                    <div class="item eye">
+                                        <i class="icon-eye"></i>
                                     </div>
-                                    <div class="flex items-center justify-between gap20 flex-grow">
-                                        <div class="name">
-                                            <a href="product-list.html" class="body-title-2">@product.Name</a>
-                                        </div>
-                                        <div class="body-text">#@product.Id</div>
-                                        <div class="body-text">$@product.Price</div>
-                                        <div class="body-text">@product.Price</div>
-                                        <div class="body-text">@product.Stock</div>
-                                        <div class="body-text">@product.Status</div>
-                                        <div class="body-text">@product.CategoryId</div>
-                                        <div>
-                                            @if (product.Status==0)
-                                            {
-                                                <div class="block-not-available">Out of stock</div>
-                                            }
-                                        </div>
-                                        <div class="body-text">$@product.Name</div>
-                                        <div class="list-icon-function">
-                                            <div class="item eye">
-                                                <i class="icon-eye"></i>
-                                            </div>
-                                            <div class="item edit">
-                                                <i class="icon-edit-3"></i>
-                                            </div>
-                                            <div class="item trash">
-                                                <i class="icon-trash-2"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                    <a class="item edit" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id">
+                                        <i class="icon-edit-3"></i>
+                                    </a>
+                                    <form method="post" asp-action="Delete" asp-controller="Product" asp-area="Admin" asp-route-id="@product.Id" onsubmit="return confirm('Bu kategoriyi silmek istediğinizden emin misiniz?');">
+
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="icon-trash-2"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+
                             }
 
                         </ul>

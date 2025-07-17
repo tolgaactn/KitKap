@@ -1,6 +1,7 @@
 using KitKap.DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
-using KitKap.Service.Extensions; // Doðru namespace
+using KitKap.Service.Extensions;
+using KitKap.MvcUI.SeedData; // Doðru namespace
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,16 @@ builder.Services.AddDbContext<KitKapDbContext>(
 
 builder.Services.AddExtensions(builder.Configuration);
 
+builder.Logging.ClearProviders();      // Default log saðlayýcýlarý kaldýrýlýr
+builder.Logging.AddConsole();
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await RoleSeeder.SeedRolesAsync(services); // Rol seed iþlemi
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -35,15 +45,21 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapControllerRoute(
-      name: "areas",
-      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-    );
+//app.MapControllerRoute(
+//      name: "areas",
+//      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+//    );
 
 
-app.MapControllerRoute(
-      name: "area",
-      pattern: "{controller=Home}/{action=Index}/{area=Admin}/{id?}"
-    );
+//app.MapControllerRoute(
+//      name: "area",
+//      pattern: "{controller=Product}/{action=Index}/{area=Admin}/{id?}"
+//    );
+
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{area=Admin}/{controller=Product}/{action=Index}/{id?}");
+
 
 app.Run();

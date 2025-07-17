@@ -28,19 +28,20 @@ namespace KitKap.Service.Extensions
     {
         public static void AddExtensions(this IServiceCollection services,IConfiguration configuration)
         {
-            services.AddIdentityCore<AppUser>(
-    opt =>
-    {
-        opt.Password.RequireNonAlphanumeric = false;
-        opt.Password.RequiredLength = 3;
-        opt.Password.RequireLowercase = false;
-        opt.Password.RequireUppercase = false;
-        opt.Password.RequireDigit = false;
-        opt.User.RequireUniqueEmail = true;
-        opt.Lockout.MaxFailedAccessAttempts = 3;
-        opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
-    }
-).AddEntityFrameworkStores<KitKapDbContext>();
+            services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 3;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = false;
+                options.User.RequireUniqueEmail = true;
+                options.Lockout.MaxFailedAccessAttempts = 3;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+            })
+            .AddEntityFrameworkStores<KitKapDbContext>()
+            .AddDefaultTokenProviders();
+
 
             services.ConfigureApplicationCookie(opt =>
             {
@@ -75,10 +76,12 @@ namespace KitKap.Service.Extensions
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = jwtSettings["Issuer"],
                     ValidAudience = jwtSettings["Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+
+                    ClockSkew = TimeSpan.FromMinutes(5)
                 };
             });
-
+            services.AddScoped<RoleManager<IdentityRole>>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IProductService, ProductService>();

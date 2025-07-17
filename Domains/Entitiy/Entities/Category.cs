@@ -12,7 +12,7 @@ namespace Kitkap.Entity.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public int? ParentCategoryId { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public Category ParentCategory { get; set; }
         public ICollection<Category> SubCategories { get; set; }

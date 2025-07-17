@@ -9,7 +9,6 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [AllowAnonymous]
-    [Route("Admin/[controller]/[action]/{id?}")]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;

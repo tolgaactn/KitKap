@@ -14,8 +14,9 @@ namespace Kitkap.Entity.Services
         Task<AuthResponse> LoginAsync(LoginUserDto model);
         Task<GetByIdUserDto> FindById(string id);
         Task<List<RequestUserDto>> GetAllUsersAsync();
+        Task<IList<string>> GetRolesAsync(string email);
         Task UpdateUserAsync(UpdateUserDto model);
         Task DeactivateUserAsync(DeactivateUserDto model);
-
+        Task LogoutAsync();
     }
 }
