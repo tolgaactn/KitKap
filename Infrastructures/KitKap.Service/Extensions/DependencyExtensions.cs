@@ -1,32 +1,35 @@
-﻿using KitKap.DataAccess.Identity;
-using KitKap.DataAccess.Repositories;
-using KitKap.DataAccess.UnitOfWorks;
-using Kitkap.Entity.Repositories;
+﻿using Kitkap.Entity.Repositories;
 using Kitkap.Entity.Services;
 using Kitkap.Entity.UnitOfWorks;
+using Kitkap.Service.Services;
+using KitKap.DataAccess.Contexts;
+using KitKap.DataAccess.Identity;
+using KitKap.DataAccess.Repositories;
+using KitKap.DataAccess.UnitOfWorks;
+using KitKap.Service.Jwt;
 using KitKap.Service.Mapping;
 using KitKap.Service.Services;
+using KitKap.Service.Services.Concretes;
+using KitKap.Service.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KitKap.DataAccess.Contexts;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using KitKap.Service.Jwt;
-using Microsoft.AspNetCore.Identity;
-using KitKap.Service.Services.Concretes;
-using KitKap.Service.Services.Interfaces;
 
 namespace KitKap.Service.Extensions
 {
     public static class DependencyExtensions
     {
-        public static void AddExtensions(this IServiceCollection services,IConfiguration configuration)
+        public static void AddExtensions(this IServiceCollection services,IConfiguration configuration, IWebHostEnvironment env)
         {
             services.AddIdentity<AppUser, IdentityRole>(options =>
             {
@@ -54,7 +57,9 @@ namespace KitKap.Service.Extensions
                 opt.Cookie = new CookieBuilder()
                 {
                     Name = "Identity.App.Cookie",
-                    HttpOnly = true
+                    HttpOnly = true,
+                    SameSite = env.IsDevelopment() ? SameSiteMode.Lax : SameSiteMode.None, //İncele kısmındaki hata geliştirici ortamında http kullanıldığı için Lax, canlıya aldığımız zaman https olacağı için None
+                    SecurePolicy = env.IsDevelopment() ? CookieSecurePolicy.None : CookieSecurePolicy.Always //İncele kısmındaki hata geliştirici ortamında http kullanıldığı için none, canlıya aldığımız zaman https olacağı için always
                 };
             });
 
@@ -90,7 +95,10 @@ namespace KitKap.Service.Extensions
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IAboutService, AboutService>();
-           // services.AddScoped(typeof(IAccountService), typeof(AccountService));
+            services.AddScoped<IProductImageService, ProductImageService>();
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IShoppingCartDetailService, ShoppingCartDetailService>();
+            // services.AddScoped(typeof(IAccountService), typeof(AccountService));
 
             services.AddAutoMapper(typeof(MappingProfile));
         }

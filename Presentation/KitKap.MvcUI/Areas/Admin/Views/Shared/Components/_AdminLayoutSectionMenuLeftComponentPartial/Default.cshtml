@@ -1,6 +1,6 @@
 ﻿<div class="section-menu-left">
     <div class="box-logo">
-        <a asp-area="Admin" asp-controller="AdminHome" asp-action="Index" id="site-logo-inner">
+        <a asp-controller="Home" asp-action="Index" id="site-logo-inner">
             <img class="" id="logo_header_mobile" alt="" src="/adminTemplate/images/logo/logo.png" data-light="/adminTemplate/images/logo/logo.png" data-dark="/adminTemplate/images/logo/logo-dark.png">
         </a>
         <div class="button-show-hide">
@@ -9,227 +9,444 @@
     </div>
     <div class="section-menu-left-wrap">
         <div class="center">
-            <div class="center-item">
-                <div class="center-heading">Ana Sayfa</div>
-                <ul class="menu-list">
-                    <li class="menu-item has-children active">
-                        <a href="javascript:void(0);" class="menu-item-button">
-                            <div class="icon"><i class="icon-grid"></i></div>
-                            <div class="text">Dashboard</div>
-                        </a>
-                        <ul class="sub-menu" style="display: block;">
-                            <li class="sub-menu-item">
-                                <a href="index.html" class="active">
-                                    <div class="text">Home 01</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="home-2.html" class="">
-                                    <div class="text">Home 02</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="home-3.html" class="">
-                                    <div class="text">Home 03</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="home-4.html" class="">
-                                    <div class="text">Home 04</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="home-boxed.html" class="">
-                                    <div class="text">Home Boxed</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="home-menu-icon-hover.html" class="">
-                                    <div class="text">Home Menu Icon Hover</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="home-menu-icon-default.html" class="">
-                                    <div class="text">Home Menu Icon Default</div>
-                                </a>
-                            </li>
+            @{
+                var actionName = ViewContext.RouteData.Values["action"]?.ToString();
+                var controllerName = ViewContext.RouteData.Values["controller"]?.ToString();
+                var areaName = ViewContext.RouteData.Values["area"]?.ToString();
+
+                if (!string.IsNullOrEmpty(actionName) && !string.IsNullOrEmpty(controllerName) && !string.IsNullOrEmpty(areaName)) /* Action ve controller null değil ise içeri girecek */
+                {
+                    <div class="center-item">
+                        <div class="center-heading">Ana Sayfa</div>
+                        <ul class="menu-list">
+                            @if (controllerName == "AdminHome" && areaName == "Admin")
+                            {
+                                <li class="menu-item has-children active">
+                                    <a href="javascript:void(0);" class="menu-item-button">
+                                        <div class="icon"><i class="icon-grid"></i></div>
+                                        <div class="text">Kontrol Paneli</div>
+                                    </a>
+                                    <ul class="sub-menu" style="display: block;">
+                                        @if (actionName == "Index" && controllerName == "AdminHome" && areaName == "Admin")
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="AdminHome" asp-action="Index" class="active">
+                                                    <div class="text">1. Anasayfa</div>
+                                                </a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="AdminHome" asp-action="Index" class="">
+                                                    <div class="text">1. Anasayfa</div>
+                                                </a>
+                                            </li>
+                                        }
+                                        <li class="sub-menu-item">
+                                            <a href="home-2.html" class="">
+                                                <div class="text">Home 02</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a href="home-3.html" class="">
+                                                <div class="text">Home 03</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a href="home-4.html" class="">
+                                                <div class="text">Home 04</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a href="home-boxed.html" class="">
+                                                <div class="text">Home Boxed</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a href="home-menu-icon-hover.html" class="">
+                                                <div class="text">Home Menu Icon Hover</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a href="home-menu-icon-default.html" class="">
+                                                <div class="text">Home Menu Icon Default</div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="menu-item has-children">
+                                    <a href="javascript:void(0);" class="menu-item-button">
+                                        <div class="icon"><i class="icon-grid"></i></div>
+                                        <div class="text">Kontrol Paneli</div>
+                                    </a>
+                                    <ul class="sub-menu" style="display: none;">
+                                        <li class="sub-menu-item">
+                                            <a asp-area="Admin" asp-controller="AdminHome" asp-action="Index" class="">
+                                                <div class="text">1. Anasayfa</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a href="home-2.html" class="">
+                                                <div class="text">Home 02</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a href="home-3.html" class="">
+                                                <div class="text">Home 03</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a href="home-4.html" class="">
+                                                <div class="text">Home 04</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a href="home-boxed.html" class="">
+                                                <div class="text">Home Boxed</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a href="home-menu-icon-hover.html" class="">
+                                                <div class="text">Home Menu Icon Hover</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a href="home-menu-icon-default.html" class="">
+                                                <div class="text">Home Menu Icon Default</div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
                         </ul>
-                    </li>
-                </ul>
-            </div>
-            <div class="center-item">
-                <div class="center-heading">Tüm Sayfalar</div>
-                <ul class="menu-list">
-                    <li class="menu-item has-children">
-                        <a href="javascript:void(0);" class="menu-item-button">
-                            <div class="icon"><i class="icon-shopping-cart"></i></div>
-                            <div class="text">E-Ticaret</div>
-                        </a>
-                        <ul class="sub-menu">
-                            <li class="sub-menu-item">
-                                <a href="add-product.html" class="">
-                                    <div class="text">Ürün Ekle</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="product-list.html" class="">
-                                    <div class="text">Ürün Listesi</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="product-detail-1.html" class="">
-                                    <div class="text">Ürün Detayı 1</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="product-detail-2.html" class="">
-                                    <div class="text">Ürün Detayı 2</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="product-detail-3.html" class="">
-                                    <div class="text">Ürün Detayı 3</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item has-children">
-                        <a href="javascript:void(0);" class="menu-item-button">
-                            <div class="icon"><i class="icon-layers"></i></div>
-                            <div class="text">Kategori</div>
-                        </a>
-                        <ul class="sub-menu">
-                            <li class="sub-menu-item">
-                                <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="">
-                                    <div class="text">Kategori Listesi</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a asp-area="Admin" asp-controller="Category" asp-action="Create" asp class="">
-                                    <div class="text">Yeni Kategori</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item has-children">
-                        <a href="javascript:void(0);" class="menu-item-button">
-                            <div class="icon"><i class="icon-box"></i></div>
-                            <div class="text">Attributes</div>
-                        </a>
-                        <ul class="sub-menu">
-                            <li class="sub-menu-item">
-                                <a href="attributes.html" class="">
+                    </div>
+                    <div class="center-item">
+                        <div class="center-heading">Tüm Sayfalar</div>
+                        <ul class="menu-list">
+                            @if (controllerName == "Product" && areaName == "Admin")
+                            {
+                                <li class="menu-item has-children active">
+                                    <a href="javascript:void(0);" class="menu-item-button">
+                                        <div class="icon"><i class="icon-shopping-cart"></i></div>
+                                        <div class="text">E-Ticaret</div>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        @if (actionName == "Create" && controllerName == "Product" && areaName == "Admin")
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="Product" asp-action="Create" class="active">
+                                                    <div class="text">Ürün Ekle</div>
+                                                </a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="Product" asp-action="Create" class="">
+                                                    <div class="text">Ürün Ekle</div>
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (actionName == "Index" && controllerName == "Product" && areaName == "Admin")
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="active">
+                                                    <div class="text">Ürün Listesi</div>
+                                                </a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="">
+                                                    <div class="text">Ürün Listesi</div>
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (actionName == "ProductDetail" && controllerName == "Product" && areaName == "Admin")
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="Product" asp-action="ProductDetail" asp-route-id="1" class="active">
+                                                    <div class="text">Ürün Detayı </div>
+                                                </a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="Product" asp-action="ProductDetail" asp-route-id="1" class="">
+                                                    <div class="text">Ürün Detayı </div>
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="menu-item has-children">
+                                    <a href="javascript:void(0);" class="menu-item-button">
+                                        <div class="icon"><i class="icon-shopping-cart"></i></div>
+                                        <div class="text">E-Ticaret</div>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="sub-menu-item">
+                                            <a asp-area="Admin" asp-controller="Product" asp-action="Create" class="">
+                                                <div class="text">Ürün Ekle</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="">
+                                                <div class="text">Ürün Listesi</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a asp-area="Admin" asp-controller="Product" asp-action="ProductDetail" asp-route-id="1" class="">
+                                                <div class="text">Ürün Detayı </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (controllerName == "Category" && areaName == "Admin")
+                            {
+                                <li class="menu-item has-children active">
+                                    <a href="javascript:void(0);" class="menu-item-button">
+                                        <div class="icon"><i class="icon-layers"></i></div>
+                                        <div class="text">Kategori</div>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        @if (actionName == "Index" && controllerName == "Category" && areaName == "Admin")
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="active">
+                                                    <div class="text">Kategori Listesi</div>
+                                                </a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="">
+                                                    <div class="text">Kategori Listesi</div>
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (actionName == "Create" && controllerName == "Category" && areaName == "Admin")
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="Category" asp-action="Create" class="active">
+                                                    <div class="text">Yeni Kategori</div>
+                                                </a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="Category" asp-action="Create" class="">
+                                                    <div class="text">Yeni Kategori</div>
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="menu-item has-children">
+                                    <a href="javascript:void(0);" class="menu-item-button">
+                                        <div class="icon"><i class="icon-layers"></i></div>
+                                        <div class="text">Kategori</div>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="sub-menu-item">
+                                            <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="">
+                                                <div class="text">Kategori Listesi</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a asp-area="Admin" asp-controller="Category" asp-action="Create" class="">
+                                                <div class="text">Yeni Kategori</div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            <li class="menu-item has-children">
+                                <a href="javascript:void(0);" class="menu-item-button">
+                                    <div class="icon"><i class="icon-box"></i></div>
                                     <div class="text">Attributes</div>
                                 </a>
+                                <ul class="sub-menu">
+                                    <li class="sub-menu-item">
+                                        <a href="attributes.html" class="">
+                                            <div class="text">Attributes</div>
+                                        </a>
+                                    </li>
+                                    <li class="sub-menu-item">
+                                        <a href="add-attributes.html" class="">
+                                            <div class="text">Add attributes</div>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li class="sub-menu-item">
-                                <a href="add-attributes.html" class="">
-                                    <div class="text">Add attributes</div>
+                            <li class="menu-item has-children">
+                                <a href="javascript:void(0);" class="menu-item-button">
+                                    <div class="icon"><i class="icon-file-plus"></i></div>
+                                    <div class="text">Siparişler</div>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="sub-menu-item">
+                                        <a href="oder-list.html" class="">
+                                            <div class="text">Sipariş Listesi</div>
+                                        </a>
+                                    </li>
+                                    <li class="sub-menu-item">
+                                        <a href="oder-detail.html" class="">
+                                            <div class="text">Sipariş Detayı</div>
+                                        </a>
+                                    </li>
+                                    <li class="sub-menu-item">
+                                        <a href="oder-tracking.html" class="">
+                                            <div class="text">Sipariş Durumu</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="menu-item has-children">
+                                <a href="javascript:void(0);" class="menu-item-button">
+                                    <div class="icon"><i class="icon-user"></i></div>
+                                    <div class="text">Kullanıcılar</div>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="sub-menu-item">
+                                        <a href="all-user.html" class="">
+                                            <div class="text">Tüm Kullanıcılar</div>
+                                        </a>
+                                    </li>
+                                    <li class="sub-menu-item">
+                                        <a href="add-new-user.html" class="">
+                                            <div class="text">Yeni Kullanıcı Ekle</div>
+                                        </a>
+                                    </li>
+                                    <li class="sub-menu-item">
+                                        <a href="login.html" class="">
+                                            <div class="text">Giriş Yap</div>
+                                        </a>
+                                    </li>
+                                    <li class="sub-menu-item">
+                                        <a href="sign-up.html" class="">
+                                            <div class="text">Kayıt Ol</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="menu-item has-children">
+                                <a href="javascript:void(0);" class="menu-item-button">
+                                    <div class="icon"><i class="icon-user-plus"></i></div>
+                                    <div class="text">Roller</div>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="sub-menu-item">
+                                        <a href="all-roles.html" class="">
+                                            <div class="text">Tüm Roller</div>
+                                        </a>
+                                    </li>
+                                    <li class="sub-menu-item">
+                                        <a href="create-role.html" class="">
+                                            <div class="text">Yeni Roller</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            @if (controllerName == "About" && areaName == "Admin")
+                            {
+                                <li class="menu-item has-children active">
+                                    <a href="javascript:void(0);" class="menu-item-button">
+                                        <div class="icon"><i class="icon-layers"></i></div>
+                                        <div class="text">Hakkında</div>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        @if (actionName == "Index" && controllerName == "About" && areaName == "Admin")
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="About" asp-action="Index" class="active">
+                                                    <div class="text">Hakkında Listesi</div>
+                                                </a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="About" asp-action="Index" class="">
+                                                    <div class="text">Hakkında Listesi</div>
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (actionName == "Create" && controllerName == "About" && areaName == "Admin")
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="About" asp-action="Create" class="active">
+                                                    <div class="text">Yeni Hakkında</div>
+                                                </a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="sub-menu-item">
+                                                <a asp-area="Admin" asp-controller="About" asp-action="Create" class="">
+                                                    <div class="text">Yeni Hakkında</div>
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="menu-item has-children">
+                                    <a href="javascript:void(0);" class="menu-item-button">
+                                        <div class="icon"><i class="icon-layers"></i></div>
+                                        <div class="text">Hakkında</div>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li class="sub-menu-item">
+                                            <a asp-area="Admin" asp-controller="About" asp-action="Index" class="">
+                                                <div class="text">Hakkında Listesi</div>
+                                            </a>
+                                        </li>
+                                        <li class="sub-menu-item">
+                                            <a asp-area="Admin" asp-controller="About" asp-action="Create" class="">
+                                                <div class="text">Yeni Hakkında</div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            <li class="menu-item">
+                                <a href="gallery.html" class="">
+                                    <div class="icon"><i class="icon-image"></i></div>
+                                    <div class="text">Galeri</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="report.html" class="">
+                                    <div class="icon"><i class="icon-pie-chart"></i></div>
+                                    <div class="text">Raporlar</div>
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                    <li class="menu-item has-children">
-                        <a href="javascript:void(0);" class="menu-item-button">
-                            <div class="icon"><i class="icon-file-plus"></i></div>
-                            <div class="text">Siparişler</div>
-                        </a>
-                        <ul class="sub-menu">
-                            <li class="sub-menu-item">
-                                <a href="oder-list.html" class="">
-                                    <div class="text">Sipariş Listesi</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="oder-detail.html" class="">
-                                    <div class="text">Sipariş Detayı</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="oder-tracking.html" class="">
-                                    <div class="text">Sipariş Durumu</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item has-children">
-                        <a href="javascript:void(0);" class="menu-item-button">
-                            <div class="icon"><i class="icon-user"></i></div>
-                            <div class="text">Kullanıcılar</div>
-                        </a>
-                        <ul class="sub-menu">
-                            <li class="sub-menu-item">
-                                <a href="all-user.html" class="">
-                                    <div class="text">Tüm Kullanıcılar</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="add-new-user.html" class="">
-                                    <div class="text">Yeni Kullanıcı Ekle</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="login.html" class="">
-                                    <div class="text">Giriş Yap</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="sign-up.html" class="">
-                                    <div class="text">Kayıt Ol</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item has-children">
-                        <a href="javascript:void(0);" class="menu-item-button">
-                            <div class="icon"><i class="icon-user-plus"></i></div>
-                            <div class="text">Roller</div>
-                        </a>
-                        <ul class="sub-menu">
-                            <li class="sub-menu-item">
-                                <a href="all-roles.html" class="">
-                                    <div class="text">Tüm Roller</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a href="create-role.html" class="">
-                                    <div class="text">Yeni Roller</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item has-children">
-                        <a href="javascript:void(0);" class="menu-item-button">
-                            <div class="icon"><i class="icon-layers"></i></div>
-                            <div class="text">Hakkında</div>
-                        </a>
-                        <ul class="sub-menu">
-                            <li class="sub-menu-item">
-                                <a asp-area="Admin" asp-controller="About" asp-action="Index" class="">
-                                    <div class="text">Hakkında Listesi</div>
-                                </a>
-                            </li>
-                            <li class="sub-menu-item">
-                                <a asp-area="Admin" asp-controller="About" asp-action="Create" asp class="">
-                                    <div class="text">Yeni Hakkında</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="gallery.html" class="">
-                            <div class="icon"><i class="icon-image"></i></div>
-                            <div class="text">Galeri</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="report.html" class="">
-                            <div class="icon"><i class="icon-pie-chart"></i></div>
-                            <div class="text">Raporlar</div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+                    </div>
+                }
+                else
+                {
+                    <p>Action veya controller ismi bulunamadı.</p>
+                }
+            }
             <div class="center-item">
                 <div class="center-heading">Ayarlar</div>
                 <ul class="menu-list">
@@ -360,7 +577,7 @@
         <div class="bot text-center">
             <div class="wrap">
                 <div class="mb-20">
-                    <img src="images/menu-left/img-bot.png" alt="">
+                    <img src="~/adminTemplate/images/menu-left/img-bot.png" alt="">
                 </div>
                 <div class="mb-20">
                     <h6>Hi, how can we help?</h6>

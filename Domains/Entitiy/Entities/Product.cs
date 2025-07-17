@@ -28,6 +28,6 @@ namespace Kitkap.Entity.Entities
             OutOfStock = 0,
             InStock = 1,
             Discontinued = 2
-        }
+        }        
     }
 }

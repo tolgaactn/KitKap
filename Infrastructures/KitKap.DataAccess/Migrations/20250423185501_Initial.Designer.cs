@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KitKap.DataAccess.Migrations
 {
     [DbContext(typeof(KitKapDbContext))]
-    [Migration("20250408193022_Initial")]
+    [Migration("20250423185501_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -221,7 +221,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2025, 4, 8, 22, 30, 21, 982, DateTimeKind.Local).AddTicks(6200),
+                            CreatedDate = new DateTime(2025, 4, 23, 21, 55, 0, 707, DateTimeKind.Local).AddTicks(5700),
                             Description = "Kitapların olduğu kategori",
                             IsDeleted = false,
                             Name = "Kitap"
@@ -229,7 +229,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2025, 4, 8, 22, 30, 21, 982, DateTimeKind.Local).AddTicks(6224),
+                            CreatedDate = new DateTime(2025, 4, 23, 21, 55, 0, 707, DateTimeKind.Local).AddTicks(5715),
                             Description = "Teknolojilerin  olduğu kategori",
                             IsDeleted = false,
                             Name = "Teknoloji"
@@ -237,7 +237,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2025, 4, 8, 22, 30, 21, 982, DateTimeKind.Local).AddTicks(6225),
+                            CreatedDate = new DateTime(2025, 4, 23, 21, 55, 0, 707, DateTimeKind.Local).AddTicks(5716),
                             Description = "Romanların olduğu kategori",
                             IsDeleted = false,
                             Name = "Roman",

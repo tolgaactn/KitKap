@@ -1,16 +1,21 @@
-﻿<div class="col-md-6 product-single-gallery">
+﻿@model ProductDetailViewModel
+
+<div class="col-md-6 product-single-gallery">
     <div class="product-slider-container">
         <div class="label-group">
-            <div class="product-label label-hot">HOT</div>
+            <div class="product-label label-hot">Popüler</div>
         </div>
 
         <div class="product-single-carousel owl-carousel owl-theme show-nav-hover">
-            <div class="product-item">
-                <img class="product-single-image"
-                     src="~/template/assets/images/demoes/demo25/products/zoom/product-1-big.jpg"
-                     data-zoom-image="~/template/assets/images/demoes/demo25/products/zoom/product-1-big.jpg"
-                     width="468" height="468" alt="product" />
-            </div>
+            @foreach (var imageUrl in Model.ImageUrls)
+            {
+                <div class="product-item">
+                    <img class="product-single-image"
+                    src="@imageUrl"
+                    data-zoom-image="@imageUrl"
+                    width="468" height="468" alt="product" />
+                </div>
+            }
         </div>
         <!-- End .product-single-carousel -->
         <span class="prod-full-screen">
@@ -19,9 +24,12 @@
     </div>
 
     <div class="prod-thumbnail owl-dots">
-        <div class="owl-dot">
-            <img src="~/template/assets/images/demoes/demo25/products/zoom/product-1-thumb.jpg"
-                 width="110" height="110" alt="product-thumbnail" />
-        </div>
+        @foreach (var imageUrl in Model.ImageUrls)
+        {
+            <div class="owl-dot">
+                <img src="@imageUrl"
+                width="110" height="110" alt="product-thumbnail" />
+            </div>
+        }
     </div>
 </div>

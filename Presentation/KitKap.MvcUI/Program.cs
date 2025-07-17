@@ -13,7 +13,8 @@ builder.Services.AddDbContext<KitKapDbContext>(
         options.UseSqlServer(builder.Configuration.GetConnectionString("ConnStr")
     ));
 
-builder.Services.AddExtensions(builder.Configuration);
+builder.Services.AddExtensions(builder.Configuration, builder.Environment);
+builder.Services.AddSession();
 
 builder.Logging.ClearProviders();      // Default log saðlayýcýlarý kaldýrýlýr
 builder.Logging.AddConsole();
@@ -40,6 +41,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

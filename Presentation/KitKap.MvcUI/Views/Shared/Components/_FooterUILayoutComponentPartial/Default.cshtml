@@ -4,30 +4,33 @@
             <div class="row">
                 <div class="col-lg-5 mb-1 mb-lg-0">
                     <div class="appear-animate" data-animation-name="fadeInUpShorter"
-                         data-animation-delay="200">
-                        <a href="demo25.html">
+                    data-animation-delay="200">
+                        <a asp-controller="Home" asp-action="Index">
                             <img src="~/template/assets/images/logo-black.png" alt="Logo" width="111"
-                                 height="44" class="m-b-4">
+                            height="44" class="m-b-4">
                         </a>
                     </div>
-
                     <div class="contact-widget">
-                        <p>
-                            Kitkap ile kitap alabilir, satabilir ve okuyabilirsiniz. 
-                            Kitap severlerin buluştuğu bu proje ile okuma kültürünü arttırmak hedeflenmektedir.
-                        </p>
+                        @foreach (var about in (IEnumerable<AboutViewModel>)ViewBag.About)
+                        {
+                            <p>
+                                @about.Description
+                            </p>
 
-                        <div class="row ls-0">
-                            <div class="col-md-2-5">
-                                <h6 class="text-uppercase mb-0">Müşteri Hizmetleri</h6>
-                                <h3 class="text-primary m-b-4">(123) 456-7890</h3>
+                            <div class="row ls-0">
+                                <div class="col-md-2-5">
+                                    <h6 class="text-uppercase mb-0">Müşteri Hizmetleri</h6>
+                                    <h3 class="text-primary mb-0">@about.Phone</h3>
+                                    <div class="body-text mb-0">@about.Email</div>
+                                    <div class="body-text mb-0">@about.Address</div>
+                                </div>
+                                <div class="col-md-3-5">
+                                    <h6 class="text-uppercase mb-0">Ödeme Metodları</h6>
+                                    <img src="~/template/assets/images/demoes/demo25/payment.jpg" alt="payment methods"
+                                    class="footer-payments m-b-4">
+                                </div>
                             </div>
-                            <div class="col-md-3-5">
-                                <h6 class="text-uppercase mb-0">Ödeme Metodları</h6>
-                                <img src="~/template/assets/images/demoes/demo25/payment.jpg" alt="payment methods"
-                                     class="footer-payments m-b-4">
-                            </div>
-                        </div>
+                        }
                     </div>
                 </div><!-- End .col-lg-5 -->
 

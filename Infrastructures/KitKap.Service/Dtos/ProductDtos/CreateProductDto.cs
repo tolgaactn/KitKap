@@ -23,6 +23,13 @@ namespace Kitkap.Service.Dtos.AddressDtos
 
         public ProductStatus Status { get; set; }
         public Category Category { get; set; }
-        public ICollection<ProductImage> ProductImages { get; set; }
+        public ICollection<CreateProductImageDto> ProductImages { get; set; }
+    }
+
+    public class CreateProductImageDto
+    {
+        public string ImageUrl { get; set; }
+        public string AltText { get; set; }
+        public bool IsMain { get; set; }
     }
 }

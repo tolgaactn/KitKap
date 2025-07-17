@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Kitkap.Entity.Services;
 using Kitkap.Service.Dtos.AddressDtos;
+using Kitkap.Service.Dtos.UserDtos;
 using KitKap.DataAccess.Identity;
 using KitKap.Service.Jwt;
 using Microsoft.AspNetCore.Http.HttpResults;

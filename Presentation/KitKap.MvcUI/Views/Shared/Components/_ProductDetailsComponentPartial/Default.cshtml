@@ -1,38 +1,64 @@
-﻿<div class="col-md-6 product-single-details font2">
-    <h1 class="product-title">Geceden önce</h1>
+﻿@model ProductDetailViewModel
 
+ 
+<div class="col-md-6 product-single-details font2">
+<form asp-controller="ShoppingCart" asp-action="AddStaySameAction" method="get" id="add-to-cart-form">
+<input type="hidden" name="id" value="@Model.Id" /> 
+    <h1 class="product-title">@Model.Name</h1>
     <div class="product-nav">
-        <div class="product-prev">
-            <a href="#">
-                <span class="product-link"></span>
-
-                <span class="product-popup">
-                    <span class="box-content">
-                        <img alt="product" width="150" height="150"
-                             src="assets/images/demoes/demo25/products/product-3.jpg"
-                             style="padding-top: 0px;">
-
-                        <span>Ask Again Yes</span>
+        @if(Model.IsLastProduct)
+        {
+            <style>
+                .custom-before-content:before {
+                content: "" !important;
+                }
+            </style>
+            <div class="product-next">
+                <a href="@Url.Action("ProductDetail", "ProductList", new { id = Model.PreviousProduct.Id })">
+                    <span class="product-link custom-before-content" style="content: '';"></span>
+                    <span class="product-popup">
+                        <span class="box-content">
+                            <img alt="product" width="150" height="150"
+                            src="@Model.PreviousProduct.ThumbnailUrl"
+                            style="padding-top: 0px;">
+                            <span>@Model.PreviousProduct.Name</span>
+                        </span>
                     </span>
-                </span>
-            </a>
-        </div>
-
-        <div class="product-next">
-            <a href="#">
-                <span class="product-link"></span>
-
-                <span class="product-popup">
-                    <span class="box-content">
-                        <img alt="product" width="150" height="150"
-                             src="assets/images/demoes/demo25/products/product-4.jpg"
-                             style="padding-top: 0px;">
-
-                        <span>The Butterfly Garden</span>
+                </a>
+            </div>
+        }
+        else if (Model.PreviousProduct != null)
+        {
+            <div class="product-prev">
+                <a href="@Url.Action("ProductDetail", "ProductList", new { id = Model.PreviousProduct.Id })">
+                    <span class="product-link"></span>
+                    <span class="product-popup">
+                        <span class="box-content">
+                            <img alt="product" width="150" height="150"
+                            src="@Model.PreviousProduct.ThumbnailUrl"
+                            style="padding-top: 0px;">
+                            <span>@Model.PreviousProduct.Name</span>
+                        </span>
                     </span>
-                </span>
-            </a>
-        </div>
+                </a>
+            </div>
+        }
+        @if (Model.NextProduct != null)
+        {
+            <div class="product-next">
+                <a href="@Url.Action("ProductDetail", "ProductList", new { id = Model.NextProduct.Id })">
+                    <span class="product-link"></span>
+                    <span class="product-popup">
+                        <span class="box-content">
+                            <img alt="product" width="150" height="150"
+                            src="@Model.NextProduct.ThumbnailUrl"
+                            style="padding-top: 0px;">
+                            <span>@Model.NextProduct.Name</span>
+                        </span>
+                    </span>
+                </a>
+            </div>
+        }
     </div>
 
     <div class="ratings-container">
@@ -47,47 +73,46 @@
     <hr class="short-divider">
 
     <div class="price-box">
-        <span class="product-price">$299.0</span>
+        <span class="product-price">@Model.Price &#x20BA;</span>
     </div><!-- End .price-box -->
 
     <div class="product-desc">
         <p>
-            Pellentesque habitant morbi tristique senectus et netus et malesuada
-            fames
-            ac turpis
-            egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor
-            sit
-            amet,
-            ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi
-            vitae est.
-            Mauris placerat eleifend leo.
+            @Model.Description
         </p>
     </div><!-- End .product-desc -->
 
     <ul class="single-info-list">
         <!---->
         <li>
-            AVAILABILITY:
+            Stok:
             <strong>
-                <a href="#" class="product-category">10 IN STOCK</a>
+                <a href="#" class="product-category">@Model.Stock</a>
             </strong>
         </li>
 
         <li>
-            SKU:
-            <strong>654613612</strong>
+            Kategori:
+            <strong>
+                <a href="#" class="product-category">@Model.CategoryName</a>
+            </strong>
+        </li>
+
+        <li>
+            ISBN:
+            <strong>@Model.ISBN</strong>
         </li>
     </ul>
 
     <div class="product-action">
         <div class="product-single-qty">
-            <input class="horizontal-quantity form-control" type="text">
+            <input class="horizontal-quantity form-control" type="number" name="Adet" value="1" min="1" max="@Model.Stock">
         </div><!-- End .product-single-qty -->
 
-        <a href="cart.html" class="btn btn-dark add-cart icon-shopping-cart mr-2"
+        <a href="#" onclick="document.getElementById('add-to-cart-form').submit(); return false;" class="btn btn-dark add-cart icon-shopping-cart mr-2"
            title="Add to Cart">Sepete Ekle</a>
 
-        <a href="cart.html" class="btn btn-gray view-cart d-none">View cart</a>
+            <a asp-controller="ShoppingCart" asp-action="Index" class="btn btn-gray view-cart @(TempData["AddedToCart"] != null ? "" : "d-none")">Sepeti Görüntüle</a>
     </div><!-- End .product-action -->
 
     <hr class="divider mb-0 mt-0">
@@ -103,7 +128,7 @@
             <a href="#" class="social-icon social-linkedin fab fa-linkedin-in"
                target="_blank" title="Linkedin"></a>
             <a href="#" class="social-icon social-gplus fab fa-google-plus-g"
-               target="_blank" title="Google +"></a>
+               target="_blank" title="Google+"></a>
             <a href="#" class="social-icon social-mail icon-mail-alt"
                target="_blank" title="Mail"></a>
         </div><!-- End .social-icons -->
@@ -114,5 +139,7 @@
                 İstek Listene Ekle
             </span>
         </a>
-    </div><!-- End .product single-share -->
+        </div><!-- End .product single-share -->
+    </form>
 </div>
+

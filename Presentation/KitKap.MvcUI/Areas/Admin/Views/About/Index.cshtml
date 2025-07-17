@@ -5,67 +5,117 @@
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
+<!-- main-content-wrap -->
 <div class="main-content-inner">
     <!-- main-content-wrap -->
     <div class="main-content-wrap">
         <div class="flex items-center flex-wrap justify-between gap20 mb-27">
-            <h3>@ViewData["Title"]</h3>
+            <h3>Hakkında Listesi</h3>
             <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
                 <li>
-                    <a href="/admin/home/index"><div class="text-tiny">Anasayfa</div></a>
+                    <a href="/Admin/AdminHome/Index"><div class="text-tiny">Anasayfa</div></a>
                 </li>
                 <li>
                     <i class="icon-chevron-right"></i>
                 </li>
                 <li>
-                    <a href="#"><div class="text-tiny">Kategoriler</div></a>
+                    <a href="#"><div class="text-tiny">Hakkında</div></a>
+                </li>
+                <li>
+                    <i class="icon-chevron-right"></i>
+                </li>
+                <li>
+                    <div class="text-tiny">Hakkında Listesi</div>
                 </li>
             </ul>
         </div>
-
+        <!-- all-roles -->
         <div class="wg-box">
             <div class="flex items-center justify-between gap10 flex-wrap">
-                <a class="tf-button style-1 w208" href="/admin/About/Create"><i class="icon-plus"></i>Yeni Kategori Ekle</a>
+                <div class="wg-filter flex-grow">
+                    <form method="get" asp-area="Admin" asp-controller="About" asp-action="Index"  class="form-search">
+                        <fieldset class="name">
+                            <input type="search" placeholder="No veya Açıklama Ara" class="" name="search" tabindex="2" value="" aria-required="true" required="">
+                        </fieldset>
+                        <div class="button-submit">
+                            <button class="" type="submit"><i class="icon-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <a class="tf-button style-1 w208" href="/Admin/About/Create"><i class="icon-plus"></i>Yeni Hakkında Ekle</a>
             </div>
-            <div class="wg-table table-all-category">
+            <div class="wg-table table-all-roles">
                 <ul class="table-title flex gap20 mb-14">
-                    <li><div class="body-title">Kategori</div></li>
-                    <li><div class="body-title">Üst - Kategori</div></li>
-                    <li><div class="body-title">Açıklama</div></li>
-                    <li><div class="body-title">Aktif-Pasif</div></li>
-                    <li><div class="body-title">Oluşturma Tarihi</div></li>
-                    <li><div class="body-title">Eylem</div></li>
+                    <li>
+                        <div class="body-title">No</div>
+                    </li>
+                    <li>
+                        <div class="body-title">Açıklama</div>
+                    </li>
+                    <li>
+                        <div class="body-title">Adres</div>
+                    </li>
+                    <li>
+                        <div class="body-title">E-mail</div>
+                    </li>
+                    <li>
+                        <div class="body-title">Telefon</div>
+                    </li>
+                    <li>
+                        <div class="body-title">Eylem</div>
+                    </li>
                 </ul>
-
                 <ul class="flex flex-column">
                     @foreach (var about in Model)
                     {
-                        <li class="product-item gap14">
-                            <div class="flex items-center justify-between gap20 flex-grow">
-                                <div class="name">
-                                    <a href="#" class="body-title-2">@about.Address</a>
-                                </div>
-                                <div class="body-text">@about.AboutId</div>
-                                <div class="body-text">@about.Address</div>
-                                <div class="body-text">@about.Email</div>
-                                <div class="body-text">@about.Phone</div>
-                                <div class="list-icon-function">
-                                    <a asp-controller="Category" asp-action="Edit" asp-route-id="@about.AboutId" class="item edit">
+                        <li class="roles-item">
+                            <div class="body-text">@about.AboutId</div>
+                            <div class="body-text">@about.Description</div>
+                            <div class="body-text">@about.Address</div>
+                            <div class="body-text">@about.Email</div>
+                            <div class="body-text">@about.Phone</div>
+                            <div class="list-icon-function">
+                                <a asp-controller="About" asp-action="Edit" asp-route-id="@about.AboutId">
+                                    <div class="item edit">
                                         <i class="icon-edit-3"></i>
-                                    </a>
-                                    <form method="post" asp-action="Delete" asp-controller="Category" asp-area="Admin" asp-route-id="@about.AboutId" onsubmit="return confirm('Bu kategoriyi silmek istediğinizden emin misiniz?');">
-
+                                    </div>
+                                </a>
+                                 @* <div class="item trash"> *@
+                                    <form method="post" asp-action="Delete" asp-controller="About" asp-area="Admin" asp-route-id="@about.AboutId" onsubmit="return confirm('Bu hakkındayı silmek istediğinizden emin misiniz?');">
                                         <button type="submit" class="btn btn-danger">
                                             <i class="icon-trash-2"></i>
                                         </button>
                                     </form>
-                                </div>
+                                 @* </div> *@
                             </div>
                         </li>
                     }
-
+                </ul>
+            </div>
+            <div class="divider"></div>
+            <div class="flex items-center justify-between flex-wrap gap10">
+                <div class="text-tiny">@ViewData["TotalCount"] Kayıttan @Model.Count() Tanesi Gösteriliyor</div>
+                <ul class="wg-pagination">
+                    <li>
+                        <a href="#"><i class="icon-chevron-left"></i></a>
+                    </li>
+                    <li class="active">
+                        <a asp-controller ="About" asp-action="Index">1</a>
+                    </li>
+                    <li>
+                        <a href="#">2</a>
+                    </li>
+                    <li>
+                        <a href="#">3</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="icon-chevron-right"></i></a>
+                    </li>
                 </ul>
             </div>
         </div>
+        <!-- /all-roles -->
     </div>
+    <!-- /main-content-wrap -->
 </div>
+<!-- /main-content-wrap -->

@@ -21,7 +21,12 @@ namespace KitKap.DataAccess.Repositories
             _dbSet = _context.Set<T>();
         }
 
-        
+        public async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+
+        }
+
         public async Task CreateAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
@@ -76,7 +81,25 @@ namespace KitKap.DataAccess.Repositories
 			return await _dbSet.FindAsync(id);
 		}
 
-		public async Task UpdateAsync(T entity)
+        public async Task<T> GetByIdAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            if (orderby != null)
+            {
+                query = orderby(query);
+            }
+            foreach (var table in includes)
+            {
+                query = query.Include(table);
+            }
+            return await query.FirstOrDefaultAsync(filter);
+        }
+
+        public async Task UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
         }

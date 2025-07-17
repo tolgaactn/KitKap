@@ -13,6 +13,7 @@ namespace Kitkap.Service.Dtos.AddressDtos
 		public long Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string CategoryName { get; set; } // 👈 bunu ekle
         public decimal Price { get; set; }
         public int Stock { get; set; }
         public string OwnerId { get; set; }
@@ -21,6 +22,12 @@ namespace Kitkap.Service.Dtos.AddressDtos
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
+
+        public string? Author { get; set; }
+        public int? ISBN { get; set; }
+        public DateTime? PublicationDate { get; set; }
+        public string? Language { get; set; }
+        public string? Condition { get; set; }
 
         public ProductStatus Status { get; set; }
         public Category Category { get; set; }

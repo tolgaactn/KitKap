@@ -1,4 +1,5 @@
 ﻿using Kitkap.Entity.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 using static Kitkap.Entity.Entities.Product;
 
 namespace KitKap.MvcUI.Areas.Admin.ViewModels.ProductViewModels
@@ -17,7 +18,9 @@ namespace KitKap.MvcUI.Areas.Admin.ViewModels.ProductViewModels
         public DateTime? DeletedAt { get; set; }
 
         public ProductStatus Status { get; set; }
-        public Category Category { get; set; }
-        public ICollection<ProductImage> ProductImages { get; set; }
+
+        [NotMapped]
+        public List<IFormFile> ProductImageFiles { get; set; }
+        public int? MainImageIndex { get; set; } // Kaçıncı görsel ana olarak işaretlendi}
     }
 }

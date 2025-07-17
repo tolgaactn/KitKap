@@ -1,4 +1,5 @@
-﻿
+﻿@model ProductDetailViewModel
+
 @{
     ViewData["Title"] = "ProductDetail";
     Layout = "~/Views/Shared/_UILayout.cshtml";
@@ -6,15 +7,15 @@
 
 <main class="main">
     
-    @await Component.InvokeAsync("_ProductListBreadcrumbComponentPartial")
+    @await Component.InvokeAsync("_ProductDetailBreadcrumbComponentPartial")
     <div class="bg-white">
         <div class="container">
             <div class="row main-content">
                 <div class="col-lg-9 product-sidebar-right">
                     <div class="product-single-container product-single-default">
-                        <div class="cart-message d-none">
-                            <strong class="single-cart-notice">“The Night Before”</strong>
-                            <span>has been added to your cart.</span>
+                        <div class="cart-message @(TempData["AddedToCart"] != null ? "" : "d-none")">
+                            <strong class="single-cart-notice">“@Model.Name”</strong>
+                            <span>Sepetinize Eklendi</span>
                         </div>
 
                         <div class="row">

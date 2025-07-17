@@ -1,4 +1,6 @@
-﻿<div class="product-single-tabs font2">
+﻿@model ProductDetailViewModel
+
+<div class="product-single-tabs font2">
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" id="product-tab-desc" data-toggle="tab"
@@ -10,8 +12,7 @@
             <a class="nav-link" id="product-tab-tags" data-toggle="tab"
                href="#product-tags-content" role="tab" aria-controls="product-tags-content"
                aria-selected="false">
-                Additional
-                Information
+                Ek Bilgiler
             </a>
         </li>
 
@@ -30,38 +31,23 @@
              aria-labelledby="product-tab-desc">
             <div class="product-desc-content">
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                    tempor
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                    nostrud ipsum
-                    consectetur sed do, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea
-                    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit
-                    esse
-                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat.
+                    @Model.Description
                 </p>
                 <ul>
                     <li>
-                        Any Product types that You want - Simple,
-                        Configurable
+                        İstediğiniz Ürün Tipleri - Basit,
+                        Yapılandırılabilir
                     </li>
                     <li>
-                        Downloadable/Digital Products, Virtual
-                        Products
+                        İndirilebilir/Dijital Ürünler, Sanal
+                        Ürünler
                     </li>
                     <li>
-                        Inventory Management with Backordered items
+                        Ön siparişli Öğelerle Envanter Yönetimi
                     </li>
                 </ul>
                 <p class="mb-0">
-                    Sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut
-                    enim ad
-                    minim
-                    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                    commodo
-                    consequat.
+                    @Model.Description
                 </p>
             </div><!-- End .product-desc-content -->
         </div><!-- End .tab-pane -->
@@ -71,23 +57,23 @@
             <table class="table table-striped mt-2">
                 <tbody>
                     <tr>
-                        <th>Weight</th>
+                        <th>Kilo</th>
                         <td>23 kg</td>
                     </tr>
 
                     <tr>
-                        <th>Dimensions</th>
+                        <th>Ölçüler</th>
                         <td>12 × 24 × 35 cm</td>
                     </tr>
 
                     <tr>
-                        <th>Color</th>
-                        <td>Black, Green, Indigo</td>
+                        <th>Renkler</th>
+                        <td>Siyah, Yeşil, Çivit Mavisi</td>
                     </tr>
 
                     <tr>
-                        <th>Size</th>
-                        <td>Large, Medium, Small</td>
+                        <th>Boyut</th>
+                        <td>Büyük, Orta, Küçük</td>
                     </tr>
                 </tbody>
             </table>
@@ -96,12 +82,12 @@
         <div class="tab-pane fade" id="product-reviews-content" role="tabpanel"
              aria-labelledby="product-tab-reviews">
             <div class="product-reviews-content">
-                <h3 class="reviews-title">1 review for Men Black Sports Shoes</h3>
+                <h3 class="reviews-title">@Model.Name için 1 inceleme</h3>
 
                 <div class="comment-list">
                     <div class="comments">
                         <figure class="img-thumbnail">
-                            <img src="assets/images/blog/author.jpg" alt="author" width="80"
+                            <img src="~/template/assets/images/blog/author.jpg" alt="author" width="80"
                                  height="80">
                         </figure>
 
@@ -118,12 +104,12 @@
                                 </div>
 
                                 <span class="comment-by">
-                                    <strong>Joe Doe</strong> – April 12, 2018
+                                    <strong>Yunus Emre</strong> – Nisan 12, 2025
                                 </span>
                             </div>
 
                             <div class="comment-content">
-                                <p>Excellent.</p>
+                                <p>Mükemmel.</p>
                             </div>
                         </div>
                     </div>
@@ -132,12 +118,12 @@
                 <div class="divider"></div>
 
                 <div class="add-product-review">
-                    <h3 class="review-title">Add a review</h3>
+                    <h3 class="review-title">Bir Yorum Yaz</h3>
 
                     <form action="#" class="comment-form m-0">
                         <div class="rating-form">
                             <label for="rating">
-                                Your rating <span class="required">*</span>
+                                Puanın <span class="required">*</span>
                             </label>
                             <span class="rating-stars">
                                 <a class="star-1" href="#">1</a>
@@ -159,7 +145,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Your review <span class="required">*</span></label>
+                            <label>Yorumun <span class="required">*</span></label>
                             <textarea cols="5" rows="6"
                                       class="form-control form-control-sm"></textarea>
                         </div><!-- End .form-group -->
@@ -168,7 +154,7 @@
                         <div class="row">
                             <div class="col-md-6 col-xl-12">
                                 <div class="form-group">
-                                    <label>Name <span class="required">*</span></label>
+                                    <label>Kullanıcı Adı <span class="required">*</span></label>
                                     <input type="text" class="form-control form-control-sm"
                                            required>
                                 </div><!-- End .form-group -->
@@ -176,7 +162,7 @@
 
                             <div class="col-md-6 col-xl-12">
                                 <div class="form-group">
-                                    <label>Email <span class="required">*</span></label>
+                                    <label>E-mail <span class="required">*</span></label>
                                     <input type="text" class="form-control form-control-sm"
                                            required>
                                 </div><!-- End .form-group -->
@@ -188,17 +174,13 @@
                                            id="save-name" />
                                     <label class="custom-control-label mb-0"
                                            for="save-name">
-                                        Save my
-                                        name, email, and website in this browser for the
-                                        next
-                                        time I
-                                        comment.
+                                        Bir dahaki sefere yorum yaptığımda kullanılmak üzere adımı, e-posta adresimi ve web site adresimi bu tarayıcıya kaydet.
                                     </label>
                                 </div>
                             </div>
                         </div>
 
-                        <input type="submit" class="btn btn-primary" value="Submit">
+                        <input type="submit" class="btn btn-primary" value="Paylaş">
                     </form>
                 </div><!-- End .add-product-review -->
             </div><!-- End .product-reviews-content -->
