@@ -49,8 +49,8 @@ A full-stack e-commerce platform where users can buy and sell second-hand books.
 
 1. Clone the repository
 ```bash
-git clone https://github.com/tolgaactn/[repo-adi].git
-cd [repo-adi]
+git clone https://github.com/tolgaactn/KitKap.git
+cd KitKap
 ```
 
 2. Update database connection string in `appsettings.json`
