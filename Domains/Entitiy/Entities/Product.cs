@@ -21,6 +21,11 @@ namespace Kitkap.Entity.Entities
         public DateTime? DeletedAt { get; set; }
 
         public ProductStatus Status { get; set; }
+        public ProductApprovalStatus ApprovalStatus { get; set; } = ProductApprovalStatus.Approved;
+
+
+        public ProductCondition Condition { get; set; } = ProductCondition.New;
+
         public Category Category { get; set; }
 		public ICollection<ProductImage> ProductImages { get; set; }
         public enum ProductStatus
@@ -28,6 +33,22 @@ namespace Kitkap.Entity.Entities
             OutOfStock = 0,
             InStock = 1,
             Discontinued = 2
-        }        
+        }
+
+        public enum ProductCondition
+        {
+            New = 0,           // Sıfır/Yeni
+            LikeNew = 1,       // Sıfır Ayarında
+            VeryGood = 2,      // Çok İyi
+            Good = 3,          // İyi
+            Acceptable = 4     // Kabul Edilebilir
+        }
+
+        public enum ProductApprovalStatus
+        {
+            Pending = 0,      // Onay bekliyor (Marketplace için)
+            Approved = 1,     // Onaylandı (Varsayılan: Admin ürünleri)
+            Rejected = 2      // Reddedildi
+        }
     }
 }

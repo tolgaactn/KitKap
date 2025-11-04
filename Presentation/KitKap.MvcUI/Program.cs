@@ -1,8 +1,8 @@
-using KitKap.DataAccess.Contexts;
+ï»¿using KitKap.DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 using KitKap.Service.Extensions;
-using KitKap.MvcUI.SeedData; // Doðru namespace
-
+using KitKap.MvcUI.SeedData;
+using KitKap.DataAccess.Identity; // DoÃ°ru namespace
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,7 +16,7 @@ builder.Services.AddDbContext<KitKapDbContext>(
 builder.Services.AddExtensions(builder.Configuration, builder.Environment);
 builder.Services.AddSession();
 
-builder.Logging.ClearProviders();      // Default log saðlayýcýlarý kaldýrýlýr
+builder.Logging.ClearProviders();      // Default log saÃ°layÃ½cÃ½larÃ½ kaldÃ½rÃ½lÃ½r
 builder.Logging.AddConsole();
 
 var app = builder.Build();
@@ -24,7 +24,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    await RoleSeeder.SeedRolesAsync(services); // Rol seed iþlemi
+    await RoleSeeder.SeedRolesAsync(services); // Rol seed iÃ¾lemi
 }
 
 // Configure the HTTP request pipeline.
@@ -40,6 +40,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSession();

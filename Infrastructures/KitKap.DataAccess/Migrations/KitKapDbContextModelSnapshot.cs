@@ -218,7 +218,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2025, 4, 23, 21, 55, 0, 707, DateTimeKind.Local).AddTicks(5700),
+                            CreatedDate = new DateTime(2025, 11, 4, 15, 42, 46, 759, DateTimeKind.Local).AddTicks(7002),
                             Description = "Kitapların olduğu kategori",
                             IsDeleted = false,
                             Name = "Kitap"
@@ -226,7 +226,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2025, 4, 23, 21, 55, 0, 707, DateTimeKind.Local).AddTicks(5715),
+                            CreatedDate = new DateTime(2025, 11, 4, 15, 42, 46, 759, DateTimeKind.Local).AddTicks(7014),
                             Description = "Teknolojilerin  olduğu kategori",
                             IsDeleted = false,
                             Name = "Teknoloji"
@@ -234,12 +234,165 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2025, 4, 23, 21, 55, 0, 707, DateTimeKind.Local).AddTicks(5716),
+                            CreatedDate = new DateTime(2025, 11, 4, 15, 42, 46, 759, DateTimeKind.Local).AddTicks(7015),
                             Description = "Romanların olduğu kategori",
                             IsDeleted = false,
                             Name = "Roman",
                             ParentCategoryId = 1
                         });
+                });
+
+            modelBuilder.Entity("Kitkap.Entity.Entities.Identity.LoginHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("IpAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSuccessful")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LoginDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LoginHistories");
+                });
+
+            modelBuilder.Entity("Kitkap.Entity.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdminNote")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BuyerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CargoCompany")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("CommissionAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CustomerNote")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeliveredAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ShippedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ShippingAddressAddressId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShippingAddressId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ShippingCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("TrackingNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuyerId");
+
+                    b.HasIndex("ShippingAddressAddressId");
+
+                    b.HasIndex("ShippingAddressId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Kitkap.Entity.Entities.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("CommissionAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CommissionRate")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SellerAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("SellerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SellerId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Kitkap.Entity.Entities.Product", b =>
@@ -250,7 +403,13 @@ namespace KitKap.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<int>("ApprovalStatus")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Condition")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -342,45 +501,105 @@ namespace KitKap.DataAccess.Migrations
                     b.ToTable("ProductImages");
                 });
 
-            modelBuilder.Entity("Kitkap.Entity.Entities.Transaction", b =>
+            modelBuilder.Entity("Kitkap.Entity.Entities.ShoppingCart", b =>
                 {
-                    b.Property<int>("TransactionId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("PointTransferred")
-                        .HasPrecision(8, 2)
-                        .HasColumnType("decimal(8,2)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<long>("ProductId1")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ReceiverId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SenderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TrackingCode")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TransactionDate")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("TransactionId");
+                    b.Property<string>("GuestId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("ProductId1");
+                    b.Property<bool>("IsCheckedOut")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
+
+                    b.ToTable("ShoppingCarts");
+                });
+
+            modelBuilder.Entity("Kitkap.Entity.Entities.ShoppingCartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShoppingCartId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ShoppingCartId");
+
+                    b.ToTable("ShoppingCartItems");
+                });
+
+            modelBuilder.Entity("Kitkap.Entity.Entities.Transaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentProvider")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
 
                     b.ToTable("Transactions");
                 });
@@ -526,10 +745,6 @@ namespace KitKap.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Condition")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("ISBN")
                         .HasColumnType("int");
 
@@ -561,6 +776,63 @@ namespace KitKap.DataAccess.Migrations
                     b.Navigation("ParentCategory");
                 });
 
+            modelBuilder.Entity("Kitkap.Entity.Entities.Identity.LoginHistory", b =>
+                {
+                    b.HasOne("KitKap.DataAccess.Identity.AppUser", null)
+                        .WithMany("LoginHistories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Kitkap.Entity.Entities.Order", b =>
+                {
+                    b.HasOne("KitKap.DataAccess.Identity.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("BuyerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Kitkap.Entity.Entities.Address", "ShippingAddress")
+                        .WithMany()
+                        .HasForeignKey("ShippingAddressAddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Kitkap.Entity.Entities.Address", null)
+                        .WithMany()
+                        .HasForeignKey("ShippingAddressId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ShippingAddress");
+                });
+
+            modelBuilder.Entity("Kitkap.Entity.Entities.OrderItem", b =>
+                {
+                    b.HasOne("Kitkap.Entity.Entities.Order", "Order")
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Kitkap.Entity.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("KitKap.DataAccess.Identity.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("SellerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Kitkap.Entity.Entities.Product", b =>
                 {
                     b.HasOne("Kitkap.Entity.Entities.Category", "Category")
@@ -589,15 +861,42 @@ namespace KitKap.DataAccess.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Kitkap.Entity.Entities.Transaction", b =>
+            modelBuilder.Entity("Kitkap.Entity.Entities.ShoppingCart", b =>
+                {
+                    b.HasOne("KitKap.DataAccess.Identity.AppUser", null)
+                        .WithOne()
+                        .HasForeignKey("Kitkap.Entity.Entities.ShoppingCart", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Kitkap.Entity.Entities.ShoppingCartItem", b =>
                 {
                     b.HasOne("Kitkap.Entity.Entities.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId1")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Kitkap.Entity.Entities.ShoppingCart", "ShoppingCart")
+                        .WithMany("Items")
+                        .HasForeignKey("ShoppingCartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("ShoppingCart");
+                });
+
+            modelBuilder.Entity("Kitkap.Entity.Entities.Transaction", b =>
+                {
+                    b.HasOne("Kitkap.Entity.Entities.Order", "Order")
+                        .WithOne("Transaction")
+                        .HasForeignKey("Kitkap.Entity.Entities.Transaction", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -653,6 +952,8 @@ namespace KitKap.DataAccess.Migrations
 
             modelBuilder.Entity("KitKap.DataAccess.Identity.AppUser", b =>
                 {
+                    b.Navigation("LoginHistories");
+
                     b.Navigation("Products");
                 });
 
@@ -661,9 +962,21 @@ namespace KitKap.DataAccess.Migrations
                     b.Navigation("SubCategories");
                 });
 
+            modelBuilder.Entity("Kitkap.Entity.Entities.Order", b =>
+                {
+                    b.Navigation("Items");
+
+                    b.Navigation("Transaction");
+                });
+
             modelBuilder.Entity("Kitkap.Entity.Entities.Product", b =>
                 {
                     b.Navigation("ProductImages");
+                });
+
+            modelBuilder.Entity("Kitkap.Entity.Entities.ShoppingCart", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

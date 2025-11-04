@@ -1,0 +1,83 @@
+﻿@model KitKap.MvcUI.ViewModels.ShoppingCartViewModels.ShoppingCartViewModel
+
+<!-- ✅ Sepet başlığı -->
+<div class="dropdown-cart-header">Sepetim (@Model.TotalItemCount ürün)</div>
+
+<!-- ✅ Sepet ürünleri -->
+<div class="dropdown-cart-products">
+    @if (Model.Items != null && Model.Items.Any())
+    {
+        @foreach (var item in Model.Items)
+        {
+            <div class="product" data-product-id="@item.ProductId">
+                <div class="product-details">
+                    <h4 class="product-title">
+                        <a asp-controller="ProductList"
+                           asp-action="ProductDetail"
+                           asp-route-id="@item.ProductId">
+                            @item.ProductName
+                        </a>
+                    </h4>
+                    <span class="cart-product-info">
+                        <span class="cart-product-qty">@item.Quantity</span>
+                        × @item.UnitPrice.ToString("N2") ₺
+                    </span>
+                </div>
+
+                <figure class="product-image-container">
+                    <a asp-controller="ProductList"
+                       asp-action="ProductDetail"
+                       asp-route-id="@item.ProductId"
+                       class="product-image">
+                        <img src="@item.ImageUrl"
+                             alt="@item.ProductName"
+                             width="80"
+                             height="80"
+                             onerror="this.src='/images/no-image.png'" />
+                    </a>
+
+                    <!-- ✅ AJAX ile silme butonu -->
+                    <button type="button"
+                            class="btn-remove"
+                            onclick="removeFromCart(@item.ProductId, this)"
+                            title="Ürünü kaldır">
+                        <span>×</span>
+                    </button>
+                </figure>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-primary text-center m-3" role="alert">
+            <i class="icon-shopping-cart" style="font-size: 48px; opacity: 0.3;"></i>
+            <p class="mt-2 mb-0"><strong>Sepetiniz boş!</strong></p>
+            <small>Alışverişe başlamak için ürünleri sepete ekleyin.</small>
+        </div>
+    }
+</div>
+
+<!-- ✅ Toplam fiyat (sepet boş değilse) -->
+@if (Model.Items != null && Model.Items.Any())
+{
+    <div class="dropdown-cart-total">
+        <span>Toplam:</span>
+        <span class="cart-total-price float-right">
+            @Model.TotalPrice.ToString("N2") ₺
+        </span>
+    </div>
+
+    <!-- ✅ Sepete git / Sipariş ver butonları -->
+    <div class="dropdown-cart-action">
+        <a asp-controller="ShoppingCart"
+           asp-action="Index"
+           class="btn btn-primary btn-block">
+            <i class="icon-shopping-cart"></i> Sepete Git
+        </a>
+        <a asp-controller="Checkout"
+           asp-action="Index"
+           class="btn btn-dark btn-block">
+            <i class="icon-credit-card"></i> Sipariş Ver
+        </a>
+    </div>
+}

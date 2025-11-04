@@ -9,17 +9,40 @@ namespace Kitkap.Entity.Entities
 {
     public class Transaction
     {
-        public int TransactionId { get; set; }
-        public int ProductId { get; set; }
-        public string SenderId { get; set; }
-        public string ReceiverId { get; set; }
-        public DateTime TransactionDate { get; set; }
-        public string Status { get; set; }
-        public int TrackingCode { get; set; }
-        public Decimal PointTransferred { get; set; }
+        public int Id { get; set; }
 
-        public Product Product { get; set; }
+        // ✅ Sipariş ile ilişki
+        public int OrderId { get; set; }
+        public Order Order { get; set; }
 
 
+        // ✅ Ödeme bilgileri
+        public decimal Amount { get; set; }
+        public string PaymentMethod { get; set; }
+
+
+        // ✅ Ödeme durumu
+        public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
+
+
+        // ✅ Gateway bilgileri (opsiyonel)
+        public string? PaymentProvider { get; set; }
+        public string? TransactionId { get; set; }
+        public string? ErrorMessage { get; set; }
+
+
+        // ✅ Tarihler
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? CompletedAt { get; set; }
+
+        public enum PaymentStatus
+        {
+            Pending = 0,
+            Processing = 1,
+            Completed = 2,
+            Failed = 3,
+            Refunded = 4,
+            Cancelled = 5
+        }
     }
 }

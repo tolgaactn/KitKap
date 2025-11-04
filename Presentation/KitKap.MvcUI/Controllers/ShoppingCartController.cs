@@ -1,169 +1,196 @@
-﻿using Humanizer;
-using Kitkap.Entity.Entities;
-using Kitkap.Service.Services;
-using KitKap.MvcUI.Areas.Admin.ViewModels.AboutViewModels;
-using KitKap.MvcUI.ViewModels.ProductDetailViewModels;
-using KitKap.MvcUI.ViewModels.ShoppingCartDetailViewModels;
-using KitKap.Service.Dtos.ShoppingCartDetailDtos;
-using KitKap.Service.Extensions;
-using KitKap.Service.Services.Concretes;
+﻿using KitKap.MvcUI.ViewModels.ShoppingCartViewModels;
+using KitKap.Service.Dtos.ShoppingCartDtos;
 using KitKap.Service.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace KitKap.MvcUI.Controllers
 {
     public class ShoppingCartController : Controller
     {
-        private readonly IProductService _productService;
-        private readonly IShoppingCartDetailService _shoppingCartDetailService;
-        private readonly IAboutService _aboutService;
-        private readonly IProductImageService _productImageService;
+        private readonly IShoppingCartService _shoppingCartService;
 
-        public ShoppingCartController(IProductService productService, IShoppingCartDetailService shoppingCartDetailService, IAboutService aboutService, IProductImageService productImageService)
+        public ShoppingCartController(IShoppingCartService shoppingCartService)
         {
-            _productService = productService;
-            _shoppingCartDetailService = shoppingCartDetailService;
-            _aboutService = aboutService;
-            _productImageService = productImageService;
+            _shoppingCartService = shoppingCartService;
         }
 
-        public async Task<IActionResult> Index()
-        {           
-
-            var shoppingCartDto = GetShoppingCart();
-
-            var shoppingCartViewModel = new List<ShoppingCartDetailViewModel>();
-
-            foreach (var dto in shoppingCartDto)
+        // ✅ AJAX ile sepete ekleme
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(long productId)
+        {
+            try
             {
-                var productImages = await _productImageService.GetByIdProductImagesAsync(dto.productId);
-                var imageUrls = productImages.Where(img => img.IsMain).Select(img => img.ImageUrl).ToList();
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var guestId = CookieHelper.GetOrCreateGuestId(HttpContext);
 
-                shoppingCartViewModel.Add(new ShoppingCartDetailViewModel
+                var dto = new AddCartItemDto
                 {
-                    productId = dto.productId,
-                    productName = dto.productName,
-                    productQuantity = dto.productQuantity,
-                    productPrice = dto.productPrice,
-                    ImageUrls = imageUrls
+                    ProductId = productId,
+                    Quantity = 1
+                };
+
+                await _shoppingCartService.AddToCartAsync(userId, guestId, dto);
+
+                // Güncel sepet bilgisini al
+                var cart = await _shoppingCartService.GetCartAsync(userId, guestId);
+
+                return Json(new
+                {
+                    success = true,
+                    message = "Ürün sepete eklendi!",
+                    cartItemCount = cart.TotalItemCount,
+                    cartTotal = cart.TotalPrice.ToString("N2")
                 });
             }
-
-            TempData["TotalQuantity"] =  _shoppingCartDetailService.TotalQuantity(shoppingCartDto);
-
-            //if (_shoppingCartDetailService.TotalPrice(shoppingCartDto) > 0)
-                TempData["TotalPrice"] = _shoppingCartDetailService.TotalPrice(shoppingCartDto);
-
-            var aboutDtos = await _aboutService.GetAllAboutAsync();
-
-            var viewModel = aboutDtos.Select(aboutDto => new AboutViewModel
+            catch (Exception ex)
             {
-                AboutId = aboutDto.AboutId,
-                Description = aboutDto.Description,
-                Address = aboutDto.Address,
-                Email = aboutDto.Email,
-                Phone = aboutDto.Phone
-            }).ToList();
-
-            ViewBag.About = viewModel;
-
-            return View(shoppingCartViewModel);
-        }
-        public async Task<IActionResult> Add(int id, int Adet)
-        {
-            var product = await _productService.GetByIdProduct(id);
-
-            var shoppingCartDto = GetShoppingCart();
-
-            ResultShoppingCartDetailDto orderDto = new ResultShoppingCartDetailDto();
-            orderDto.productId = (int)product.Id;
-            orderDto.productName = product.Name;
-            orderDto.productQuantity = Adet;
-            orderDto.productPrice = product.Price;
-
-            shoppingCartDto = _shoppingCartDetailService.AddShoppingCart(shoppingCartDto, orderDto);
-            SaveShoppingCart(shoppingCartDto);
-            return RedirectToAction("Index");
-        }
-        public async Task<IActionResult> AddStaySameAction(int Id, int Adet)
-        {
-            var product = await _productService.GetByIdProduct(Id);
-
-            var shoppingCartDto = GetShoppingCart();
-
-            ResultShoppingCartDetailDto orderDto = new ResultShoppingCartDetailDto();
-            orderDto.productId = (int)product.Id;
-            orderDto.productName = product.Name;
-            orderDto.productQuantity = Adet;
-            orderDto.productPrice = product.Price;
-
-            shoppingCartDto = _shoppingCartDetailService.AddShoppingCart(shoppingCartDto, orderDto);
-            SaveShoppingCart(shoppingCartDto);
-            TempData["AddedToCart"] = true;
-            return RedirectToAction("ProductDetail", "ProductList", new {id = product.Id});
-        }
-        public IActionResult Delete(int id)
-        {
-            var shoppingCartDto = GetShoppingCart();
-
-            shoppingCartDto = _shoppingCartDetailService.DeleteFromShoppingCart(shoppingCartDto, id);
-            SaveShoppingCart(shoppingCartDto);
-            return RedirectToAction("Index");
-        }
-        public IActionResult DeleteFromDropdownCart(int id)
-        {
-            var shoppingCartDto = GetShoppingCart();
-
-            shoppingCartDto = _shoppingCartDetailService.DeleteFromShoppingCart(shoppingCartDto, id);
-            SaveShoppingCart(shoppingCartDto);
-            // Geldiği sayfaya geri gönder
-            string referer = Request.Headers["Referer"].ToString();
-            if (!string.IsNullOrEmpty(referer))
-            {
-                return Redirect(referer);
+                return Json(new
+                {
+                    success = false,
+                    message = $"Hata: {ex.Message}"
+                });
             }
-
-            return RedirectToAction("Index");
         }
-        public IActionResult DeleteShoppingCart()
+
+        // ✅ Dropdown sepeti güncelleme (Partial View döndür)
+        [HttpGet]
+        public async Task<IActionResult> GetCartDropdown()
         {
-            //HttpContext.Session.Clear(); //Oturumda bulunan tüm session'ları siler.
-            HttpContext.Session.Remove("shoppingCart"); //Sadece ismi belirtilen session'ı siler.
-            return RedirectToAction("Index");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var guestId = CookieHelper.GetOrCreateGuestId(HttpContext);
+
+            var cartDto = await _shoppingCartService.GetCartAsync(userId, guestId);
+
+            var model = new ShoppingCartViewModel
+            {
+                Id = cartDto.Id,
+                UserId = cartDto.UserId,
+                GuestId = cartDto.GuestId,
+                CreatedAt = cartDto.CreatedAt,
+                Items = cartDto.Items.Select(item => new ShoppingCartItemViewModel
+                {
+                    ProductId = item.ProductId,
+                    ProductName = item.ProductName,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.UnitPrice,
+                    ImageUrl = item.ProductImageUrl
+                }).ToList()
+            };
+
+            return PartialView("Components/_CartDropdownComponentPartial/Default", model);
+        }
+
+        // ✅ Dropdown'dan ürün silme
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCart(long productId)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var guestId = CookieHelper.GetOrCreateGuestId(HttpContext);
+
+                await _shoppingCartService.RemoveFromCartAsync(userId, guestId, productId);
+
+                var cart = await _shoppingCartService.GetCartAsync(userId, guestId);
+
+                return Json(new
+                {
+                    success = true,
+                    message = "Ürün sepetten kaldırıldı",
+                    cartItemCount = cart.TotalItemCount,
+                    cartTotal = cart.TotalPrice.ToString("N2")
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = $"Hata: {ex.Message}"
+                });
+            }
+        }
+
+        // Sepet sayfası
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var guestId = CookieHelper.GetOrCreateGuestId(HttpContext);
+
+            var cartDto = await _shoppingCartService.GetCartAsync(userId, guestId);
+
+            var model = new ShoppingCartViewModel
+            {
+                Id = cartDto.Id,
+                UserId = cartDto.UserId,
+                GuestId = cartDto.GuestId,
+                CreatedAt = cartDto.CreatedAt,
+                Items = cartDto.Items.Select(item => new ShoppingCartItemViewModel
+                {
+                    ProductId = item.ProductId,
+                    ProductName = item.ProductName,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.UnitPrice,
+                    ImageUrl = item.ProductImageUrl
+                }).ToList()
+            };
+
+            return View(model);
         }
         [HttpPost]
-        public IActionResult UpdateQuantity(int productId, int quantity)
+        public async Task<IActionResult> UpdateQuantity(long productId, int quantity)
         {
-
-            var shoppingCartDto = GetShoppingCart();
-            shoppingCartDto = _shoppingCartDetailService.UpdateQuantity(shoppingCartDto, productId, quantity);
-            SaveShoppingCart(shoppingCartDto);
-
-            var updatedItem = shoppingCartDto.FirstOrDefault(x => x.productId == productId);
-            decimal updatedSubtotal = updatedItem != null ? updatedItem.productPrice * updatedItem.productQuantity : 0;
-            decimal totalPrice = _shoppingCartDetailService.TotalPrice(shoppingCartDto);
-            int totalQuantity = _shoppingCartDetailService.TotalQuantity(shoppingCartDto);
-
-            return Json(new
+            try
             {
-                success = true,
-                updatedSubtotal,
-                totalPrice,
-                totalQuantity,
-                updatedQuantity = updatedItem?.productQuantity ?? 1 // <= minicart için
-            });
-        }
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var guestId = CookieHelper.GetOrCreateGuestId(HttpContext);
 
-        public List<ResultShoppingCartDetailDto> GetShoppingCart()
-        {
-            var shoppingCart = HttpContext.Session.GetJson<List<ResultShoppingCartDetailDto>>("shoppingCart") ?? new List<ResultShoppingCartDetailDto>();
+                await _shoppingCartService.UpdateQuantityAsync(userId, guestId, productId, quantity);
 
-            return shoppingCart;
+                var cart = await _shoppingCartService.GetCartAsync(userId, guestId);
+
+                return Json(new
+                {
+                    success = true,
+                    cartItemCount = cart.TotalItemCount,
+                    cartTotal = cart.TotalPrice.ToString("N2")
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
         }
-        public void SaveShoppingCart(List<ResultShoppingCartDetailDto> shoppingCart)
+        [HttpPost]
+        public async Task<IActionResult> ClearCart()
         {
-            HttpContext.Session.SetJson("shoppingCart", shoppingCart);
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var guestId = CookieHelper.GetOrCreateGuestId(HttpContext);
+
+                await _shoppingCartService.ClearCartAsync(userId, guestId);
+
+                return Json(new
+                {
+                    success = true,
+                    message = "Sepet başarıyla temizlendi!"
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Sepet temizlenirken hata oluştu: " + ex.Message
+                });
+            }
         }
     }
 }

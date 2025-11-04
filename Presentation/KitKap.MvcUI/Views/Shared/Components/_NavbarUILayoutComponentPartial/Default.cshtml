@@ -1,4 +1,4 @@
-﻿@model List<ShoppingCartDetailViewModel>
+﻿@model ShoppingCartViewModel
 
 <header class="header">
     <div class="header-middle sticky-header">
@@ -16,7 +16,7 @@
                             var actionName = ViewContext.RouteData.Values["action"]?.ToString();
                             var controllerName = ViewContext.RouteData.Values["controller"]?.ToString();
 
-                            if (!string.IsNullOrEmpty(actionName) && !string.IsNullOrEmpty(controllerName)) /* Action ve controller null değil ise içeri girecek */
+                            if (!string.IsNullOrEmpty(actionName) && !string.IsNullOrEmpty(controllerName))
                             {
                                 if (actionName == "Index" && controllerName == "Home")
                                 {
@@ -38,42 +38,20 @@
                                                 <a href="#" class="nolink">VARIATION 1</a>
                                                 <ul class="submenu">
                                                     <li><a href="category.html">Fullwidth Banner</a></li>
-                                                    <li>
-                                                        <a href="category-banner-boxed-slider.html">
-                                                            Boxed Slider
-                                                            Banner
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="category-banner-boxed-image.html">
-                                                            Boxed Image
-                                                            Banner
-                                                        </a>
-                                                    </li>
+                                                    <li><a href="category-banner-boxed-slider.html">Boxed Slider Banner</a></li>
+                                                    <li><a href="category-banner-boxed-image.html">Boxed Image Banner</a></li>
                                                     <li><a href="category.html">Left Sidebar</a></li>
                                                     <li><a href="category-sidebar-right.html">Right Sidebar</a></li>
                                                     <li><a href="category-off-canvas.html">Off Canvas Filter</a></li>
-                                                    <li>
-                                                        <a href="category-horizontal-filter1.html">
-                                                            Horizontal
-                                                            Filter1
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="category-horizontal-filter2.html">
-                                                            Horizontal
-                                                            Filter2
-                                                        </a>
-                                                    </li>
+                                                    <li><a href="category-horizontal-filter1.html">Horizontal Filter1</a></li>
+                                                    <li><a href="category-horizontal-filter2.html">Horizontal Filter2</a></li>
                                                 </ul>
                                             </div>
                                             <div class="col-lg-4">
                                                 <a href="#" class="nolink">VARIATION 2</a>
                                                 <ul class="submenu">
                                                     <li><a href="category-list.html">List Types</a></li>
-                                                    <li>
-                                                        <a href="category-infinite-scroll.html">Ajax Infinite Scroll</a>
-                                                    </li>
+                                                    <li><a href="category-infinite-scroll.html">Ajax Infinite Scroll</a></li>
                                                     <li><a href="category.html">3 Columns Products</a></li>
                                                     <li><a href="category-4col.html">4 Columns Products</a></li>
                                                     <li><a href="category-5col.html">5 Columns Products</a></li>
@@ -85,8 +63,7 @@
                                             <div class="col-lg-4 p-0">
                                                 <div class="menu-banner">
                                                     <figure>
-                                                        <img src="~/template/assets/images/menu-banner.jpg" alt="Menu banner"
-                                                             width="300" height="300">
+                                                        <img src="~/template/assets/images/menu-banner.jpg" alt="Menu banner" width="300" height="300">
                                                     </figure>
                                                     <div class="banner-content">
                                                         <h4>
@@ -99,118 +76,19 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div><!-- End .megamenu -->
+                                    </div>
                                 </li>
-                                if ((actionName == "Index" && controllerName == "ProductList") || (actionName == "ProductDetail" && controllerName == "ProductList"))
+
+                                @if ((actionName == "Index" && controllerName == "ProductList") || (actionName == "ProductDetail" && controllerName == "ProductList"))
                                 {
                                     <li class="d-none d-xl-block active">
                                         <a asp-controller="ProductList" asp-action="Index">KİTAPLAR</a>
-                                        <div class="megamenu megamenu-fixed-width">
-                                            <div class="row">
-                                                <div class="col-lg-4">
-                                                    <a href="#" class="nolink">PRODUCT PAGES</a>
-                                                    <ul class="submenu">
-                                                        <li><a href="demo25-product.html">SIMPLE PRODUCT</a></li>
-                                                        <li><a href="product-variable.html">VARIABLE PRODUCT</a></li>
-                                                        <li><a href="demo25-product.html">SALE PRODUCT</a></li>
-                                                        <li><a href="demo25-product.html">FEATURED & ON SALE</a></li>
-                                                        <li><a href="product-custom-tab.html">WITH CUSTOM TAB</a></li>
-                                                        <li><a href="product-sidebar-left.html">WITH LEFT SIDEBAR</a></li>
-                                                        <li><a href="product-sidebar-right.html">WITH RIGHT SIDEBAR</a></li>
-                                                        <li><a href="product-addcart-sticky.html">ADD CART STICKY</a></li>
-                                                    </ul>
-                                                </div><!-- End .col-lg-4 -->
-
-                                                <div class="col-lg-4">
-                                                    <a href="#" class="nolink">PRODUCT LAYOUTS</a>
-                                                    <ul class="submenu">
-                                                        <li><a href="product-extended-layout.html">EXTENDED LAYOUT</a></li>
-                                                        <li><a href="product-grid-layout.html">GRID IMAGE</a></li>
-                                                        <li><a href="product-full-width.html">FULL WIDTH LAYOUT</a></li>
-                                                        <li><a href="product-sticky-info.html">STICKY INFO</a></li>
-                                                        <li><a href="product-sticky-both.html">LEFT & RIGHT STICKY</a></li>
-                                                        <li>
-                                                            <a href="product-transparent-image.html">TRANSPARENT IMAGE</a>
-                                                        </li>
-                                                        <li><a href="product-center-vertical.html">CENTER VERTICAL</a></li>
-                                                        <li><a href="#">BUILD YOUR OWN</a></li>
-                                                    </ul>
-                                                </div><!-- End .col-lg-4 -->
-
-                                                <div class="col-lg-4 p-0">
-                                                    <div class="menu-banner menu-banner-2">
-                                                        <figure>
-                                                            <img src="~/template/assets/images/menu-banner-1.jpg" alt="Menu banner"
-                                                                 class="product-promo" width="380" height="790">
-                                                        </figure>
-                                                        <i>OFF</i>
-                                                        <div class="banner-content">
-                                                            <h4>
-                                                                <span class="">UP TO</span><br />
-                                                                <b class="">50%</b>
-                                                            </h4>
-                                                        </div>
-                                                        <a href="category.html" class="btn btn-sm btn-dark">SHOP NOW</a>
-                                                    </div>
-                                                </div><!-- End .col-lg-4 -->
-                                            </div><!-- End .row -->
-                                        </div><!-- End .megamenu -->
                                     </li>
                                 }
                                 else
                                 {
                                     <li class="d-none d-xl-block">
                                         <a asp-controller="ProductList" asp-action="Index">KİTAPLAR</a>
-                                        <div class="megamenu megamenu-fixed-width">
-                                            <div class="row">
-                                                <div class="col-lg-4">
-                                                    <a href="#" class="nolink">PRODUCT PAGES</a>
-                                                    <ul class="submenu">
-                                                        <li><a href="demo25-product.html">SIMPLE PRODUCT</a></li>
-                                                        <li><a href="product-variable.html">VARIABLE PRODUCT</a></li>
-                                                        <li><a href="demo25-product.html">SALE PRODUCT</a></li>
-                                                        <li><a href="demo25-product.html">FEATURED & ON SALE</a></li>
-                                                        <li><a href="product-custom-tab.html">WITH CUSTOM TAB</a></li>
-                                                        <li><a href="product-sidebar-left.html">WITH LEFT SIDEBAR</a></li>
-                                                        <li><a href="product-sidebar-right.html">WITH RIGHT SIDEBAR</a></li>
-                                                        <li><a href="product-addcart-sticky.html">ADD CART STICKY</a></li>
-                                                    </ul>
-                                                </div><!-- End .col-lg-4 -->
-
-                                                <div class="col-lg-4">
-                                                    <a href="#" class="nolink">PRODUCT LAYOUTS</a>
-                                                    <ul class="submenu">
-                                                        <li><a href="product-extended-layout.html">EXTENDED LAYOUT</a></li>
-                                                        <li><a href="product-grid-layout.html">GRID IMAGE</a></li>
-                                                        <li><a href="product-full-width.html">FULL WIDTH LAYOUT</a></li>
-                                                        <li><a href="product-sticky-info.html">STICKY INFO</a></li>
-                                                        <li><a href="product-sticky-both.html">LEFT & RIGHT STICKY</a></li>
-                                                        <li>
-                                                            <a href="product-transparent-image.html">TRANSPARENT IMAGE</a>
-                                                        </li>
-                                                        <li><a href="product-center-vertical.html">CENTER VERTICAL</a></li>
-                                                        <li><a href="#">BUILD YOUR OWN</a></li>
-                                                    </ul>
-                                                </div><!-- End .col-lg-4 -->
-
-                                                <div class="col-lg-4 p-0">
-                                                    <div class="menu-banner menu-banner-2">
-                                                        <figure>
-                                                            <img src="~/template/assets/images/menu-banner-1.jpg" alt="Menu banner"
-                                                                 class="product-promo" width="380" height="790">
-                                                        </figure>
-                                                        <i>OFF</i>
-                                                        <div class="banner-content">
-                                                            <h4>
-                                                                <span class="">UP TO</span><br />
-                                                                <b class="">50%</b>
-                                                            </h4>
-                                                        </div>
-                                                        <a href="category.html" class="btn btn-sm btn-dark">SHOP NOW</a>
-                                                    </div>
-                                                </div><!-- End .col-lg-4 -->
-                                            </div><!-- End .row -->
-                                        </div><!-- End .megamenu -->
                                     </li>
                                 }
                             }
@@ -218,7 +96,7 @@
                             {
                                 <p>Action veya controller ismi bulunamadı.</p>
                             }
-                        }                        
+                        }
                     </ul>
                 </nav>
                 <span class="separator d-none d-lg-inline"></span>
@@ -234,14 +112,14 @@
             <div class="header-right pl-0 pl-lg-4">
                 <div class="header-search header-search-inline header-search-category w-lg-max text-right d-none d-sm-flex">
                     <a href="#" class="search-toggle" role="button"><i class="icon-magnifier"></i></a>
-                    <form action=" #" method="get">
+                    <form action="#" method="get">
                         <div class="header-search-wrapper">
                             <input type="search" class="form-control font-italic" name="q" id="q"
                                    placeholder="Aradığım şey..." required>
                             <button class="btn icon-magnifier" title="search" type="submit"></button>
-                        </div><!-- End .header-search-wrapper -->
+                        </div>
                     </form>
-                </div><!-- End .header-search -->
+                </div>
 
                 <span class="separator d-none d-lg-inline"></span>
                 <a asp-controller="Home" asp-action="Login">
@@ -258,86 +136,28 @@
                     <i class="icon-wishlist-2"></i>
                 </a>
 
+                <!-- ✅ SEPET DROPDOWN (AJAX ile çalışır) -->
                 <div id="shoppingCart" class="dropdown cart-dropdown">
                     <a href="#" title="Cart" class="dropdown-toggle cart-toggle" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                       aria-label="Sepet">
                         <i class="minicart-icon"></i>
-                        <span class="cart-count badge-circle">
-                            @if(TempData["TotalQuantity"] != null)
-                            {
-                                @TempData["TotalQuantity"]
-                            }
-                        </span>
+                        @if (Model.TotalItemCount > 0)
+                        {
+                            <span class="cart-count badge-circle">@Model.TotalItemCount</span>
+                        }
                     </a>
-
                     <div class="cart-overlay"></div>
-
-                    <div class="dropdown-menu mobile-cart">
-                        <a href="#" title="Close (Esc)" class="btn-close">×</a>
-
+                    <div class="dropdown-menu mobile-cart cart-dropdown-custom">
+                        <button class="btn-close" onclick="closeCart()" aria-label="Sepeti Kapat">
+                            ×
+                        </button>
                         <div class="dropdownmenu-wrapper custom-scrollbar">
-                            <div class="dropdown-cart-header">Sepetim</div>
-                            <!-- End .dropdown-cart-header -->
-
-                            <div class="dropdown-cart-products">
-                                @if (Model.Count > 0)
-                                {
-                                    @foreach (var order in Model)
-                                    {
-                                        <div class="product" data-product-id="@order.productId">
-                                            <div class="product-details">
-                                                <h4 class="product-title">
-                                                    <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@order.productId">@order.productName</a>
-                                                </h4>
-
-                                                <span class="cart-product-info">
-                                                    <span class="cart-product-qty">@order.productQuantity</span>
-                                                    × @(order.productQuantity * order.productPrice)
-                                                </span>
-                                            </div><!-- End .product-details -->
-
-                                            <figure class="product-image-container">
-                                                <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@order.productId" class="product-image">
-                                                    @foreach (var image in order.ImageUrls)
-                                                    {
-                                                        <img src="@image" alt="product"
-                                                        width="80" height="80">
-                                                    }
-                                                </a>
-                                                <a asp-controller="ShoppingCart" asp-action="DeleteFromDropdownCart" asp-route-id="@order.productId" class="btn-remove" title="Remove Product"><span>×</span></a>
-                                            </figure>
-                                        </div><!-- End .product -->
-                                    }
-                                }
-                                else
-                                {
-                                    <div class="alert alert-primary" role="alert">
-                                        <strong>Sepetiniz boş!</strong>
-                                    </div>
-                                }
-                            </div><!-- End .cart-product -->
-
-                            <div class="dropdown-cart-total">
-                                <span>Toplam:</span>
-
-                                <span class="cart-total-price float-right">
-                                    @if (TempData["TotalPrice"] != null)
-                                    {
-                                        @TempData["TotalPrice"] <span>₺</span>
-                                    }
-                                </span>
-                            </div><!-- End .dropdown-cart-total -->
-
-                            <div class="dropdown-cart-action">
-                                <a asp-controller="ShoppingCart" asp-action="Index" class="btn btn-gray btn-block view-cart">
-                                    Sepete Git
-                                </a>
-                                <a href="#" class="btn btn-dark btn-block">Sipariş Ver</a>
-                            </div><!-- End .dropdown-cart-total -->
-                        </div><!-- End .dropdownmenu-wrapper -->
-                    </div><!-- End .dropdown-menu -->
-                </div><!-- End .dropdown -->
+                            @await Html.PartialAsync("Components/_CartDropdownComponentPartial/Default", Model)
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </header>
+

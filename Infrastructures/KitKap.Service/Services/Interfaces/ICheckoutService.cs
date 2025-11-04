@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kitkap.Service.Dtos.AddressDtos
+namespace KitKap.Service.Services.Interfaces
 {
-    public class RemoveTransactionDto
+    public interface ICheckoutService
     {
-        public int TransactionId { get; set; }
-     
+
     }
 }

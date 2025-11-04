@@ -1,6 +1,7 @@
 ﻿using Kitkap.Entity.Services;
 using Kitkap.Service.Dtos.AddressDtos;
 using KitKap.MvcUI.ViewModels.AccountViewModels;
+using KitKap.Service.Services.Interfaces; // ✅ ShoppingCartService için
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,14 @@ namespace KitKap.MvcUI.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
+        private readonly IShoppingCartService _shoppingCartService; // ✅ YENİ
 
-        public AccountController(IAccountService accountService)
+        public AccountController(
+            IAccountService accountService,
+            IShoppingCartService shoppingCartService) // ✅ YENİ
         {
             _accountService = accountService;
+            _shoppingCartService = shoppingCartService; // ✅ YENİ
         }
 
         [HttpGet]
@@ -31,30 +36,51 @@ namespace KitKap.MvcUI.Controllers
             {
                 Email = model.Email,
                 Password = model.Password,
-                RememberMe = model.RememberMe
+                RememberMe = model.RememberMe,
+                IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString()
             };
 
             var authResponse = await _accountService.LoginAsync(loginDto);
-
             if (!authResponse.IsSuccessful)
             {
-                ModelState.AddModelError("", "Giriş başarısız.");
+                foreach (var error in authResponse.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error);
+                }
                 return View(model);
             }
 
+            // ✅✅✅ LOGIN SONRASI SEPET MİGRATION ✅✅✅
+            try
+            {
+                var guestId = CookieHelper.GetGuestId(HttpContext);
+                if (!string.IsNullOrEmpty(guestId))
+                {
+                    var userInfo = await _accountService.GetUserByEmailAsync(model.Email);
+                    if (userInfo != null)
+                    {
+                        await _shoppingCartService.MergeGuestCartToUserAsync(userInfo.Id, guestId);
+                        CookieHelper.RemoveGuestId(HttpContext);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Migration hatası login'i engellemez, sadece log'la
+                // Logger varsa: _logger.LogError(ex, "Sepet migration hatası");
+                Console.WriteLine($"Sepet migration hatası: {ex.Message}");
+            }
+            // ✅✅✅ MİGRATION BİTTİ ✅✅✅
+
             // Kullanıcı başarılı giriş yaptıysa rollerini kontrol et
             var roles = await _accountService.GetRolesAsync(model.Email);
-
             if (roles.Contains("Admin"))
                 return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
-
             if (roles.Contains("Kurumsal"))
                 return RedirectToAction("Index", "CorporateDashboard");
-
             if (roles.Contains("BireyselMusteri"))
                 return RedirectToAction("Index", "Home");
 
-            // Rolü yoksa fallback
             return RedirectToAction("Index", "Home");
         }
 
@@ -80,7 +106,6 @@ namespace KitKap.MvcUI.Controllers
             };
 
             var result = await _accountService.CreateUserAsync(dto);
-
             if (result == "OK")
                 return RedirectToAction("Login");
 
@@ -91,7 +116,7 @@ namespace KitKap.MvcUI.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            await _accountService.LogoutAsync(); // Token sil veya cookie temizle
+            await _accountService.LogoutAsync();
             return RedirectToAction("Login");
         }
 
@@ -101,4 +126,3 @@ namespace KitKap.MvcUI.Controllers
         }
     }
 }
-

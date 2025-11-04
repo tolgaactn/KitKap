@@ -6,7 +6,6 @@ using KitKap.DataAccess.Contexts;
 using KitKap.DataAccess.Identity;
 using KitKap.DataAccess.Repositories;
 using KitKap.DataAccess.UnitOfWorks;
-using KitKap.Service.Jwt;
 using KitKap.Service.Mapping;
 using KitKap.Service.Services;
 using KitKap.Service.Services.Concretes;
@@ -19,76 +18,67 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace KitKap.Service.Extensions
 {
     public static class DependencyExtensions
     {
-        public static void AddExtensions(this IServiceCollection services,IConfiguration configuration, IWebHostEnvironment env)
+        public static void AddExtensions(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
+            // ========== IDENTITY CONFIGURATION ==========
             services.AddIdentity<AppUser, IdentityRole>(options =>
             {
+                // Password Policy
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 3;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireDigit = false;
+
+                // User Policy
                 options.User.RequireUniqueEmail = true;
+
+                // Lockout Policy
                 options.Lockout.MaxFailedAccessAttempts = 3;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
             })
             .AddEntityFrameworkStores<KitKapDbContext>()
             .AddDefaultTokenProviders();
 
-
-            services.ConfigureApplicationCookie(opt =>
+            // ========== COOKIE AUTHENTICATION CONFIGURATION ==========
+            services.ConfigureApplicationCookie(options =>
             {
-                opt.LoginPath = new PathString("/Account/Login");
-                opt.LogoutPath = new PathString("/Account/Logout");
-                //opt.AccessDeniedPath = new PathString("/Account/AccessDenied");
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-                opt.SlidingExpiration = true; //10 dk. dolmadan kullanıcı yeniden login olursa süre baştan başlar.
+                // Path Configuration
+                options.LoginPath = new PathString("/Account/Login");
+                options.LogoutPath = new PathString("/Account/Logout");
+                options.AccessDeniedPath = new PathString("/Account/AccessDenied");
 
-                opt.Cookie = new CookieBuilder()
+                // Session Timeout
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // 1 saat oturum
+                options.SlidingExpiration = true; // Kullanıcı aktifse süre yenilenir
+
+                // Cookie Configuration
+                options.Cookie = new CookieBuilder()
                 {
-                    Name = "Identity.App.Cookie",
-                    HttpOnly = true,
-                    SameSite = env.IsDevelopment() ? SameSiteMode.Lax : SameSiteMode.None, //İncele kısmındaki hata geliştirici ortamında http kullanıldığı için Lax, canlıya aldığımız zaman https olacağı için None
-                    SecurePolicy = env.IsDevelopment() ? CookieSecurePolicy.None : CookieSecurePolicy.Always //İncele kısmındaki hata geliştirici ortamında http kullanıldığı için none, canlıya aldığımız zaman https olacağı için always
+                    Name = "KitKap.Auth.Cookie", // Daha açıklayıcı isim
+                    HttpOnly = true, // XSS koruması
+                    SameSite = env.IsDevelopment() ? SameSiteMode.Lax : SameSiteMode.Strict,
+                    SecurePolicy = env.IsDevelopment() ? CookieSecurePolicy.None : CookieSecurePolicy.Always,
+                    IsEssential = true // GDPR için gerekli
                 };
             });
 
-            var jwtSettings = configuration.GetSection("JwtSettings");
-            services.Configure<JwtSettings>(jwtSettings);
+            // ========== DEPENDENCY INJECTION ==========
 
-            services.AddAuthentication(opt =>
-            {
-                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(opt =>
-            {
-                var key = Encoding.UTF8.GetBytes(jwtSettings["Secret"]);
-                opt.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtSettings["Issuer"],
-                    ValidAudience = jwtSettings["Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-
-                    ClockSkew = TimeSpan.FromMinutes(5)
-                };
-            });
+            // Identity Services
             services.AddScoped<RoleManager<IdentityRole>>();
+
+            // Repository Pattern
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Business Services
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IAddressService, AddressService>();
@@ -97,10 +87,14 @@ namespace KitKap.Service.Extensions
             services.AddScoped<IAboutService, AboutService>();
             services.AddScoped<IProductImageService, ProductImageService>();
             services.AddScoped<IFileService, FileService>();
-            services.AddScoped<IShoppingCartDetailService, ShoppingCartDetailService>();
-            // services.AddScoped(typeof(IAccountService), typeof(AccountService));
+            services.AddScoped<IShoppingCartService, ShoppingCartService>();
+            services.AddScoped<IOrderService, OrderService>();
 
+            // AutoMapper
             services.AddAutoMapper(typeof(MappingProfile));
+
+            // HttpContextAccessor (LoginHistory için gerekli)
+            services.AddHttpContextAccessor();
         }
     }
 }

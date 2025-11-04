@@ -1,6 +1,7 @@
 ﻿using Kitkap.Entity.Repositories;
 using KitKap.DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,19 +85,84 @@ namespace KitKap.DataAccess.Repositories
         public async Task<T> GetByIdAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null, params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _dbSet;
+
+            if (filter != null)
+                query = query.Where(filter);
+
+            if (orderby != null)
+                query = orderby(query);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<List<T>> GetListWithIncludeAsync(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool asNoTracking = true)
+        {
+            IQueryable<T> query = _dbSet;
+
             if (filter != null)
             {
                 query = query.Where(filter);
             }
-            if (orderby != null)
+
+            if (include != null)
             {
-                query = orderby(query);
+                query = include(query);
             }
-            foreach (var table in includes)
+
+            if (asNoTracking)
             {
-                query = query.Include(table);
+                query = query.AsNoTracking();
             }
-            return await query.FirstOrDefaultAsync(filter);
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<T?> GetWithIncludeAsync(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
+        {
+            IQueryable<T> query = _dbSet;
+
+            // Filtre uygula
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            // İlişkili tabloları yükle
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            // ✅ Tracking kapalı - sadece okuma (performanslı)
+            return await query.AsNoTracking().FirstOrDefaultAsync();
+        }
+
+        public async Task<T?> GetWithIncludeForUpdateAsync(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
+        {
+            IQueryable<T> query = _dbSet;
+
+            // Filtre uygula
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            // İlişkili tabloları yükle
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            // ✅ Tracking açık - güncelleme yapabilirsin
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task UpdateAsync(T entity)

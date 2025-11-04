@@ -8,7 +8,7 @@ using KitKap.MvcUI.Areas.Admin.ViewModels.ProductViewModels;
 using KitKap.MvcUI.ViewModels.ProductDetailViewModels;
 using KitKap.MvcUI.ViewModels.ProductListViewModels;
 using KitKap.Service.Dtos.ProductDtos;
-using KitKap.Service.Dtos.ShoppingCartDetailDtos;
+using KitKap.Service.Dtos.ShoppingCartDtos;
 using KitKap.Service.Extensions;
 using KitKap.Service.Services.Concretes;
 using KitKap.Service.Services.Interfaces;
@@ -23,23 +23,19 @@ namespace KitKap.MvcUI.Controllers
         public readonly IAccountService _accountService;
         private readonly IAboutService _aboutService;
         private readonly IProductImageService _productImageService;
-        private readonly IShoppingCartDetailService _shoppingCartDetailService;
 
-        public ProductListController(IProductService productService, ICategoryService categoryService, IAccountService accountService, IAboutService aboutService, IProductImageService productImageService, IShoppingCartDetailService shoppingCartDetailService)
+        public ProductListController(IProductService productService, ICategoryService categoryService, IAccountService accountService, IAboutService aboutService, IProductImageService productImageService)
         {
             _productService = productService;
             _categoryService = categoryService;
             _accountService = accountService;
             _aboutService = aboutService;
             _productImageService = productImageService;
-            _shoppingCartDetailService = shoppingCartDetailService;
         }
         public async Task<IActionResult> Index()
         {
 
-            var shoppingCart = HttpContext.Session.GetJson<List<ResultShoppingCartDetailDto>>("shoppingCart") ?? new List<ResultShoppingCartDetailDto>();
-            TempData["TotalQuantity"] = _shoppingCartDetailService.TotalQuantity(shoppingCart);
-            TempData["TotalPrice"] = _shoppingCartDetailService.TotalPrice(shoppingCart);
+            var shoppingCart = HttpContext.Session.GetJson<List<ShoppingCartItemDto>>("shoppingCart") ?? new List<ShoppingCartItemDto>();
 
             var productDtos = await _productService.GetAllProducts();
 
@@ -70,9 +66,8 @@ namespace KitKap.MvcUI.Controllers
         public async Task<IActionResult> ProductDetail(long id)
         {
 
-            var shoppingCart = HttpContext.Session.GetJson<List<ResultShoppingCartDetailDto>>("shoppingCart") ?? new List<ResultShoppingCartDetailDto>();
-            TempData["TotalQuantity"] = _shoppingCartDetailService.TotalQuantity(shoppingCart);
-            TempData["TotalPrice"] = _shoppingCartDetailService.TotalPrice(shoppingCart);
+            var shoppingCart = HttpContext.Session.GetJson<List<ShoppingCartItemDto>>("shoppingCart") ?? new List<ShoppingCartItemDto>();
+            //TempData["TotalPrice"] = _shoppingCartDetailService.TotalPrice(shoppingCart);
 
             var productDto = await _productService.GetByIdProduct(id);
 

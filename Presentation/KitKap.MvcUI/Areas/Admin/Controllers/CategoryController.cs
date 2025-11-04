@@ -49,7 +49,7 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
 		public async Task <IActionResult> Create()
 		{
             var categories = await _categoryService.GetAllCategories();
-			ViewBag.Categories = categories;
+            ViewBag.Categories = categories;
             return View();
         }
 

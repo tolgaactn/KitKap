@@ -1,16 +1,19 @@
 ﻿using AutoMapper;
 using Kitkap.Entity.Entities;
+using Kitkap.Service.Dtos.AddressDtos;
+using Kitkap.Service.Dtos.UserDtos;
 using KitKap.DataAccess.Identity;
+using KitKap.Service.Dtos.AboutDtos;
+using KitKap.Service.Dtos.OrderDtos;
+using KitKap.Service.Dtos.ProductImagesDtos;
+using KitKap.Service.Dtos.ShoppingCartDtos;
+using KitKap.Service.Dtos.TransactionDtos;
+using KitKap.Service.Dtos.UserDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Kitkap.Service.Dtos.AddressDtos;
-using KitKap.Service.Dtos.AboutDtos;
-using KitKap.Service.Dtos.ProductImagesDtos;
-using Kitkap.Service.Dtos.UserDtos;
-using KitKap.Service.Dtos.ShoppingCartDetailDtos;
 
 namespace KitKap.Service.Mapping
 {
@@ -35,12 +38,6 @@ namespace KitKap.Service.Mapping
             CreateMap<Category, RemoveCategoryDto>().ReverseMap();
             CreateMap<Category, GetByIdCategoryDto>().ReverseMap();
 
-            CreateMap<Transaction, RequestTransactionDto>().ReverseMap();
-            CreateMap<Transaction, CreateTransactionDto>().ReverseMap();
-            CreateMap<Transaction, UpdateTransactionDto>().ReverseMap();
-            CreateMap<Transaction, RemoveTransactionDto>().ReverseMap();
-            CreateMap<Transaction, GetByIdTransactionDto>().ReverseMap();
-
             CreateMap<Address, RequestAddressDto>().ReverseMap();
             CreateMap<Address, CreateAddressDto>().ReverseMap();
             CreateMap<Address, UpdateAddressDto>().ReverseMap();
@@ -51,6 +48,7 @@ namespace KitKap.Service.Mapping
             CreateMap<AppUser, LoginUserDto>().ReverseMap();
             CreateMap<AppUser, RegisterUserDto>().ReverseMap();
             CreateMap<AppUser, RequestUserDto>().ReverseMap();
+            CreateMap<AppUser, JwtUserDto>().ReverseMap();
 
             CreateMap<About, ResultAboutDto>().ReverseMap();
             CreateMap<About, CreateAboutDto>().ReverseMap();
@@ -59,9 +57,18 @@ namespace KitKap.Service.Mapping
 
             CreateMap<Book, UpdateBookDto>().IncludeBase<Product,UpdateProductDto>().ReverseMap();
 
-            CreateMap<ShoppingCartDetail, ResultShoppingCartDetailDto>().ReverseMap();
+            CreateMap<ShoppingCartItem, ShoppingCartItemDto>().ReverseMap();
+            CreateMap<ShoppingCartItem, AddCartItemDto>().ReverseMap();
 
+            CreateMap<ShoppingCart, ShoppingCartDto>().ReverseMap();
 
+            CreateMap<Order, OrderDto>().ReverseMap();
+            CreateMap<CreateOrderDto, Order>();
+
+            CreateMap<OrderItem, OrderItemDto>().ReverseMap();
+
+            CreateMap<Transaction, TransactionDto>().ReverseMap();
+            CreateMap<CreateTransactionDto, Transaction>();
 
         }
     }
