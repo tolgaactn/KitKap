@@ -7,7 +7,8 @@
 
 <link rel="stylesheet" href="~/template/assets/css/style.min.css">
 <main class="main">
-	@await Component.InvokeAsync("_ShoppingCartBreadCrumbComponentPartial")
+	
+		@await Component.InvokeAsync("_ShoppingCartBreadCrumbComponentPartial")
 		<div class="row">
 			<div class="col-lg-8">
 				<div class="cart-table-container">
@@ -32,10 +33,12 @@
 										</a>
 									</div><!-- End .float-right -->
 									<div class="mx-3 float-right">
-										<a asp-controller="ShoppingCart" asp-action="DeleteShoppingCart" class="btn btn-shop btn-update-cart">
-											Sepeti Temizle
-										</a>
-									</div><!-- End .float-right -->
+										<button type="button"
+												class="btn btn-outline-danger btn-shop"
+												onclick="clearCart()">
+											<i class="icon-trash"></i> Sepeti Temizle
+										</button>
+									</div>><!-- End .float-right -->
 								</td>
 							</tr>
 						</tfoot>
@@ -48,3 +51,4 @@
 
 	<div class="mb-6"></div><!-- margin -->
 </main>
+

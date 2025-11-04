@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Kitkap.Entity.Repositories
 {
@@ -20,5 +21,8 @@ namespace Kitkap.Entity.Repositories
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);
         Task AddRangeAsync(IEnumerable<T> entities);
+        Task<T?> GetWithIncludeAsync(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
+        Task<T?> GetWithIncludeForUpdateAsync(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
+        Task<List<T>> GetListWithIncludeAsync(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool asNoTracking = true);
     }
 }

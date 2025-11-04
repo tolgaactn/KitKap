@@ -7,46 +7,73 @@
             <div class="product-default inner-quickview inner-icon">
                 <figure>
                     <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@item.Id">
-                        <img src="@item.ImageUrl"
-                             width="217" height="217" alt="@item.Name" title="@item.Name">
+                        <img src="@item.ImageUrl" width="217" height="217" alt="@item.Name" title="@item.Name">
                     </a>
+
                     <div class="label-group">
                         <div class="product-label label-hot">Popüler</div>
                     </div>
+
+                    <!-- ✅ Resim üzerindeki sepet butonu -->
                     <div class="btn-icon-group">
-                        <a href="#"
-                           class="btn-icon btn-add-cart product-type-simple">
+                        <button type="button"
+                                class="btn-icon btn-add-cart product-type-simple"
+                                onclick="addToCart(@item.Id, this)"
+                                title="Sepete Ekle">
                             <i class="icon-shopping-cart"></i>
-                        </a>
+                        </button>
                     </div>
-                    <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@item.Id" class="btn-quickview"
-                       title="Hızlı Gözat">
+
+                    <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@item.Id"
+                       class="btn-quickview" title="Hızlı Gözat">
                         Hızlı Gözat
                     </a>
                 </figure>
+
                 <div class="product-details">
                     <div class="category-wrap">
                         <div class="category-list">
-                            <a href="#" class="product-category">@item.CategoryName</a>
+                            <a asp-controller="ProductList" asp-action="Index">
+                                @item.CategoryName
+                            </a>
                         </div>
-                        <a href="#" class="btn-icon-wish">
-                            <i class="icon-heart"></i>
-                        </a>
                     </div>
+
                     <h3 class="product-title">
-                        <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@item.Id">@item.Name</a>
+                        <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@item.Id">
+                            @item.Name
+                        </a>
                     </h3>
+
                     <div class="ratings-container">
                         <div class="product-ratings">
-                            <span class="ratings" style="width:80%"></span><!-- End .ratings -->
+                            <span class="ratings" style="width:80%"></span>
                             <span class="tooltiptext tooltip-top"></span>
-                        </div><!-- End .product-ratings -->
-                    </div><!-- End .product-container -->
+                        </div>
+                    </div>
+
                     <div class="price-box">
-                        <span class="product-price">@item.Price &#x20BA;</span>
-                    </div><!-- End .price-box -->
-                </div><!-- End .product-details -->
+                        <span class="product-price">@item.Price.ToString("N2") ₺</span>
+                    </div>
+
+                    <!-- ✅ Alt kısımdaki butonlar -->
+                    <div class="product-action">
+                        <button type="button"
+                                class="btn btn-primary"
+                                onclick="addToCart(@item.Id, this)">
+                            <i class="icon-shopping-cart"></i>
+                            <span>Sepete Ekle</span>
+                        </button>
+
+                        <a asp-controller="ProductList"
+                           asp-action="ProductDetail"
+                           asp-route-id="@item.Id"
+                           class="btn btn-outline-primary">
+                            <span>Detaya Git</span>
+                        </a>
+                    </div>
+                </div>
             </div>
-        </div><!-- End .col-lg-3 -->
-    }  
+        </div>
+    }
 </div>

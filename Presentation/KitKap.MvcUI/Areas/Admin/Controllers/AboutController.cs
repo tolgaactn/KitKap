@@ -58,8 +58,8 @@ namespace KitKap.MvcUI.Areas.Admin.Controllers
             [HttpGet]
             public async Task<IActionResult> Create()
             {
-                var categories = await _aboutService.GetAllAboutAsync();
-                ViewBag.Categories = categories;
+                var abouts = await _aboutService.GetAllAboutAsync();
+                ViewBag.Abouts = abouts;
                 return View();
             }
 

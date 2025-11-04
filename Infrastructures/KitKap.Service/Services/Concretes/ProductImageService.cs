@@ -82,6 +82,13 @@ namespace KitKap.Service.Services.Concretes
             var images = await _uow.GetRepository<ProductImage>().GetAll(b => b.ProductId == id);
             return _mapper.Map<List<RequestProductImageDto>>(images);
         }
+
+        public async Task<RequestProductImageDto> GetBaseProductImageByIdAsync(long id)
+        {
+            var image = await _uow.GetRepository<ProductImage>().GetAll(b => b.ProductId == id);
+            var baseImage = image.FirstOrDefault(i => i.IsMain) ?? image.FirstOrDefault();
+            return _mapper.Map<RequestProductImageDto>(baseImage);
+        }
     }
 
 }

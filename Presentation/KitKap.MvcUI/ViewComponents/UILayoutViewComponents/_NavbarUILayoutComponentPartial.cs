@@ -1,47 +1,47 @@
-﻿using KitKap.MvcUI.ViewModels.ShoppingCartDetailViewModels;
-using KitKap.Service.Dtos.ShoppingCartDetailDtos;
+﻿using Azure;
+using KitKap.MvcUI.ViewModels.ShoppingCartDetailViewModels;
+using KitKap.MvcUI.ViewModels.ShoppingCartViewModels;
+using KitKap.Service.Dtos.ShoppingCartDtos;
 using KitKap.Service.Extensions;
 using KitKap.Service.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace KitKap.MvcUI.ViewComponents.UILayoutViewComponents
 {
     public class _NavbarUILayoutComponentPartial : ViewComponent
     {
-        private readonly IProductImageService _productImageService;
+        private readonly IShoppingCartService _shoppingCartService;
 
-        public _NavbarUILayoutComponentPartial(IProductImageService productImageService)
+        public _NavbarUILayoutComponentPartial(IShoppingCartService shoppingCartService)
         {
-            _productImageService = productImageService;
+            _shoppingCartService = shoppingCartService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var shoppingCartDto = GetShoppingCart();
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var guestId = CookieHelper.GetOrCreateGuestId(HttpContext);
 
-            var shoppingCartViewModel = new List<ShoppingCartDetailViewModel>();
+            var cartDto = await _shoppingCartService.GetCartAsync(userId, guestId);
 
-            foreach (var dto in shoppingCartDto)
+            var model = new ShoppingCartViewModel
             {
-                var productImages = await _productImageService.GetByIdProductImagesAsync(dto.productId);
-                var imageUrls = productImages.Where(img => img.IsMain).Select(img => img.ImageUrl).ToList();
-
-                shoppingCartViewModel.Add(new ShoppingCartDetailViewModel
+                Id = cartDto.Id,
+                UserId = cartDto.UserId,
+                GuestId = cartDto.GuestId,
+                CreatedAt = cartDto.CreatedAt,
+                Items = cartDto.Items.Select(item => new ShoppingCartItemViewModel
                 {
-                    productId = dto.productId,
-                    productName = dto.productName,
-                    productQuantity = dto.productQuantity,
-                    productPrice = dto.productPrice,
-                    ImageUrls = imageUrls
-                });
-            }
-            return View(shoppingCartViewModel);
-        }
-        public List<ResultShoppingCartDetailDto> GetShoppingCart()
-        {
-            var shoppingCart = HttpContext.Session.GetJson<List<ResultShoppingCartDetailDto>>("shoppingCart") ?? new List<ResultShoppingCartDetailDto>();
+                    ProductId = item.ProductId,
+                    ProductName = item.ProductName,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.UnitPrice,
+                    ImageUrl = item.ProductImageUrl
+                }).ToList()
+            };
 
-            return shoppingCart;
+            return View(model);
         }
     }
 }

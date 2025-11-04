@@ -3,36 +3,28 @@ using Kitkap.Entity.Services;
 using Kitkap.Service.Dtos.AddressDtos;
 using Kitkap.Service.Dtos.UserDtos;
 using KitKap.DataAccess.Identity;
-using KitKap.Service.Jwt;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace KitKap.Service.Services.Concretes
 {
     public class AccountService : IAccountService
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
-        private readonly JwtSettings _jwtSettings;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountService(UserManager<AppUser> userManager, IMapper mapper, IOptions<JwtSettings> jwtSettings, SignInManager<AppUser> signInManager)
+        public AccountService(
+            UserManager<AppUser> userManager,
+            IMapper mapper,
+            SignInManager<AppUser> signInManager,
+            IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _mapper = mapper;
-            _jwtSettings = jwtSettings.Value;
             _signInManager = signInManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<string> CreateUserAsync(RegisterUserDto model)
@@ -49,7 +41,6 @@ namespace KitKap.Service.Services.Concretes
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Email = model.Email,
-                //PhoneNumber = model.PhoneNumber,
                 Balance = 0,
                 IsActived = true
             };
@@ -58,7 +49,6 @@ namespace KitKap.Service.Services.Concretes
 
             if (result.Succeeded)
             {
-                // Varsayılan rol ata
                 await _userManager.AddToRoleAsync(user, "BireyselMusteri");
                 return "OK";
             }
@@ -69,52 +59,79 @@ namespace KitKap.Service.Services.Concretes
         public async Task<AuthResponse> LoginAsync(LoginUserDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
+
             if (user == null)
-                return new AuthResponse { IsSuccessful = false, Errors = new List<string> { "Email bulunamadı" } };
-
-            var passwordValid = await _userManager.CheckPasswordAsync(user, model.Password);
-            if (!passwordValid)
-                return new AuthResponse { IsSuccessful = false, Errors = new List<string> { "Şifre yanlış" } };
-
+            {
+                return new AuthResponse
+                {
+                    IsSuccessful = false,
+                    Errors = new List<string> { "Email veya şifre hatalı" }
+                };
+            }
 
             if (!user.IsActived)
             {
-                throw new Exception("Hesabınız pasif durumdadır.");
+                return new AuthResponse
+                {
+                    IsSuccessful = false,
+                    Errors = new List<string> { "Hesabınız pasif durumdadır." }
+                };
             }
 
-            var roles = await _userManager.GetRolesAsync(user);
-
-            var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Name, user.UserName)
-        };
-
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddMinutes(_jwtSettings.ExpiresInMinutes);
-
-            var token = new JwtSecurityToken(
-                issuer: _jwtSettings.Issuer,
-                audience: _jwtSettings.Audience,
-                claims: claims,
-                expires: expires,
-                signingCredentials: creds
+            // Cookie Authentication ile giriş yap
+            var result = await _signInManager.PasswordSignInAsync(
+                user,
+                model.Password,
+                isPersistent: model.RememberMe, // Remember Me
+                lockoutOnFailure: true // 3 yanlış denemeden sonra kilitle
             );
+
+            if (result.Succeeded)
+            {
+                // Login history kaydet (opsiyonel)
+                await SaveLoginHistoryAsync(user.Id, true, model.IpAddress);
+
+                return new AuthResponse
+                {
+                    IsSuccessful = true,
+                    UserName = user.UserName
+                };
+            }
+
+            if (result.IsLockedOut)
+            {
+                return new AuthResponse
+                {
+                    IsSuccessful = false,
+                    Errors = new List<string> { "Hesabınız kilitlendi. Lütfen daha sonra tekrar deneyin." }
+                };
+            }
+
+            // Başarısız giriş
+            await SaveLoginHistoryAsync(user.Id, false, model.IpAddress);
 
             return new AuthResponse
             {
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = expires,
-                UserName = user.UserName,
-                IsSuccessful = true
+                IsSuccessful = false,
+                Errors = new List<string> { "Email veya şifre hatalı" }
             };
+        }
+
+        private async Task SaveLoginHistoryAsync(string userId, bool isSuccessful, string ipAddress)
+        {
+            // Eğer LoginHistory kullanmak isterseniz:
+            // var history = new LoginHistory
+            // {
+            //     UserId = userId,
+            //     LoginDate = DateTime.Now,
+            //     IpAddress = ipAddress ?? "Unknown",
+            //     IsSuccessful = isSuccessful
+            // };
+            // await _dbContext.LoginHistories.AddAsync(history);
+            // await _dbContext.SaveChangesAsync();
+
+            // Şimdilik boş bırakıyoruz
+            await Task.CompletedTask;
         }
 
         public async Task<GetByIdUserDto> FindById(string id)
@@ -122,6 +139,7 @@ namespace KitKap.Service.Services.Concretes
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
                 throw new Exception("Kullanıcı bulunamadı.");
+
             return _mapper.Map<GetByIdUserDto>(user);
         }
 
@@ -162,14 +180,28 @@ namespace KitKap.Service.Services.Concretes
                 throw new Exception($"Güncelleme başarısız: {errors}");
             }
         }
+
         public async Task LogoutAsync()
         {
             await _signInManager.SignOutAsync();
         }
+
         public async Task<IList<string>> GetRolesAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return new List<string>();
+
             return await _userManager.GetRolesAsync(user);
+        }
+
+        public async Task<RequestUserDto?> GetUserByEmailAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+             if (user == null)
+                return null;
+
+             return _mapper.Map<RequestUserDto>(user);
         }
     }
 

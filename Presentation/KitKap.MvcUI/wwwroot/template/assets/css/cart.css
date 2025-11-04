@@ -1,0 +1,293 @@
+﻿/* ========================================
+   🛒 SEPET DROPDOWN - KESİN ÇÖZÜM
+   ======================================== */
+
+/* Sepet container */
+.cart-dropdown-custom {
+    position: fixed !important;
+    right: 20px !important;
+    top: 80px !important;
+    bottom: 20px !important;
+    width: 400px !important;
+    max-width: calc(100vw - 40px) !important;
+    max-height: calc(100vh - 100px) !important;
+    z-index: 10000 !important;
+    overflow: hidden !important;
+    background: white !important;
+    border: 1px solid #ddd !important;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2) !important;
+    border-radius: 4px !important;
+    margin: 0 !important;
+    /* ✅ visibility kaldırıldı - pointer-events ile kontrol */
+    pointer-events: none !important;
+    opacity: 0 !important;
+    transform: translateX(450px) !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+    /* Sepet açık */
+    .cart-dropdown-custom.cart-open {
+        pointer-events: auto !important;
+        opacity: 1 !important;
+        transform: translateX(0) !important;
+    }
+
+/* Overlay */
+.cart-overlay {
+    display: none !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    z-index: 9998 !important; /* Sepetten (10000) daha düşük */
+    cursor: pointer !important;
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+    pointer-events: none !important; /* ✅ Varsayılan olarak tıklanamaz */
+}
+
+    .cart-overlay.active {
+        display: block !important;
+        opacity: 1 !important;
+        pointer-events: auto !important; /* ✅ Active olunca tıklanabilir */
+    }
+
+body.cart-open {
+    overflow: hidden !important;
+}
+
+/* ========================================
+   ❌ Close Butonu
+   ======================================== */
+
+.btn-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    line-height: 28px;
+    text-align: center;
+    font-size: 24px;
+    color: #999;
+    text-decoration: none;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    z-index: 10;
+    background: transparent;
+    cursor: pointer;
+    border: none;
+    display: none;
+}
+
+    .btn-close:hover {
+        color: #333;
+        background: #f5f5f5;
+        transform: rotate(90deg);
+    }
+
+@media (max-width: 768px) {
+    .btn-close {
+        display: block !important;
+    }
+}
+
+/* ========================================
+   🔔 Toast Notification
+   ======================================== */
+
+.toast-container {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    min-width: 320px;
+    max-width: 420px;
+    border-left: 5px solid;
+    pointer-events: auto;
+}
+
+.toast-success {
+    border-left-color: #28a745;
+}
+
+.toast-error {
+    border-left-color: #dc3545;
+}
+
+.toast i {
+    font-size: 20px;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* ========================================
+   🔢 Badge Animasyonu
+   ======================================== */
+
+.badge-bounce {
+    animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.3);
+    }
+
+    50% {
+        transform: scale(0.9);
+    }
+
+    75% {
+        transform: scale(1.15);
+    }
+}
+
+/* ========================================
+   🎨 Dropdown İçerik
+   ======================================== */
+
+.dropdownmenu-wrapper {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.dropdown-cart-header {
+    flex-shrink: 0;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-cart-products {
+    flex: 1;
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 15px;
+}
+
+    .dropdown-cart-products::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .dropdown-cart-products::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 10px;
+    }
+
+    .dropdown-cart-products .product {
+        width: 100%;
+        padding: 10px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+        .dropdown-cart-products .product:hover {
+            background-color: #f8f9fa;
+        }
+
+.dropdown-cart-total {
+    flex-shrink: 0;
+    padding: 15px;
+    border-top: 1px solid #eee;
+}
+
+.dropdown-cart-action {
+    flex-shrink: 0;
+    padding: 15px;
+}
+
+.btn-remove {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+}
+
+    .btn-remove:hover {
+        color: #dc3545;
+    }
+
+/* ========================================
+   📱 RESPONSIVE
+   ======================================== */
+
+@media (max-width: 992px) {
+    .cart-dropdown-custom {
+        width: 350px !important;
+        right: 15px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .cart-dropdown-custom {
+        width: calc(100vw - 30px) !important;
+        right: 15px !important;
+        left: 15px !important;
+        top: 70px !important;
+    }
+
+    .toast-container {
+        top: 60px;
+        right: 10px;
+        left: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .cart-dropdown-custom {
+        width: calc(100vw - 20px) !important;
+        right: 10px !important;
+        left: 10px !important;
+        top: 60px !important;
+        bottom: 10px !important;
+    }
+}
+
+/* ========================================
+   🎨 Banner Gizle
+   ======================================== */
+
+img[src*="banner-2"],
+img[src*="banner-3"],
+img[src*="banner-4"],
+img[src*="banner-5"] {
+    display: none !important;
+}

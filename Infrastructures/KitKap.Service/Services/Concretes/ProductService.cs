@@ -19,7 +19,6 @@ namespace KitKap.Service.Services
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
-        private readonly IProductImageService _productImageService;
 
         public ProductService(IUnitOfWork uow, IMapper mapper)
         {

@@ -16,6 +16,7 @@ namespace KitKap.Service.Services.Interfaces
         Task SetMainImageAsync(long selectedImageId, long productId);
         Task MarkAsDeletedAsync(List<long> imageIds);
         Task<List<RequestProductImageDto>> GetByIdProductImagesAsync(long id);
+        Task<RequestProductImageDto> GetBaseProductImageByIdAsync(long id);
     }
 
 }

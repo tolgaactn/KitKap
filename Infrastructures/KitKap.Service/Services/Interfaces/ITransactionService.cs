@@ -1,18 +1,23 @@
 ﻿using Kitkap.Service.Dtos.AddressDtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using KitKap.Service.Dtos.TransactionDtos;
 
-namespace Kitkap.Entity.Services
+namespace KitKap.Service.Services.Interfaces
 {
     public interface ITransactionService
     {
-        Task<IEnumerable<RequestTransactionDto>> GetAllTransactions();
-        Task<GetByIdTransactionDto> GetByIdTransaction(int id);
-        Task CreateAsync(CreateTransactionDto model);
-        Task DeleteAsync(RemoveTransactionDto model);
-        Task UpdateAsync(UpdateTransactionDto model);
+        // Transaction oluşturma
+        Task<int> CreateTransactionForOrderAsync(CreateTransactionDto dto);
+
+        // Transaction durum güncellemeleri
+        Task CompleteTransactionAsync(int transactionId, string? gatewayTransactionId = null);
+        Task FailTransactionAsync(int transactionId, string errorMessage);
+        Task CancelTransactionAsync(int transactionId);
+        Task RefundTransactionAsync(int transactionId);
+
+        // Transaction okuma
+        Task<TransactionDto?> GetTransactionByIdAsync(int transactionId);
+        Task<TransactionDto?> GetTransactionByOrderIdAsync(int orderId);
+        Task<IEnumerable<TransactionDto>> GetAllTransactionsAsync();
+        Task<IEnumerable<TransactionDto>> GetPendingTransactionsAsync();
     }
 }

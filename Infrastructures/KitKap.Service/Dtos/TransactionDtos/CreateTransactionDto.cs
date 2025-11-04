@@ -8,11 +8,8 @@ namespace Kitkap.Service.Dtos.AddressDtos
 {
     public class CreateTransactionDto
     {
-        public int ProductId { get; set; }
-        public string SenderId { get; set; }
-        public string ReceiverId { get; set; }
-        public DateTime TransactionDate { get; set; }
-        public string Status { get; set; }
-        public int TrackingCode { get; set; }
+        public int OrderId { get; set; }
+        public string PaymentMethod { get; set; }
+        public string? PaymentProvider { get; set; }  // Opsiyonel: "PayTR"
     }
 }

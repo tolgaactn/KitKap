@@ -1,0 +1,55 @@
+﻿@model KitKap.MvcUI.ViewModels.ShoppingCartViewModels.ShoppingCartViewModel
+
+@{
+    ViewData["Title"] = "Sepetim";
+    Layout = "~/Views/Shared/_UILayout.cshtml";
+}
+
+<link rel="stylesheet" href="~/template/assets/css/style.min.css">
+
+<main class="main">
+    @await Component.InvokeAsync("_ShoppingCartBreadCrumbComponentPartial")
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="cart-table-container">
+                <table class="table table-cart">
+                    <thead>
+                        @await Component.InvokeAsync("_ShoppingCartTableHeadComponentPartial")
+                    </thead>
+
+                    <tbody>
+                        @* ViewComponent’e Model.Items gönderiyoruz *@
+                        @await Component.InvokeAsync("_ShoppingCartProductListComponentPartial", Model.Items)
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="clearfix">
+                                @await Component.InvokeAsync("_ShoppingCartDiscountComponentPartial", Model)
+
+                                <div class="float-right">
+                                    <a asp-controller="ProductList" asp-action="Index" class="btn btn-shop btn-update-cart">
+                                        Alışverişe Devam
+                                    </a>
+                                </div>
+
+                                <div class="mx-3 float-right">
+                                    <form asp-controller="Cart" asp-action="ClearCart" method="post">
+                                        <button type="submit" class="btn btn-shop btn-update-cart">
+                                            Sepeti Temizle
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        @await Component.InvokeAsync("_ShoppingCartDetailComponentPartial", Model)
+    </div>
+
+    <div class="mb-6"></div>
+</main>

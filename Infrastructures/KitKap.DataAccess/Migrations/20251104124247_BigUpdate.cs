@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KitKap.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class BigUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -226,6 +226,74 @@ namespace KitKap.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LoginHistories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IpAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsSuccessful = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LoginHistories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LoginHistories_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BuyerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ShippingAddressId = table.Column<int>(type: "int", nullable: false),
+                    ShippingAddressAddressId = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubTotal = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    ShippingCost = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    CommissionAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ShippedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeliveredAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TrackingNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CargoCompany = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CustomerNote = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AdminNote = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Addresses_ShippingAddressAddressId",
+                        column: x => x.ShippingAddressAddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "AddressId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Addresses_ShippingAddressId",
+                        column: x => x.ShippingAddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "AddressId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Orders_AspNetUsers_BuyerId",
+                        column: x => x.BuyerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -242,12 +310,13 @@ namespace KitKap.DataAccess.Migrations
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    ApprovalStatus = table.Column<int>(type: "int", nullable: false),
+                    Condition = table.Column<int>(type: "int", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
                     Author = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ISBN = table.Column<int>(type: "int", nullable: true),
                     PublicationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Language = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Condition = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Language = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -264,6 +333,94 @@ namespace KitKap.DataAccess.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShoppingCarts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    GuestId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsCheckedOut = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingCarts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ShoppingCarts_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    PaymentProvider = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ErrorMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false),
+                    SellerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    CommissionRate = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
+                    CommissionAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    SellerAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_AspNetUsers_SellerId",
+                        column: x => x.SellerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -292,27 +449,29 @@ namespace KitKap.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Transactions",
+                name: "ShoppingCartItems",
                 columns: table => new
                 {
-                    TransactionId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    SenderId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReceiverId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TrackingCode = table.Column<int>(type: "int", nullable: false),
-                    PointTransferred = table.Column<decimal>(type: "decimal(8,2)", precision: 8, scale: 2, nullable: false),
-                    ProductId1 = table.Column<long>(type: "bigint", nullable: false)
+                    ShoppingCartId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transactions", x => x.TransactionId);
+                    table.PrimaryKey("PK_ShoppingCartItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transactions_Products_ProductId1",
-                        column: x => x.ProductId1,
+                        name: "FK_ShoppingCartItems_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ShoppingCartItems_ShoppingCarts_ShoppingCartId",
+                        column: x => x.ShoppingCartId,
+                        principalTable: "ShoppingCarts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -327,9 +486,9 @@ namespace KitKap.DataAccess.Migrations
                 columns: new[] { "Id", "CreatedDate", "Description", "IsDeleted", "Name", "ParentCategoryId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 23, 21, 55, 0, 707, DateTimeKind.Local).AddTicks(5700), "Kitapların olduğu kategori", false, "Kitap", null },
-                    { 2, new DateTime(2025, 4, 23, 21, 55, 0, 707, DateTimeKind.Local).AddTicks(5715), "Teknolojilerin  olduğu kategori", false, "Teknoloji", null },
-                    { 3, new DateTime(2025, 4, 23, 21, 55, 0, 707, DateTimeKind.Local).AddTicks(5716), "Romanların olduğu kategori", false, "Roman", 1 }
+                    { 1, new DateTime(2025, 11, 4, 15, 42, 46, 759, DateTimeKind.Local).AddTicks(7002), "Kitapların olduğu kategori", false, "Kitap", null },
+                    { 2, new DateTime(2025, 11, 4, 15, 42, 46, 759, DateTimeKind.Local).AddTicks(7014), "Teknolojilerin  olduğu kategori", false, "Teknoloji", null },
+                    { 3, new DateTime(2025, 11, 4, 15, 42, 46, 759, DateTimeKind.Local).AddTicks(7015), "Romanların olduğu kategori", false, "Roman", 1 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -382,6 +541,41 @@ namespace KitKap.DataAccess.Migrations
                 column: "ParentCategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LoginHistories_UserId",
+                table: "LoginHistories",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_ProductId",
+                table: "OrderItems",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_SellerId",
+                table: "OrderItems",
+                column: "SellerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_BuyerId",
+                table: "Orders",
+                column: "BuyerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_ShippingAddressAddressId",
+                table: "Orders",
+                column: "ShippingAddressAddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_ShippingAddressId",
+                table: "Orders",
+                column: "ShippingAddressId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductImages_ProductId",
                 table: "ProductImages",
                 column: "ProductId");
@@ -397,9 +591,27 @@ namespace KitKap.DataAccess.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_ProductId1",
+                name: "IX_ShoppingCartItems_ProductId",
+                table: "ShoppingCartItems",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCartItems_ShoppingCartId",
+                table: "ShoppingCartItems",
+                column: "ShoppingCartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCarts_UserId",
+                table: "ShoppingCarts",
+                column: "UserId",
+                unique: true,
+                filter: "[UserId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_OrderId",
                 table: "Transactions",
-                column: "ProductId1");
+                column: "OrderId",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -424,7 +636,16 @@ namespace KitKap.DataAccess.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "LoginHistories");
+
+            migrationBuilder.DropTable(
+                name: "OrderItems");
+
+            migrationBuilder.DropTable(
                 name: "ProductImages");
+
+            migrationBuilder.DropTable(
+                name: "ShoppingCartItems");
 
             migrationBuilder.DropTable(
                 name: "Transactions");
@@ -436,10 +657,16 @@ namespace KitKap.DataAccess.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "ShoppingCarts");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Addresses");
