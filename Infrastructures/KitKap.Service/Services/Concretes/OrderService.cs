@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using static Kitkap.Entity.Entities.Order;
@@ -166,9 +167,43 @@ namespace KitKap.Service.Services.Concretes
         
         }
 
-        public Task<IEnumerable<OrderDto>> GetOrdersByUserAsync(string userId)
+        public async Task<IEnumerable<OrderDto>> GetOrdersByUserAsync(string userId)
         {
-            throw new NotImplementedException();
+            // 1. Kullanıcının tüm siparişlerini çek
+            var orders = await _uow.GetRepository<Order>().GetAll(
+                filter: o => o.BuyerId == userId,
+                orderby: q => q.OrderByDescending(o => o.CreatedAt),
+                includes: new Expression<Func<Order, object>>[]
+                {
+            o => o.Items
+                }
+            );
+
+            if (!orders.Any())
+                return new List<OrderDto>();
+
+            // 2. Buyer ve Address'leri çek (tek seferde)
+            var buyer = await _uow.GetRepository<AppUser>().GetByIdAsync(userId);
+
+            var addressIds = orders.Select(o => o.ShippingAddressId).Distinct().ToList();
+            var addresses = await _uow.GetRepository<Address>().GetAll(
+                filter: a => addressIds.Contains(a.AddressId)
+            );
+
+            // 3. DTO'lara çevir
+            var dtoList = new List<OrderDto>();
+
+            foreach (var order in orders)
+            {
+                var dto = _mapper.Map<OrderDto>(order);
+                var address = addresses.FirstOrDefault(a => a.AddressId == order.ShippingAddressId);
+
+                dto.EnrichDto(order, buyer, address);
+
+                dtoList.Add(dto);
+            }
+
+            return dtoList;
         }
 
         public async Task<OrderSummaryDto> GetOrderSummaryAsync(string userId)
@@ -272,6 +307,49 @@ namespace KitKap.Service.Services.Concretes
 
             await _uow.GetRepository<Order>().UpdateAsync(order);
             await _uow.CommitAsync();
+        }
+
+        public async Task<OrderDto> GetOrderByIdAsync(int orderId)
+        {
+            // 1. Order'ı çek (Items dahil)
+            var order = await _uow.GetRepository<Order>().GetWithIncludeAsync(
+                filter: o => o.Id == orderId,
+                include: q => q.Include(o => o.Items)
+                        .ThenInclude(i => i.Product)
+                            .ThenInclude(p => p.ProductImages)
+                    .Include(o => o.Transaction)
+            );
+
+            if (order == null)
+                throw new KeyNotFoundException("Sipariş bulunamadı");
+
+            // 2. Buyer ve Address'i ayrı çek (navigation property olmadığı için)
+            var buyer = await _uow.GetRepository<AppUser>().GetByIdAsync(order.BuyerId);
+            var address = await _uow.GetRepository<Address>().GetByIdAsync(order.ShippingAddressId);
+
+            // 3. Seller'ları çek (OrderItem'lardaki SellerId'ler için)
+            var sellerIds = order.Items.Select(i => i.SellerId).Distinct().ToList();
+            var sellers = await _uow.GetRepository<AppUser>().GetAll(
+                filter: u => sellerIds.Contains(u.Id)
+            );
+
+            // 4. Order → OrderDto mapping
+            var dto = _mapper.Map<OrderDto>(order);
+
+            // 5. Extension ile zenginleştir (Buyer ve Address bilgilerini ekle)
+            dto.EnrichDto(order, buyer, address);
+
+            // 6. Her OrderItem'ı zenginleştir
+            foreach (var itemDto in dto.Items)
+            {
+                var item = order.Items.First(i => i.Id == itemDto.Id);
+                var product = item.Product;
+                var seller = sellers.FirstOrDefault(s => s.Id == item.SellerId);
+
+                itemDto.EnrichDto(item, product, seller);
+            }
+
+            return dto;
         }
     }
 }

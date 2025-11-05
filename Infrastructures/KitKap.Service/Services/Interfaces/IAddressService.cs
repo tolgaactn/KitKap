@@ -14,5 +14,6 @@ namespace Kitkap.Entity.Services
         Task AddAsync(CreateAddressDto model);
         Task DeleteAsync(RemoveAddressDto model);
         Task UpdateAsync(UpdateAddressDto model);
+        Task<IEnumerable<RequestAddressDto>> GetByUserIdAsync(string userId);
     }
 }

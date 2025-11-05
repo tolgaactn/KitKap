@@ -1,0 +1,608 @@
+﻿@model KitKap.MvcUI.ViewModels.CheckoutViewModels.CheckoutViewModel
+@{
+    ViewData["Title"] = "Sipariş Tamamla";
+    Layout = "~/Views/Shared/_UILayout.cshtml";
+}
+
+<link rel="stylesheet" href="~/template/assets/css/style.min.css">
+
+<main class="main">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
+                <li class="breadcrumb-item"><a asp-controller="ShoppingCart" asp-action="Index">Sepet</a></li>
+                <li class="breadcrumb-item active">Sipariş Tamamla</li>
+            </ol>
+        </nav>
+
+        <h2 class="step-title mb-2">Sipariş Tamamla</h2>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong><i class="icon-exclamation-circle"></i> Hata!</strong> @TempData["ErrorMessage"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        <form asp-action="PlaceOrder" method="post" id="checkoutForm">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="UserId" />
+            <input type="hidden" asp-for="SelectedAddressId" id="selectedAddressInput" />
+
+            <div class="row">
+                <!-- ========================================
+                     SOL TARAF: ADRES VE ÖDEME
+                     ======================================== -->
+                <div class="col-lg-8">
+                    
+                    <!-- 1. TESLİMAT ADRESİ -->
+                    <div class="checkout-step">
+                        <h3 class="step-title">
+                            <span class="step-number">1</span>
+                            Teslimat Adresi
+                        </h3>
+
+                        @if (Model.UserAddresses.Any())
+                        {
+                            <div class="row">
+                                @foreach (var address in Model.UserAddresses)
+                                {
+                                    <div class="col-md-6 mb-3">
+                                        <div class="address-card @(address.AddressId == Model.SelectedAddressId ? "selected" : "")" 
+                                             onclick="selectAddress(@address.AddressId)">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" 
+                                                       class="custom-control-input" 
+                                                       name="addressRadio" 
+                                                       id="address_@address.AddressId"
+                                                       value="@address.AddressId"
+                                                       @(address.AddressId == Model.SelectedAddressId ? "checked" : "")>
+                                                <label class="custom-control-label w-100" for="address_@address.AddressId">
+                                                    <div class="address-content">
+                                                        <strong class="address-title">@address.City, @address.District</strong>
+                                                        @if (!string.IsNullOrEmpty(address.Description))
+                                                        {
+                                                            <p class="address-desc">@address.Description</p>
+                                                        }
+                                                        <small class="address-meta text-muted">
+                                                            @address.Country - PK: @address.PostCode
+                                                        </small>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            <!-- Yeni Adres Ekle Butonu -->
+                            <button type="button" 
+                                    class="btn btn-outline-primary btn-sm" 
+                                    data-toggle="modal" 
+                                    data-target="#newAddressModal">
+                                <i class="icon-plus"></i> Yeni Adres Ekle
+                            </button>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning">
+                                <i class="icon-exclamation-triangle"></i>
+                                Kayıtlı adresiniz yok. Lütfen yeni adres ekleyin.
+                            </div>
+                            <button type="button" 
+                                    class="btn btn-primary" 
+                                    data-toggle="modal" 
+                                    data-target="#newAddressModal">
+                                <i class="icon-plus"></i> Adres Ekle
+                            </button>
+                        }
+                    </div>
+
+                    <!-- 2. ÖDEME YÖNTEMİ -->
+                    <div class="checkout-step">
+                        <h3 class="step-title">
+                            <span class="step-number">2</span>
+                            Ödeme Yöntemi
+                        </h3>
+
+                        <div class="payment-methods">
+                            <div class="payment-method-card">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" 
+                                           id="paymentBankTransfer" 
+                                           name="PaymentMethod" 
+                                           value="BankTransfer" 
+                                           class="custom-control-input"
+                                           checked>
+                                    <label class="custom-control-label w-100" for="paymentBankTransfer">
+                                        <div class="payment-method-content">
+                                            <div class="payment-icon">
+                                                <i class="icon-credit-card"></i>
+                                            </div>
+                                            <div class="payment-info">
+                                                <strong>Havale/EFT</strong>
+                                                <p class="text-muted mb-0">Ödeme onaylandıktan sonra kargoya verilir</p>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="payment-method-card">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" 
+                                           id="paymentCreditCard" 
+                                           name="PaymentMethod" 
+                                           value="CreditCard" 
+                                           class="custom-control-input">
+                                    <label class="custom-control-label w-100" for="paymentCreditCard">
+                                        <div class="payment-method-content">
+                                            <div class="payment-icon">
+                                                <i class="icon-credit-card"></i>
+                                            </div>
+                                            <div class="payment-info">
+                                                <strong>Kredi Kartı</strong>
+                                                <p class="text-muted mb-0">Güvenli ödeme (PayTR)</p>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. SİPARİŞ NOTU -->
+                    <div class="checkout-step">
+                        <h3 class="step-title">
+                            <span class="step-number">3</span>
+                            Sipariş Notu <small class="text-muted">(Opsiyonel)</small>
+                        </h3>
+
+                        <textarea asp-for="CustomerNote" 
+                                  class="form-control" 
+                                  rows="4" 
+                                  placeholder="Siparişinizle ilgili özel bir not eklemek isterseniz buraya yazabilirsiniz..."></textarea>
+                    </div>
+
+                </div>
+
+                <!-- ========================================
+                     SAĞ TARAF: SİPARİŞ ÖZETİ
+                     ======================================== -->
+                <div class="col-lg-4">
+                    <div class="order-summary">
+                        <h3 class="summary-title">SİPARİŞ ÖZETİ</h3>
+
+                        <!-- Ürünler -->
+                        <div class="summary-items">
+                            @foreach (var item in Model.OrderSummary.Items)
+                            {
+                                <div class="summary-item">
+                                    <div class="item-image">
+                                        <img src="@item.ProductImageUrl" 
+                                             alt="@item.ProductName" 
+                                             onerror="this.src='/images/no-image.png'">
+                                    </div>
+                                    <div class="item-details">
+                                        <h4 class="item-name">@item.ProductName</h4>
+                                        <p class="item-quantity">Adet: @item.Quantity</p>
+                                    </div>
+                                    <div class="item-price">
+                                        <strong>@((item.UnitPrice * item.Quantity).ToString("N2")) ₺</strong>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <hr>
+
+                        <!-- Fiyat Detayları -->
+                        <table class="summary-totals">
+                            <tbody>
+                                <tr>
+                                    <td>Ara Toplam</td>
+                                    <td class="text-right">@Model.OrderSummary.SubTotal.ToString("N2") ₺</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Kargo Ücreti
+                                        @if (Model.OrderSummary.IsFreeShipping)
+                                        {
+                                            <span class="badge badge-success ml-2">ÜCRETSİZ</span>
+                                        }
+                                    </td>
+                                    <td class="text-right">
+                                        @if (Model.OrderSummary.ShippingCost > 0)
+                                        {
+                                            @Model.OrderSummary.ShippingCost.ToString("N2") @:₺
+                                        }
+                                        else
+                                        {
+                                            <span class="text-success">Ücretsiz</span>
+                                        }
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="summary-total">
+                                    <td><strong>TOPLAM</strong></td>
+                                    <td class="text-right">
+                                        <strong>@Model.OrderSummary.TotalAmount.ToString("N2") ₺</strong>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <!-- Ücretsiz Kargo İnfo -->
+                        @if (!Model.OrderSummary.IsFreeShipping && Model.OrderSummary.RemainingForFreeShipping > 0)
+                        {
+                            <div class="alert alert-info">
+                                <i class="icon-truck"></i>
+                                <strong>@Model.OrderSummary.RemainingForFreeShipping.ToString("N2") ₺</strong> daha alışveriş yapın, 
+                                <strong>kargo ücretsiz</strong> olsun!
+                            </div>
+                        }
+
+                        <!-- Sipariş Tamamla Butonu -->
+                        <button type="submit" 
+                                class="btn btn-primary btn-block btn-lg btn-order"
+                                id="placeOrderBtn">
+                            <i class="icon-check"></i> Siparişi Tamamla
+                        </button>
+
+                        <a asp-controller="ShoppingCart" 
+                           asp-action="Index" 
+                           class="btn btn-outline-secondary btn-block mt-2">
+                            <i class="icon-arrow-left"></i> Sepete Dön
+                        </a>
+
+                        <!-- Güvenlik Rozetleri -->
+                        <div class="security-badges text-center mt-3">
+                            <small class="text-muted">
+                                <i class="icon-lock"></i> Güvenli Ödeme
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<!-- ========================================
+     YENİ ADRES MODAL
+     ======================================== -->
+<div class="modal fade" id="newAddressModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="icon-map-marker"></i> Yeni Adres Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="newAddressForm">
+                    <div class="form-group">
+                        <label>Ülke *</label>
+                        <input type="text" class="form-control" id="newCountry" value="Türkiye" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Şehir *</label>
+                        <input type="text" class="form-control" id="newCity" placeholder="Örn: İstanbul" required>
+                    </div>
+                    <div class="form-group">
+                        <label>İlçe *</label>
+                        <input type="text" class="form-control" id="newDistrict" placeholder="Örn: Kadıköy" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Posta Kodu *</label>
+                        <input type="number" class="form-control" id="newPostCode" placeholder="Örn: 34710" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Adres Detayı</label>
+                        <textarea class="form-control" id="newDescription" rows="3" placeholder="Mahalle, sokak, bina no..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary" onclick="saveNewAddress()">
+                    <i class="icon-check"></i> Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Adres seçimi
+        function selectAddress(addressId) {
+            $('.address-card').removeClass('selected');
+            $('.address-card').find('input[type="radio"]').prop('checked', false);
+            
+            var $card = $('.address-card').has('#address_' + addressId);
+            $card.addClass('selected');
+            $('#address_' + addressId).prop('checked', true);
+            $('#selectedAddressInput').val(addressId);
+        }
+
+        // Yeni adres kaydet
+        function saveNewAddress() {
+            const addressData = {
+                country: $('#newCountry').val(),
+                city: $('#newCity').val(),
+                district: $('#newDistrict').val(),
+                postCode: parseInt($('#newPostCode').val()),
+                description: $('#newDescription').val()
+            };
+
+            if (!addressData.city || !addressData.district || !addressData.postCode) {
+                alert('Lütfen tüm zorunlu alanları doldurun');
+                return;
+            }
+
+            $.ajax({
+                url: '/Checkout/AddNewAddress',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(addressData),
+                success: function (response) {
+                    if (response.success) {
+                        alert('Adres başarıyla eklendi!');
+                        location.reload();
+                    } else {
+                        alert('Hata: ' + response.message);
+                    }
+                },
+                error: function () {
+                    alert('Bir hata oluştu');
+                }
+            });
+        }
+
+        // Form submit kontrolü
+        $('#checkoutForm').on('submit', function (e) {
+            const selectedAddress = $('#selectedAddressInput').val();
+            
+            if (!selectedAddress || selectedAddress === '0') {
+                e.preventDefault();
+                alert('Lütfen bir teslimat adresi seçin');
+                $('html, body').animate({
+                    scrollTop: $('.checkout-step').first().offset().top - 100
+                }, 500);
+                return false;
+            }
+
+            $('#placeOrderBtn').prop('disabled', true)
+                              .html('<i class="fas fa-spinner fa-spin"></i> İşleniyor...');
+        });
+    </script>
+
+    <style>
+        /* Checkout Genel */
+        .step-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .checkout-step {
+            background: #fff;
+            border: 1px solid #e7e7e7;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .checkout-step .step-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            margin-right: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Adres Kartları */
+        .address-card {
+            border: 2px solid #e7e7e7;
+            border-radius: 8px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .address-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .address-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+        }
+
+        .address-content {
+            margin-left: 5px;
+        }
+
+        .address-title {
+            display: block;
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .address-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .address-meta {
+            font-size: 0.85rem;
+        }
+
+        /* Ödeme Yöntemleri */
+        .payment-methods {
+            display: grid;
+            gap: 15px;
+        }
+
+        .payment-method-card {
+            border: 2px solid #e7e7e7;
+            border-radius: 8px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method-card:hover {
+            border-color: #667eea;
+        }
+
+        .payment-method-card:has(input:checked) {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+        }
+
+        .payment-method-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .payment-icon {
+            font-size: 2rem;
+            color: #667eea;
+        }
+
+        .payment-info strong {
+            display: block;
+            font-size: 1.05rem;
+            margin-bottom: 5px;
+        }
+
+        .payment-info p {
+            font-size: 0.9rem;
+        }
+
+        /* Sipariş Özeti */
+        .order-summary {
+            position: sticky;
+            top: 20px;
+            background: #fff;
+            border: 1px solid #e7e7e7;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+
+        .summary-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 12px;
+        }
+
+        .summary-items {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .item-image img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #333;
+        }
+
+        .item-quantity {
+            font-size: 0.85rem;
+            color: #999;
+            margin: 0;
+        }
+
+        .item-price {
+            text-align: right;
+            color: #667eea;
+        }
+
+        .summary-totals {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .summary-totals td {
+            padding: 12px 0;
+            border-top: 1px solid #e7e7e7;
+        }
+
+        .summary-totals tfoot td {
+            border-top: 2px solid #333;
+            font-size: 1.2rem;
+            padding-top: 15px;
+        }
+
+        .btn-order {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            font-weight: 700;
+            padding: 16px;
+        }
+
+        .btn-order:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .security-badges {
+            padding-top: 15px;
+            border-top: 1px solid #e7e7e7;
+        }
+    </style>
+}

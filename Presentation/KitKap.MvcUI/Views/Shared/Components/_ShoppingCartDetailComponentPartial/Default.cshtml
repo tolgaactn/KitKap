@@ -1,87 +1,200 @@
-﻿<div class="col-lg-4">
-	<div class="cart-summary">
-		<h3>Sepet Detayları</h3>
+﻿@model KitKap.MvcUI.ViewModels.ShoppingCartViewModels.ShoppingCartViewModel
 
-		<table class="table table-totals">
-			<tbody>
-				<tr>
-					<td>Toplam</td>
-					<td>Adet: <span class="cart-summary-quantity">@TempData["TotalQuantity"]</span></td>
-                    <td>Fiyat: <span class="cart-summary-price">@TempData["TotalPrice"]₺</span></td>
-				</tr>
-				<tr>
-					<td colspan="2" class="text-left">
-						<h4>Gönderim Türü</h4>
+@{
+    var subTotal = Model.TotalPrice;
+    var shippingCost = subTotal >= 400 ? 0 : 50;
+    var totalAmount = subTotal + shippingCost;
+    var isFreeShipping = shippingCost == 0;
+    var remainingForFree = isFreeShipping ? 0 : 400 - subTotal;
+}
 
-						<div class="form-group form-group-custom-control">
-							<div class="custom-control custom-radio">
-								<input type="radio" class="custom-control-input" name="radio"
-									   checked>
-								<label class="custom-control-label">Elden Teslim Alma</label>
-							</div><!-- End .custom-checkbox -->
-						</div><!-- End .form-group -->
+<div class="col-lg-4">
+    <div class="cart-summary">
+        <h3>SEPET ÖZETİ</h3>
 
-						<div class="form-group form-group-custom-control mb-0">
-							<div class="custom-control custom-radio mb-0">
-								<input type="radio" name="radio" class="custom-control-input">
-								<label class="custom-control-label">Kart ile Tek Çekim</label>
-							</div><!-- End .custom-checkbox -->
-						</div><!-- End .form-group -->
+        @if (Model.Items != null && Model.Items.Any())
+        {
+            <!-- Fiyat Tablosu -->
+            <table class="table table-totals">
+                <tbody>
+                    <tr>
+                        <td>Ara Toplam</td>
+                        <td class="text-right">@subTotal.ToString("N2") ₺</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Kargo Ücreti
+                            @if (isFreeShipping)
+                            {
+                                <span class="badge badge-success ml-2">ÜCRETSİZ</span>
+                            }
+                        </td>
+                        <td class="text-right">
+                            @if (shippingCost > 0)
+                            {
+                                @shippingCost.ToString("N2") @:₺
+                            }
+                            else
+                            {
+                                <span class="text-success">Ücretsiz</span>
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>TOPLAM</strong></td>
+                        <td class="text-right">
+                            <strong class="text-primary" style="font-size: 1.4rem;">
+                                @totalAmount.ToString("N2") ₺
+                            </strong>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
 
-						<form action="#">
-							<div class="form-group form-group-sm">
-								<label>Gönderilecek Adres <strong>TR.</strong></label>
-								<div class="select-custom">
-									<select class="form-control form-control-sm">
-										<option value="TR">Türkiye</option>
-										<option value="US">Amerika</option>
-										<option value="China">Çin</option>
-										<option value="Germany">Almanya</option>
-									</select>
-								</div><!-- End .select-custom -->
-							</div><!-- End .form-group -->
+            <!-- Ücretsiz Kargo Bilgisi -->
+            @if (!isFreeShipping && remainingForFree > 0)
+            {
+                <div class="alert alert-info">
+                    <i class="icon-truck"></i>
+                    <strong>@remainingForFree.ToString("N2") ₺</strong> daha alışveriş yapın,
+                    <strong>kargo ücretsiz</strong> olsun!
+                </div>
+            }
 
-							<div class="form-group form-group-sm">
-								<div class="select-custom">
-									<select class="form-control form-control-sm">
-										<option value="IST">İstanbul</option>
-										<option value="TKR">Tekirdağ</option>
-										<option value="ANK">Ankara</option>
-									</select>
-								</div><!-- End .select-custom -->
-							</div><!-- End .form-group -->
+            <!-- Butonlar -->
+            <div class="checkout-methods">
+                <a asp-controller="Checkout"
+                   asp-action="Index"
+                   class="btn btn-block btn-primary btn-lg">
+                    <i class="icon-credit-card"></i> Sipariş Ver
+                </a>
+                <a asp-controller="ProductList"
+                   asp-action="Index"
+                   class="btn btn-block btn-outline-secondary mt-2">
+                    <i class="icon-arrow-left"></i> Alışverişe Devam
+                </a>
+            </div>
+        }
+        else
+        {
+            <!-- Sepet Boş -->
+            <div class="alert alert-warning text-center">
+                <i class="icon-shopping-cart" style="font-size: 48px; opacity: 0.3;"></i>
+                <p class="mt-3 mb-0"><strong>Sepetiniz boş!</strong></p>
+                <small>Alışverişe başlamak için ürünleri sepete ekleyin.</small>
+            </div>
+            <div class="checkout-methods">
+                <a asp-controller="ProductList"
+                   asp-action="Index"
+                   class="btn btn-block btn-primary">
+                    <i class="icon-search"></i> Ürünleri Keşfet
+                </a>
+            </div>
+        }
 
-							<div class="form-group form-group-sm">
-								<input type="text" class="form-control form-control-sm"
-									   placeholder="Şehir / İlçe">
-							</div><!-- End .form-group -->
-
-							<div class="form-group form-group-sm">
-								<input type="text" class="form-control form-control-sm"
-									   placeholder="Posta Kodu">
-							</div><!-- End .form-group -->
-
-							<button type="submit" class="btn btn-shop btn-update-total">
-								Tümünü Güncelle
-							</button>
-						</form>
-					</td>
-				</tr>
-			</tbody>
-
-			<tfoot>
-				<tr>
-					<td>Toplam</td>
-					<td colspan="2" class="text-right"><span class="cart-summary-total">@TempData["TotalPrice"]₺</span></td>
-				</tr>
-			</tfoot>
-		</table>
-
-		<div class="checkout-methods">
-			<a href="cart.html" class="btn btn-block btn-dark">
-				Onayla
-				<i class="fa fa-arrow-right"></i>
-			</a>
-		</div>
-	</div><!-- End .cart-summary -->
+    </div><!-- End .cart-summary -->
 </div>
+
+<style>
+    .cart-summary {
+        position: sticky;
+        top: 20px;
+        background: #fff;
+        border: 1px solid #e7e7e7;
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .cart-summary h3 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 25px;
+        text-align: center;
+        border-bottom: 2px solid #0066cc;
+        padding-bottom: 12px;
+        color: #333;
+    }
+
+    .table-totals {
+        margin-bottom: 20px;
+    }
+
+    .table-totals td {
+        padding: 14px 0;
+        border-top: 1px solid #e7e7e7;
+        font-size: 1rem;
+    }
+
+    .table-totals tbody tr:first-child td {
+        border-top: none;
+    }
+
+    .table-totals tfoot td {
+        border-top: 2px solid #333;
+        font-size: 1.15rem;
+        padding-top: 18px;
+        padding-bottom: 0;
+    }
+
+    .alert-info {
+        background-color: #e3f2fd;
+        border-color: #2196F3;
+        color: #0d47a1;
+        font-size: 0.9rem;
+        border-radius: 6px;
+        padding: 12px 15px;
+        margin-bottom: 20px;
+    }
+
+    .alert-info i {
+        margin-right: 8px;
+    }
+
+    .checkout-methods .btn {
+        font-weight: 600;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 1.05rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .btn-outline-secondary {
+        border: 2px solid #e7e7e7;
+        color: #666;
+    }
+
+    .btn-outline-secondary:hover {
+        background: #f8f9fa;
+        border-color: #ddd;
+        color: #333;
+    }
+
+    .badge-success {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+    }
+
+    .alert-warning {
+        border-radius: 8px;
+        padding: 30px 20px;
+    }
+
+    .alert-warning i {
+        display: block;
+        margin-bottom: 15px;
+    }
+</style>

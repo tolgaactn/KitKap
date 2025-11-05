@@ -19,5 +19,6 @@ namespace KitKap.Service.Services.Interfaces
         Task UpdateOrderStatusAsync(int orderId, OrderStatus newStatus);
 
         Task UpdateShippingInfoAsync(int orderId, string trackingNumber, string cargoCompany);
+        Task<OrderDto> GetOrderByIdAsync(int orderId);
     }
 }
