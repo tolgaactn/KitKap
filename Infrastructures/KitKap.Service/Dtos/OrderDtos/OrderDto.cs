@@ -21,7 +21,7 @@ namespace KitKap.Service.Dtos.OrderDtos
         public OrderStatus Status { get; set; }
         public string StatusText { get; set; }
 
-        public string PaymentMehtod { get; set; }
+        public string PaymentMethod { get; set; }
         public string PaymentMethodText { get; set; }
 
         public List<OrderItemDto> Items { get; set; } = new();

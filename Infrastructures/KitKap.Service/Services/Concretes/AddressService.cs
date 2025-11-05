@@ -50,6 +50,19 @@ namespace KitKap.Service.Services.Concretes
             return _mapper.Map<GetByIdAddressDto>(address);
         }
 
+        /// <summary>
+        /// Kullanıcının tüm adreslerini getirir
+        /// </summary>
+        public async Task<IEnumerable<RequestAddressDto>> GetByUserIdAsync(string userId)
+        {
+            var addresses = await _uow.GetRepository<Address>().GetAll(
+                filter: a => a.UserId == userId && !a.IsDeleted,
+                orderby: q => q.OrderByDescending(a => a.AddressId) // En yeni adres önce
+            );
+
+            return _mapper.Map<List<RequestAddressDto>>(addresses);
+        }
+
         public async Task UpdateAsync(UpdateAddressDto model)
         {
             var address = await _uow.GetRepository<Address>().GetByIdAsync(model.AddressId);
