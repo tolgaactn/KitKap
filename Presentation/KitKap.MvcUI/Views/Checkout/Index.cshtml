@@ -53,16 +53,16 @@
                                 @foreach (var address in Model.UserAddresses)
                                 {
                                     <div class="col-md-6 mb-3">
-                                        <div class="address-card @(address.AddressId == Model.SelectedAddressId ? "selected" : "")" 
-                                             onclick="selectAddress(@address.AddressId)">
+                                        <div class="address-card @(address.Id == Model.SelectedAddressId ? "selected" : "")" 
+                                             onclick="selectAddress(@address.Id)">
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" 
                                                        class="custom-control-input" 
                                                        name="addressRadio" 
-                                                       id="address_@address.AddressId"
-                                                       value="@address.AddressId"
-                                                       @(address.AddressId == Model.SelectedAddressId ? "checked" : "")>
-                                                <label class="custom-control-label w-100" for="address_@address.AddressId">
+                                                       id="address_@address.Id"
+                                                       value="@address.Id"
+                                                       @(address.Id == Model.SelectedAddressId ? "checked" : "")>
+                                                <label class="custom-control-label w-100" for="address_@address.Id">
                                                     <div class="address-content">
                                                         <strong class="address-title">@address.City, @address.District</strong>
                                                         @if (!string.IsNullOrEmpty(address.Description))

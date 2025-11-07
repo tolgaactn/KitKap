@@ -1,6 +1,0 @@
-@Kitkap.WebMvcUI_HostAddress = http://localhost:5236
-
-GET {{Kitkap.WebMvcUI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

@@ -1,0 +1,403 @@
+﻿/* ============================================
+   🛍️ PRODUCT CARD - KİTKAP CUSTOM
+   ============================================ */
+
+/* Template CSS override */
+.product-default {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    border: 1px solid #ebebeb !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    transition: all 0.3s ease !important;
+    margin-bottom: 20px !important;
+}
+
+    .product-default:hover {
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1) !important;
+        transform: translateY(-3px) !important;
+        border-color: #c96 !important;
+    }
+
+    /* ============================================
+   🖼️ GÖRSEL ALANI (KÜÇÜLTÜLDÜ)
+   ============================================ */
+    .product-default figure {
+        position: relative;
+        margin: 0 !important;
+        height: 220px !important; /* 280px → 220px */
+        background: #f9f9f9 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow: hidden !important;
+        padding: 15px !important; /* 20px → 15px */
+    }
+
+        .product-default figure > a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .product-default figure img {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            width: auto !important;
+            height: auto !important;
+            object-fit: contain !important;
+            transition: transform 0.3s ease !important;
+        }
+
+    .product-default:hover figure img {
+        transform: scale(1.05) !important;
+    }
+
+/* 🏷️ Etiket */
+.label-group {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 10;
+}
+
+.product-label {
+    display: inline-block;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fff;
+    border-radius: 2px;
+    letter-spacing: 0.5px;
+}
+
+.label-hot {
+    background: #ff5252;
+}
+
+/* 🛒 Resim üstü sepet ikonu */
+.btn-icon-group {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.product-default:hover .btn-icon-group {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.btn-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #333;
+    font-size: 15px;
+}
+
+    .btn-icon:hover {
+        background: #c96;
+        color: #fff;
+        transform: scale(1.1);
+    }
+
+/* 👁️ Hızlı gözat */
+.btn-quickview {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(204, 153, 102, 0.95);
+    color: #fff;
+    padding: 8px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.product-default:hover .btn-quickview {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.btn-quickview:hover {
+    background: rgba(204, 153, 102, 1);
+    color: #fff;
+}
+
+/* ============================================
+   📦 DETAYLAR ALANI (KÜÇÜLTÜLDÜ)
+   ============================================ */
+.product-details {
+    display: flex;
+    flex-direction: column;
+    padding: 12px !important; /* 15px → 12px */
+    flex-grow: 1;
+}
+
+/* Kategori */
+.category-wrap {
+    margin-bottom: 4px;
+}
+
+.category-list a {
+    font-size: 11px;
+    color: #999;
+    text-decoration: none;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+    .category-list a:hover {
+        color: #c96;
+    }
+
+/* Başlık */
+.product-title {
+    margin: 0 0 8px 0 !important; /* 10px → 8px */
+    min-height: 38px; /* 40px → 38px */
+}
+
+    .product-title a {
+        font-size: 13px !important; /* 14px → 13px */
+        font-weight: 600;
+        color: #333;
+        text-decoration: none;
+        line-height: 1.4;
+        display: block;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+        .product-title a:hover {
+            color: #c96;
+        }
+
+/* Rating */
+.ratings-container {
+    margin-bottom: 8px;
+}
+
+.product-ratings {
+    position: relative;
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+/* Fiyat */
+.price-box {
+    margin: 8px 0 12px 0 !important; /* Azaltıldı */
+}
+
+.product-price {
+    font-size: 18px !important; /* 20px → 18px */
+    font-weight: 700;
+    color: #c96;
+}
+
+/* ============================================
+   🎯 PROFESYONEL BUTONLAR
+   ============================================ */
+.product-action {
+    display: flex !important;
+    gap: 8px !important;
+    margin-top: auto !important;
+    align-items: stretch !important;
+}
+
+    .product-action .btn {
+        flex: 1 !important;
+        padding: 11px 10px !important; /* Daha dengeli */
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        border-radius: 2px !important; /* Köşeler hafif yuvarlatıldı */
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        transition: all 0.25s ease !important;
+        cursor: pointer !important;
+        text-decoration: none !important;
+        border: none !important;
+        line-height: 1 !important; /* Dikey hizalama için */
+        white-space: nowrap !important;
+        position: relative !important;
+    }
+
+        .product-action .btn i {
+            font-size: 13px !important;
+            line-height: 1 !important;
+        }
+
+        .product-action .btn span {
+            line-height: 1 !important;
+        }
+
+    /* 🛒 Sepete Ekle - Profesyonel */
+    .product-action .btn-primary {
+        background: linear-gradient(180deg, #d4a574 0%, #c96 100%) !important;
+        color: #fff !important;
+        border: 1px solid #c96 !important;
+        box-shadow: 0 2px 5px rgba(204, 153, 102, 0.2) !important;
+    }
+
+        .product-action .btn-primary:hover {
+            background: linear-gradient(180deg, #c96 0%, #b85 100%) !important;
+            border-color: #b85 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 10px rgba(204, 153, 102, 0.3) !important;
+        }
+
+        .product-action .btn-primary:active {
+            transform: translateY(0) !important;
+        }
+
+    /* 🔍 Detaya Git - Profesyonel */
+    .product-action .btn-outline-primary {
+        background: #fff !important;
+        color: #666 !important;
+        border: 1px solid #ddd !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05) !important;
+    }
+
+        .product-action .btn-outline-primary:hover {
+            background: #f8f8f8 !important;
+            color: #333 !important;
+            border-color: #c96 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .product-action .btn-outline-primary:active {
+            transform: translateY(0) !important;
+        }
+
+/* ============================================
+   📱 RESPONSIVE
+   ============================================ */
+
+/* Tablet */
+@media (max-width: 991px) {
+    .product-default figure {
+        height: 200px !important;
+    }
+
+    .product-title a {
+        font-size: 12px !important;
+    }
+
+    .product-price {
+        font-size: 17px !important;
+    }
+}
+
+/* Mobil */
+@media (max-width: 767px) {
+    .product-default figure {
+        height: 180px !important;
+        padding: 12px !important;
+    }
+
+    .product-details {
+        padding: 10px !important;
+    }
+
+    .product-title {
+        min-height: 34px;
+    }
+
+        .product-title a {
+            font-size: 12px !important;
+        }
+
+    .product-price {
+        font-size: 16px !important;
+    }
+
+    .product-action .btn {
+        padding: 9px 8px !important;
+        font-size: 10px !important;
+    }
+
+        .product-action .btn i {
+            font-size: 12px !important;
+        }
+
+    /* Mobilde her zaman göster */
+    .btn-icon-group {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .btn-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 13px;
+    }
+}
+
+/* Küçük mobil */
+@media (max-width: 575px) {
+    .product-default figure {
+        height: 160px !important;
+    }
+
+    .product-action {
+        flex-direction: column;
+        gap: 6px !important;
+    }
+
+        .product-action .btn span {
+            display: inline !important;
+        }
+}
+
+/* ============================================
+   🔧 TEMPLATE OVERRIDE FİX
+   ============================================ */
+
+/* Grid düzeltme */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -10px;
+    margin-left: -10px;
+}
+
+    .row > [class*='col-'] {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+/* Flexbox düzeltme */
+.products .row > [class*='col-'] {
+    display: flex;
+}

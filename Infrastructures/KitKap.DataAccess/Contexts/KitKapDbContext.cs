@@ -82,16 +82,25 @@ namespace KitKap.DataAccess.Contexts
             {
                 entity.HasKey(e => e.Id);
 
+                // ✅ 1-to-Many ilişki (bir kullanıcının birden fazla sepeti olabilir - eski sepetler için)
                 entity.HasOne<AppUser>()
-                      .WithOne() // her kullanıcının tek sepeti olacak
-                      .HasForeignKey<ShoppingCart>(e => e.UserId)
+                      .WithMany() // ← WithOne() değil, WithMany() olacak
+                      .HasForeignKey(e => e.UserId)
+                      .IsRequired(false) // ← UserId nullable olabilir (Guest için)
                       .OnDelete(DeleteBehavior.Cascade);
+
+                // ✅ UserId unique index (aktif sepet için)
+                entity.HasIndex(e => e.UserId)
+                      .IsUnique(false); // ← Unique OLMASIN (eski sepetler için)
+
+                // ✅ Aktif sepet kontrolü için composite index
+                entity.HasIndex(e => new { e.UserId, e.IsCheckedOut });
+                entity.HasIndex(e => new { e.GuestId, e.IsCheckedOut });
 
                 entity.HasMany(e => e.Items)
                       .WithOne(i => i.ShoppingCart)
                       .HasForeignKey(i => i.ShoppingCartId)
                       .OnDelete(DeleteBehavior.Cascade);
-
             });
 
             // ShoppingCartDetail
@@ -111,6 +120,11 @@ namespace KitKap.DataAccess.Contexts
                        .IsRequired();
             });
 
+            modelBuilder.Entity<Address>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+            });
+
             // ========================================
             // ORDER İLİŞKİLERİ
             // ========================================
@@ -119,26 +133,25 @@ namespace KitKap.DataAccess.Contexts
             {
                 entity.HasKey(e => e.Id);
 
-                // ✅ Order → Buyer (AppUser)
-                // Entity'de navigation property YOK ama EF Core ilişkiyi biliyor
-                entity.HasOne<AppUser>()  // ← Generic parametre
-                    .WithMany()            // User'ın birden fazla siparişi
+                // ✅ Order → Buyer (AppUser) - Navigation YOK
+                entity.HasOne<AppUser>()
+                    .WithMany()
                     .HasForeignKey(o => o.BuyerId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                // ✅ Order → ShippingAddress
-                entity.HasOne<Address>()  // ← Generic parametre
+                // ✅ Order → ShippingAddress - NAVIGATION VAR!
+                entity.HasOne(o => o.ShippingAddress)  // ✅ Navigation kullan
                     .WithMany()
                     .HasForeignKey(o => o.ShippingAddressId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                // Order → OrderItems
+                // ✅ Order → OrderItems
                 entity.HasMany(e => e.Items)
                     .WithOne(i => i.Order)
                     .HasForeignKey(i => i.OrderId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                // Order → Transaction (1-to-1)
+                // ✅ Order → Transaction (1-to-1)
                 entity.HasOne(o => o.Transaction)
                     .WithOne(t => t.Order)
                     .HasForeignKey<Transaction>(t => t.OrderId)

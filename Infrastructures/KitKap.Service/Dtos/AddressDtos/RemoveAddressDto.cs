@@ -8,7 +8,7 @@ namespace Kitkap.Service.Dtos.AddressDtos
 {
     public class RemoveAddressDto
     {
-        public int AddressId { get; set; }
+        public int Id { get; set; }
        
     }
 }

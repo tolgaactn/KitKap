@@ -60,7 +60,7 @@ namespace KitKap.MvcUI.Controllers
                 // Varsayılan adresi seç (ilk adres)
                 if (viewModel.UserAddresses.Any())
                 {
-                    viewModel.SelectedAddressId = viewModel.UserAddresses.First().AddressId;
+                    viewModel.SelectedAddressId = viewModel.UserAddresses.First().Id;
                 }
 
                 return View(viewModel);
@@ -90,7 +90,7 @@ namespace KitKap.MvcUI.Controllers
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                // 1. Model validasyon
+                // Model validasyon
                 if (model.SelectedAddressId == 0)
                 {
                     TempData["ErrorMessage"] = "Lütfen bir teslimat adresi seçin";
@@ -103,7 +103,7 @@ namespace KitKap.MvcUI.Controllers
                     return RedirectToAction("Index");
                 }
 
-                // 2. CreateOrderDto oluştur
+                // CreateOrderDto oluştur
                 var createOrderDto = new CreateOrderDto
                 {
                     BuyerId = userId,
@@ -112,21 +112,35 @@ namespace KitKap.MvcUI.Controllers
                     CustomerNote = model.CustomerNote
                 };
 
-                // 3. Siparişi oluştur
+                // ✅ DEBUG: Console'a yaz
+                Console.WriteLine($"🔵 CreateOrder başlıyor...");
+                Console.WriteLine($"   - BuyerId: {userId}");
+                Console.WriteLine($"   - ShippingAddressId: {model.SelectedAddressId}");
+                Console.WriteLine($"   - PaymentMethod: {model.PaymentMethod}");
+
+                // Siparişi oluştur
                 var orderId = await _orderService.CreateOrderFromCartAsync(createOrderDto);
 
-                // 4. Onay sayfasına yönlendir
+                Console.WriteLine($"✅ Order oluşturuldu - OrderId: {orderId}");
+
+                // Onay sayfasına yönlendir
                 return RedirectToAction("Confirmation", new { orderId = orderId });
             }
             catch (InvalidOperationException ex)
             {
-                // Stok sorunu veya sepet boş
+                Console.WriteLine($"⚠️ InvalidOperationException: {ex.Message}");
                 TempData["ErrorMessage"] = ex.Message;
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Sipariş oluşturulurken hata: {ex.Message}";
+                // ✅ INNER EXCEPTION'I GÖSTER
+                Console.WriteLine($"❌ HATA:");
+                Console.WriteLine($"   Message: {ex.Message}");
+                Console.WriteLine($"   InnerException: {ex.InnerException?.Message}");
+                Console.WriteLine($"   StackTrace: {ex.StackTrace}");
+
+                TempData["ErrorMessage"] = $"Sipariş oluşturulurken hata: {ex.InnerException?.Message ?? ex.Message}";
                 return RedirectToAction("Index");
             }
         }
@@ -159,28 +173,8 @@ namespace KitKap.MvcUI.Controllers
                 var viewModel = new OrderConfirmationViewModel
                 {
                     Order = order,
-                    Transaction = transaction,
-                    SuccessMessage = "Siparişiniz başarıyla oluşturuldu!"
+                    Transaction = transaction
                 };
-
-                // 5. Ödeme talimatları (Havale/EFT için)
-                if (order.PaymentMethod == "BankTransfer")
-                {
-                    viewModel.PaymentInstructions = @"
-                        <strong>HAVALE/EFT BİLGİLERİ:</strong><br>
-                        Banka: Ziraat Bankası<br>
-                        IBAN: TR00 0000 0000 0000 0000 0000 00<br>
-                        Alıcı: KitKap E-Ticaret A.Ş.<br>
-                        <br>
-                        Açıklama kısmına sipariş numaranızı yazınız: <strong>#" + orderId + @"</strong><br>
-                        <br>
-                        Ödemeniz onaylandıktan sonra siparişiniz kargoya verilecektir.
-                    ";
-                }
-                else if (order.PaymentMethod == "CreditCard")
-                {
-                    viewModel.PaymentInstructions = "Ödemeniz alındı. Siparişiniz hazırlanıyor.";
-                }
 
                 return View(viewModel);
             }
@@ -245,5 +239,6 @@ namespace KitKap.MvcUI.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
+
     }
 }

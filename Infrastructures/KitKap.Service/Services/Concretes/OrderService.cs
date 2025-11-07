@@ -187,7 +187,7 @@ namespace KitKap.Service.Services.Concretes
 
             var addressIds = orders.Select(o => o.ShippingAddressId).Distinct().ToList();
             var addresses = await _uow.GetRepository<Address>().GetAll(
-                filter: a => addressIds.Contains(a.AddressId)
+                filter: a => addressIds.Contains(a.Id)
             );
 
             // 3. DTO'lara çevir
@@ -196,7 +196,7 @@ namespace KitKap.Service.Services.Concretes
             foreach (var order in orders)
             {
                 var dto = _mapper.Map<OrderDto>(order);
-                var address = addresses.FirstOrDefault(a => a.AddressId == order.ShippingAddressId);
+                var address = addresses.FirstOrDefault(a => a.Id == order.ShippingAddressId);
 
                 dto.EnrichDto(order, buyer, address);
 
