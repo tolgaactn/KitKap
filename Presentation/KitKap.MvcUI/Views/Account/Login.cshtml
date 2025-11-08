@@ -1,89 +1,106 @@
 ﻿@model LoginViewModel
 @{
-    Layout = null;
     ViewData["Title"] = "Giriş Yap";
 }
 
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="utf-8">
-    <title>@ViewData["Title"] - KitKap</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<main class="main">
+    <div class="page-header">
+        <div class="container d-flex flex-column align-items-center">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Giriş Yap</li>
+                    </ol>
+                </div>
+            </nav>
 
-    <link rel="stylesheet" href="~/adminTemplate/css/bootstrap.css" />
-    <link rel="stylesheet" href="~/adminTemplate/css/style.css" />
-    <link rel="stylesheet" href="~/adminTemplate/font/fonts.css" />
-    <link rel="stylesheet" href="~/adminTemplate/icon/style.css" />
-    <link rel="stylesheet" href="~/adminTemplate/css/animate.min.css" />
-    <link rel="stylesheet" href="~/adminTemplate/css/bootstrap-select.min.css" />
-    <link rel="shortcut icon" href="~/adminTemplate/images/favicon.png" />
-</head>
-<body class="body">
-    <div id="wrapper">
-        <div id="page">
-            <div class="wrap-login-page sign-up" style="padding-top:34px">
-                <div class="flex-grow flex flex-column justify-center gap30">
-                    <a asp-controller="Home" asp-action="Index">
-                        <img src="~/template/assets/images/logo-black.png" alt="KitKap Logo" width="111" height="44" />
-                    </a>
+            <h1>Hesabınıza Giriş Yapın</h1>
+        </div>
+    </div>
 
-                    <div class="login-box">
-                        <h3>Hesabına Giriş Yap</h3>
-                        <p class="body-text">Giriş yapmak için email ve şifreni gir.</p>
-
-                        <form asp-action="Login" asp-controller="Account" method="post" class="form-login flex flex-column gap24">
-                            @* Genel hata mesajları *@
-                            <div asp-validation-summary="All" class="text-danger mb-3"></div>
-
-                            <fieldset class="email">
-                                <label asp-for="Email" class="body-title mb-10"></label>
-                                <input asp-for="Email" class="form-control" placeholder="Email adresinizi girin" />
-                                <span asp-validation-for="Email" class="text-danger"></span>
-                            </fieldset>
-
-                            <fieldset class="password">
-                                <label asp-for="Password" class="body-title mb-10"></label>
-                                <input asp-for="Password" class="form-control password-input" placeholder="Şifrenizi girin" />
-                                <span asp-validation-for="Password" class="text-danger"></span>
-                                <span class="show-pass">
-                                    <i class="icon-eye view"></i>
-                                    <i class="icon-eye-off hide"></i>
-                                </span>
-                            </fieldset>
-
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="form-check">
-                                    <input asp-for="RememberMe" class="form-check-input" />
-                                    <label asp-for="RememberMe" class="form-check-label body-text"></label>
-                                </div>
-                                <a asp-action="ForgotPassword" asp-controller="Account" class="body-text tf-color">Şifreni mi unuttun?</a>
-                            </div>
-
-                            <button type="submit" class="tf-button w-full">Giriş Yap</button>
-                        </form>
-
-                        <div class="text-center mt-3">
-                            <p class="text-tiny">Veya sosyal medya hesabınla giriş yap</p>
-                            <div class="d-flex gap16">
-                                <a href="/auth/google" class="tf-button style-2 w-full">Google ile Giriş Yap</a>
-                                <a href="/auth/facebook" class="tf-button style-2 w-full">Facebook ile Giriş Yap</a>
-                            </div>
+    <div class="container login-container">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="row">
+                    <!-- ✅ SOL: GİRİŞ FORMU -->
+                    <div class="col-md-6">
+                        <div class="heading mb-1">
+                            <h2 class="title">Giriş Yap</h2>
                         </div>
+
+                        <form asp-action="Login" method="post">
+                            @Html.AntiForgeryToken()
+
+                            <!-- ✅ ReturnUrl Hidden Field -->
+                            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+
+                            <!-- ✅ Hata Mesajları - SADECE HATA VARSA GÖSTER -->
+                            @if (!ViewData.ModelState.IsValid)
+                            {
+                                <div class="alert alert-danger" role="alert">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                </div>
+                            }
+
+                            <!-- Email -->
+                            <label asp-for="Email">
+                                E-posta Adresi *
+                            </label>
+                            <input asp-for="Email" type="email" class="form-input form-wide mb-2" required />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+
+                            <!-- Password -->
+                            <label asp-for="Password">
+                                Şifre *
+                            </label>
+                            <input asp-for="Password" type="password" class="form-input form-wide mb-2" required />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+
+                            <!-- Remember Me & Forgot Password -->
+                            <div class="form-footer mb-2">
+                                <div class="custom-control custom-checkbox mb-0">
+                                    <input asp-for="RememberMe" type="checkbox" class="custom-control-input" id="lost-password" />
+                                    <label asp-for="RememberMe" class="custom-control-label mb-0" for="lost-password">Beni Hatırla</label>
+                                </div>
+
+                                <a asp-action="ForgotPassword" class="forget-password text-dark form-footer-right">
+                                    Şifremi Unuttum
+                                </a>
+                            </div>
+
+                            <button type="submit" class="btn btn-dark btn-md w-100">
+                                GİRİŞ YAP
+                            </button>
+                        </form>
                     </div>
 
-                    <div class="text-center mt-4">
-                        <span class="body-text">Hesabın yok mu? </span>
-                        <a asp-action="Register" asp-controller="Account" class="tf-color">Kayıt Ol</a>
+                    <!-- ✅ SAĞ: KAYIT OL -->
+                    <div class="col-md-6">
+                        <div class="heading mb-1">
+                            <h2 class="title">Hesabınız Yok mu?</h2>
+                        </div>
+
+                        <p>Kayıt olarak şu avantajlardan yararlanın:</p>
+
+                        <ul class="check-list">
+                            <li><i class="icon-check"></i> Hızlı ve kolay alışveriş</li>
+                            <li><i class="icon-check"></i> Sipariş takibi</li>
+                            <li><i class="icon-check"></i> Özel kampanyalar ve indirimler</li>
+                            <li><i class="icon-check"></i> Favori listeniz</li>
+                            <li><i class="icon-check"></i> Adres kaydetme</li>
+                        </ul>
+
+                        <a asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="btn btn-primary btn-md">
+                            HESAP OLUŞTUR
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</main>
 
-    @* Client-side validation için gerekli scriptler *@
-    <script src="~/lib/jquery/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-</body>
-</html>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

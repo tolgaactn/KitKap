@@ -1,4 +1,4 @@
-﻿@model ShoppingCartViewModel
+﻿@model NavbarViewModel
 
 <header class="header">
     <div class="header-middle sticky-header">
@@ -8,151 +8,127 @@
                     <i class="fas fa-bars"></i>
                 </button>
                 <a asp-controller="Home" asp-action="Index" class="logo">
-                    <img src="~/template/assets/images/logo-black.png" alt="Porto Logo" width="111" height="44">
+                    <img src="~/template/assets/images/logo-black.png" alt="KitKap Logo" width="111" height="44">
                 </a>
                 <nav class="main-nav">
                     <ul class="menu">
                         @{
                             var actionName = ViewContext.RouteData.Values["action"]?.ToString();
                             var controllerName = ViewContext.RouteData.Values["controller"]?.ToString();
-
-                            if (!string.IsNullOrEmpty(actionName) && !string.IsNullOrEmpty(controllerName))
-                            {
-                                if (actionName == "Index" && controllerName == "Home")
-                                {
-                                    <li class="active">
-                                        <a asp-controller="Home" asp-action="Index">Ana Sayfa</a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li>
-                                        <a asp-controller="Home" asp-action="Index">Ana Sayfa</a>
-                                    </li>
-                                }
-                                <li>
-                                    <a href="#">KATEGORİLER</a>
-                                    <div class="megamenu megamenu-fixed-width megamenu-3cols">
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                <a href="#" class="nolink">VARIATION 1</a>
-                                                <ul class="submenu">
-                                                    <li><a href="category.html">Fullwidth Banner</a></li>
-                                                    <li><a href="category-banner-boxed-slider.html">Boxed Slider Banner</a></li>
-                                                    <li><a href="category-banner-boxed-image.html">Boxed Image Banner</a></li>
-                                                    <li><a href="category.html">Left Sidebar</a></li>
-                                                    <li><a href="category-sidebar-right.html">Right Sidebar</a></li>
-                                                    <li><a href="category-off-canvas.html">Off Canvas Filter</a></li>
-                                                    <li><a href="category-horizontal-filter1.html">Horizontal Filter1</a></li>
-                                                    <li><a href="category-horizontal-filter2.html">Horizontal Filter2</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <a href="#" class="nolink">VARIATION 2</a>
-                                                <ul class="submenu">
-                                                    <li><a href="category-list.html">List Types</a></li>
-                                                    <li><a href="category-infinite-scroll.html">Ajax Infinite Scroll</a></li>
-                                                    <li><a href="category.html">3 Columns Products</a></li>
-                                                    <li><a href="category-4col.html">4 Columns Products</a></li>
-                                                    <li><a href="category-5col.html">5 Columns Products</a></li>
-                                                    <li><a href="category-6col.html">6 Columns Products</a></li>
-                                                    <li><a href="category-7col.html">7 Columns Products</a></li>
-                                                    <li><a href="category-8col.html">8 Columns Products</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-lg-4 p-0">
-                                                <div class="menu-banner">
-                                                    <figure>
-                                                        <img src="~/template/assets/images/menu-banner.jpg" alt="Menu banner" width="300" height="300">
-                                                    </figure>
-                                                    <div class="banner-content">
-                                                        <h4>
-                                                            <span class="">UP TO</span><br />
-                                                            <b class="">50%</b>
-                                                            <i>OFF</i>
-                                                        </h4>
-                                                        <a href="category.html" class="btn btn-sm btn-dark">SHOP NOW</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                @if ((actionName == "Index" && controllerName == "ProductList") || (actionName == "ProductDetail" && controllerName == "ProductList"))
-                                {
-                                    <li class="d-none d-xl-block active">
-                                        <a asp-controller="ProductList" asp-action="Index">KİTAPLAR</a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li class="d-none d-xl-block">
-                                        <a asp-controller="ProductList" asp-action="Index">KİTAPLAR</a>
-                                    </li>
-                                }
-                            }
-                            else
-                            {
-                                <p>Action veya controller ismi bulunamadı.</p>
-                            }
                         }
+
+                        <li class="@(actionName == "Index" && controllerName == "Home" ? "active" : "")">
+                            <a asp-controller="Home" asp-action="Index">Ana Sayfa</a>
+                        </li>
+
+                        <li class="@((actionName == "Index" || actionName == "ProductDetail") && controllerName == "ProductList" ? "active" : "")">
+                            <a asp-controller="ProductList" asp-action="Index">Kitaplar</a>
+                        </li>
+
+                        <li class="d-none d-lg-block">
+                            <a href="#">Kategoriler</a>
+                        </li>
+
+                        <li class="d-none d-xl-block"><a href="#">İndirimli Ürünler</a></li>
+                        <li class="d-none d-xl-block"><a href="#">Satıcı Ol</a></li>
                     </ul>
                 </nav>
-                <span class="separator d-none d-lg-inline"></span>
-                <nav class="main-nav ml-0 d-none d-xl-block">
-                    <ul class="menu">
-                        <li class="d-none d-xxl-block"><a href="#">İNDİRİM</a></li>
-                        <li><a href="#">Satıcı Ol</a></li>
-                    </ul>
-                </nav>
-                <span class="separator d-none d-xl-inline"></span>
             </div>
 
             <div class="header-right pl-0 pl-lg-4">
+                <!-- Arama -->
                 <div class="header-search header-search-inline header-search-category w-lg-max text-right d-none d-sm-flex">
                     <a href="#" class="search-toggle" role="button"><i class="icon-magnifier"></i></a>
                     <form action="#" method="get">
                         <div class="header-search-wrapper">
-                            <input type="search" class="form-control font-italic" name="q" id="q"
-                                   placeholder="Aradığım şey..." required>
+                            <input type="search" class="form-control" name="q" id="q"
+                                   placeholder="Kitap, yazar, yayınevi ara..." required>
                             <button class="btn icon-magnifier" title="search" type="submit"></button>
                         </div>
                     </form>
                 </div>
 
                 <span class="separator d-none d-lg-inline"></span>
-                <a asp-controller="Account" asp-action="Login">
-                    <div class="header-user">
-                        <i class="icon-user-2"></i>
-                        <div class="header-userinfo">
-                            <span class="d-inline-block font2 line-height-1">Merhaba!</span>
-                            <h4 class="mb-0">Hesabım</h4>
-                        </div>
-                    </div>
-                </a>
 
-                <a href="wishlist.html" class="header-icon">
+                <!-- ✅ PROFİL DROPDOWN (Kurumsal Standart) -->
+                <div class="dropdown header-dropdown" id="profileDropdown">
+                    <a href="#" class="dropdown-toggle" id="profileToggle" role="button" aria-haspopup="true" aria-expanded="false">
+                        <div class="header-user">
+                            <i class="icon-user-2"></i>
+                            <div class="header-userinfo">
+                                @if (Model.IsSignedIn)
+                                {
+                                    <!-- ✅ GİRİŞ YAPILMIŞ -->
+                                    <span class="d-inline-block font2 line-height-1">Merhaba,</span>
+                                    <h4 class="mb-0 user-name">@Model.UserFirstName</h4>
+                                }
+                                else
+                                {
+                                    <!-- ✅ GİRİŞ YAPILMAMIŞ -->
+                                    <span class="d-inline-block font2 line-height-1">Giriş Yap</span>
+                                    <h4 class="mb-0">Hesabım</h4>
+                                }
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right" id="profileMenu">
+                        @if (Model.IsSignedIn)
+                        {
+                            <!-- ✅ GİRİŞ YAPMIŞ KULLANICI MENÜSÜ -->
+                            <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                <i class="icon-user-2"></i> Hesabım
+                            </a>
+                            <a class="dropdown-item" asp-controller="Order" asp-action="MyOrders">
+                                <i class="icon-shopping-bag"></i> Siparişlerim
+                            </a>
+                            <a class="dropdown-item" asp-controller="Account" asp-action="Addresses">
+                                <i class="icon-map-marker"></i> Adreslerim
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="dropdown-form">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i class="icon-off"></i> Çıkış Yap
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <!-- ✅ GİRİŞ YAPMAMIŞ KULLANICI MENÜSÜ -->
+                            <a class="dropdown-item" asp-controller="Account" asp-action="Login">
+                                <i class="icon-sign-in"></i> Giriş Yap
+                            </a>
+                            <a class="dropdown-item" asp-controller="Account" asp-action="Register">
+                                <i class="icon-user-add"></i> Üye Ol
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-controller="Order" asp-action="TrackOrder">
+                                <i class="icon-magnifier"></i> Sipariş Takip
+                            </a>
+                        }
+                    </div>
+                </div>
+
+                <!-- Favoriler -->
+                <a href="#" class="header-icon" title="Favorilerim">
                     <i class="icon-wishlist-2"></i>
                 </a>
 
-                <!-- ✅ SEPET DROPDOWN (AJAX ile çalışır) -->
+                <!-- ✅ SEPET DROPDOWN -->
                 <div id="shoppingCart" class="dropdown cart-dropdown">
-                    <a href="#" title="Cart" class="dropdown-toggle cart-toggle" role="button"
-                       aria-label="Sepet">
+                    <a href="#" title="Sepet" class="dropdown-toggle cart-toggle" role="button" aria-label="Sepet">
                         <i class="minicart-icon"></i>
-                        @if (Model.TotalItemCount > 0)
+                        @if (Model.Cart.TotalItemCount > 0)
                         {
-                            <span class="cart-count badge-circle">@Model.TotalItemCount</span>
+                            <span class="cart-count badge-circle">@Model.Cart.TotalItemCount</span>
                         }
                     </a>
                     <div class="cart-overlay"></div>
                     <div class="dropdown-menu mobile-cart cart-dropdown-custom">
-                        <button class="btn-close" onclick="closeCart()" aria-label="Sepeti Kapat">
-                            ×
-                        </button>
+                        <button class="btn-close" onclick="closeCart()" aria-label="Sepeti Kapat">×</button>
                         <div class="dropdownmenu-wrapper custom-scrollbar">
-                            @await Html.PartialAsync("Components/_CartDropdownComponentPartial/Default", Model)
+                            @await Html.PartialAsync("Components/_CartDropdownComponentPartial/Default", Model.Cart)
                         </div>
                     </div>
                 </div>
@@ -160,4 +136,3 @@
         </div>
     </div>
 </header>
-

@@ -203,6 +203,56 @@ namespace KitKap.Service.Services.Concretes
 
              return _mapper.Map<RequestUserDto>(user);
         }
+
+        public async Task<ProfileDto?> GetUserProfileAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return null;
+
+            return _mapper.Map<ProfileDto>(user);
+        }
+
+        public async Task<bool> UpdateUserProfileAsync(UpdateProfileDto model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+                return false;
+
+            // Email ve UserName değişikliği için kontrol
+            if (user.UserName != model.UserName)
+            {
+                var existingUserName = await _userManager.FindByNameAsync(model.UserName);
+                if (existingUserName != null && existingUserName.Id != user.Id)
+                {
+                    throw new Exception("Bu kullanıcı adı zaten kullanılıyor.");
+                }
+            }
+
+            // Bilgileri güncelle
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.PhoneNumber = model.PhoneNumber;
+            user.UserName = model.UserName;
+
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded;
+        }
+
+        public async Task<bool> ChangePasswordAsync(ChangePasswordDto model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+                return false;
+
+            var result = await _userManager.ChangePasswordAsync(
+                user,
+                model.CurrentPassword,
+                model.NewPassword
+            );
+
+            return result.Succeeded;
+        }
     }
 
 }

@@ -1,0 +1,43 @@
+﻿/* Account Pages Styling */
+.login-container,
+.register-container {
+    padding: 60px 0;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+    .form-input:focus {
+        border-color: #c96;
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba(204, 153, 102, 0.25);
+    }
+
+.check-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+    .check-list li {
+        padding: 8px 0;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .check-list i {
+        color: #10b981;
+        margin-right: 10px;
+    }
+
+.form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

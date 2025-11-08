@@ -1,31 +1,31 @@
 ﻿/* ========================================
-   🛒 SEPET DROPDOWN - KESİN ÇÖZÜM
+   🛒 SEPET DROPDOWN - KURUMSAL STANDART
    ======================================== */
 
-/* Sepet container */
+/* Sepet Container */
 .cart-dropdown-custom {
     position: fixed !important;
     right: 20px !important;
     top: 80px !important;
     bottom: 20px !important;
-    width: 400px !important;
+    width: 420px !important;
     max-width: calc(100vw - 40px) !important;
     max-height: calc(100vh - 100px) !important;
     z-index: 10000 !important;
     overflow: hidden !important;
-    background: white !important;
-    border: 1px solid #ddd !important;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2) !important;
-    border-radius: 4px !important;
+    background: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12) !important;
+    border-radius: 8px !important;
     margin: 0 !important;
-    /* ✅ visibility kaldırıldı - pointer-events ile kontrol */
     pointer-events: none !important;
     opacity: 0 !important;
     transform: translateX(450px) !important;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    color-scheme: light !important; /* ✅ Zorla light mode */
 }
 
-    /* Sepet açık */
+    /* Sepet Açık Durumu */
     .cart-dropdown-custom.cart-open {
         pointer-events: auto !important;
         opacity: 1 !important;
@@ -42,18 +42,19 @@
     bottom: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
-    background: rgba(0, 0, 0, 0.5) !important;
-    z-index: 9998 !important; /* Sepetten (10000) daha düşük */
+    background: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(2px) !important;
+    z-index: 9998 !important;
     cursor: pointer !important;
     opacity: 0 !important;
     transition: opacity 0.3s ease !important;
-    pointer-events: none !important; /* ✅ Varsayılan olarak tıklanamaz */
+    pointer-events: none !important;
 }
 
     .cart-overlay.active {
         display: block !important;
         opacity: 1 !important;
-        pointer-events: auto !important; /* ✅ Active olunca tıklanabilir */
+        pointer-events: auto !important;
     }
 
 body.cart-open {
@@ -61,33 +62,38 @@ body.cart-open {
 }
 
 /* ========================================
-   ❌ Close Butonu
+   ❌ KAPAT BUTONU
    ======================================== */
 
 .btn-close {
     position: absolute;
-    top: 10px;
+    top: 15px;
     right: 15px;
-    width: 30px;
-    height: 30px;
-    line-height: 28px;
+    width: 32px;
+    height: 32px;
+    line-height: 30px;
     text-align: center;
     font-size: 24px;
-    color: #999;
+    color: #666;
     text-decoration: none;
     border-radius: 50%;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     z-index: 10;
-    background: transparent;
+    background: #f5f5f5;
     cursor: pointer;
     border: none;
     display: none;
+    font-weight: 300;
 }
 
     .btn-close:hover {
         color: #333;
-        background: #f5f5f5;
+        background: #e8e8e8;
         transform: rotate(90deg);
+    }
+
+    .btn-close:active {
+        transform: rotate(90deg) scale(0.95);
     }
 
 @media (max-width: 768px) {
@@ -97,7 +103,7 @@ body.cart-open {
 }
 
 /* ========================================
-   🔔 Toast Notification
+   🔔 TOAST NOTIFICATION - YEŞİL ONAY
    ======================================== */
 
 .toast-container {
@@ -117,63 +123,132 @@ body.cart-open {
     gap: 15px;
     padding: 16px 20px;
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
     min-width: 320px;
     max-width: 420px;
-    border-left: 5px solid;
+    border-left: 4px solid;
     pointer-events: auto;
+    animation: slideInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    font-size: 14px;
+    color: #333;
 }
 
+/* ✅ YEŞİL SUCCESS TOAST */
 .toast-success {
-    border-left-color: #28a745;
+    border-left-color: #10b981;
+    background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
 }
 
+    .toast-success i {
+        color: #10b981;
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+    .toast-success span {
+        color: #065f46;
+        font-weight: 500;
+    }
+
+/* ❌ KIRMIZI ERROR TOAST */
 .toast-error {
-    border-left-color: #dc3545;
+    border-left-color: #ef4444;
+    background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
 }
 
-.toast i {
-    font-size: 20px;
-}
+    .toast-error i {
+        color: #ef4444;
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+    .toast-error span {
+        color: #991b1b;
+        font-weight: 500;
+    }
 
 .toast-close {
     background: none;
     border: none;
-    font-size: 22px;
+    font-size: 20px;
     color: #999;
     cursor: pointer;
     padding: 0;
+    margin-left: auto;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+    .toast-close:hover {
+        color: #666;
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+/* Toast Animasyonu */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(400px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 /* ========================================
-   🔢 Badge Animasyonu
+   🔢 BADGE ANİMASYONU
    ======================================== */
 
 .badge-bounce {
-    animation: bounce 0.6s ease;
+    animation: badgeBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-@keyframes bounce {
-    0%, 100% {
-        transform: scale(1);
-    }
-
-    25% {
-        transform: scale(1.3);
+@keyframes badgeBounce {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
     }
 
     50% {
+        transform: scale(1.2);
+    }
+
+    70% {
         transform: scale(0.9);
     }
 
-    75% {
-        transform: scale(1.15);
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Badge Pulse Efekti */
+.cart-count.badge-circle {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 0 6px rgba(220, 38, 38, 0);
     }
 }
 
 /* ========================================
-   🎨 Dropdown İçerik
+   🎨 DROPDOWN İÇERİK
    ======================================== */
 
 .dropdownmenu-wrapper {
@@ -183,66 +258,201 @@ body.cart-open {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    background: #ffffff;
 }
 
+/* Dropdown Header */
 .dropdown-cart-header {
     flex-shrink: 0;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
+    padding: 20px 20px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fafafa;
 }
 
+    .dropdown-cart-header h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+    }
+
+/* Ürün Listesi */
 .dropdown-cart-products {
     flex: 1;
-    max-height: 400px;
+    max-height: 450px;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0 15px;
+    padding: 10px 15px;
+    background: #ffffff;
 }
 
+    /* ✅ Özel Scrollbar */
     .dropdown-cart-products::-webkit-scrollbar {
         width: 6px;
     }
 
-    .dropdown-cart-products::-webkit-scrollbar-thumb {
-        background: #c1c1c1;
+    .dropdown-cart-products::-webkit-scrollbar-track {
+        background: #f5f5f5;
         border-radius: 10px;
     }
 
+    .dropdown-cart-products::-webkit-scrollbar-thumb {
+        background: #d0d0d0;
+        border-radius: 10px;
+        transition: background 0.3s ease;
+    }
+
+        .dropdown-cart-products::-webkit-scrollbar-thumb:hover {
+            background: #b0b0b0;
+        }
+
+    /* Ürün Kartı */
     .dropdown-cart-products .product {
+        position: relative;
         width: 100%;
-        padding: 10px;
+        padding: 15px 12px;
+        margin-bottom: 8px;
         border-bottom: 1px solid #f0f0f0;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        background: #ffffff;
     }
 
         .dropdown-cart-products .product:hover {
-            background-color: #f8f9fa;
+            background-color: #f9fafb;
+            border-color: #e5e7eb;
+            transform: translateX(2px);
         }
 
+        .dropdown-cart-products .product:last-child {
+            border-bottom: none;
+        }
+
+        /* Ürün Resmi */
+        .dropdown-cart-products .product img {
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+    /* Ürün Başlığı */
+    .dropdown-cart-products .product-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: #1f2937;
+        margin-bottom: 4px;
+    }
+
+    /* Ürün Fiyatı */
+    .dropdown-cart-products .product-price {
+        font-size: 15px;
+        font-weight: 600;
+        color: #10b981;
+    }
+
+/* Toplam Fiyat */
 .dropdown-cart-total {
     flex-shrink: 0;
-    padding: 15px;
-    border-top: 1px solid #eee;
+    padding: 15px 20px;
+    border-top: 2px solid #f0f0f0;
+    background: #fafafa;
 }
 
+    .dropdown-cart-total .cart-total-price {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+/* Butonlar */
 .dropdown-cart-action {
     flex-shrink: 0;
-    padding: 15px;
+    padding: 15px 20px 20px;
+    background: #ffffff;
 }
 
+    .dropdown-cart-action .btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .dropdown-cart-action .btn-primary {
+        background: #10b981;
+        border-color: #10b981;
+        margin-bottom: 10px;
+    }
+
+        .dropdown-cart-action .btn-primary:hover {
+            background: #059669;
+            border-color: #059669;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+    .dropdown-cart-action .btn-outline-dark {
+        color: #374151;
+        border-color: #d1d5db;
+    }
+
+        .dropdown-cart-action .btn-outline-dark:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+
+/* Silme Butonu */
 .btn-remove {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    color: #999;
+    top: 10px;
+    right: 10px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #6b7280;
     cursor: pointer;
     padding: 0;
+    transition: all 0.2s ease;
+    z-index: 2;
 }
 
     .btn-remove:hover {
-        color: #dc3545;
+        color: #ef4444;
+        background: #fee;
+        border-color: #fecaca;
+        transform: rotate(90deg);
+    }
+
+    .btn-remove:active {
+        transform: rotate(90deg) scale(0.9);
+    }
+
+/* Boş Sepet Mesajı */
+.empty-cart-message {
+    text-align: center;
+    padding: 60px 30px;
+    color: #6b7280;
+}
+
+    .empty-cart-message i {
+        font-size: 64px;
+        color: #d1d5db;
+        margin-bottom: 20px;
+        display: block;
+    }
+
+    .empty-cart-message p {
+        font-size: 16px;
+        margin: 0;
     }
 
 /* ========================================
@@ -251,7 +461,7 @@ body.cart-open {
 
 @media (max-width: 992px) {
     .cart-dropdown-custom {
-        width: 350px !important;
+        width: 380px !important;
         right: 15px !important;
     }
 }
@@ -265,9 +475,14 @@ body.cart-open {
     }
 
     .toast-container {
-        top: 60px;
+        top: 70px;
         right: 10px;
         left: 10px;
+    }
+
+    .toast {
+        min-width: auto;
+        width: 100%;
     }
 }
 
@@ -278,11 +493,25 @@ body.cart-open {
         left: 10px !important;
         top: 60px !important;
         bottom: 10px !important;
+        border-radius: 12px !important;
+    }
+
+    .dropdown-cart-header {
+        padding: 15px;
+    }
+
+    .dropdown-cart-products {
+        padding: 5px 10px;
+    }
+
+    .dropdown-cart-action .btn {
+        padding: 10px;
+        font-size: 13px;
     }
 }
 
 /* ========================================
-   🎨 Banner Gizle
+   🎨 BANNER GİZLE
    ======================================== */
 
 img[src*="banner-2"],
@@ -290,4 +519,128 @@ img[src*="banner-3"],
 img[src*="banner-4"],
 img[src*="banner-5"] {
     display: none !important;
+    visibility: hidden !important;
+}
+
+/* ========================================
+   ⚡ PERFORMANS & ACCESSIBILITY
+   ======================================== */
+
+/* Smooth Scroll */
+.dropdown-cart-products {
+    scroll-behavior: smooth;
+}
+
+/* Focus States (Keyboard Navigation) */
+.btn:focus,
+.btn-remove:focus,
+.btn-close:focus {
+    outline: 2px solid #10b981;
+    outline-offset: 2px;
+}
+
+/* Reduce Motion (Accessibility) */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ========================================
+   🎯 LOADING STATE (Opsiyonel)
+   ======================================== */
+
+.cart-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.cart-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e5e7eb;
+    border-top-color: #10b981;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* TempData Alert Mesajları */
+.alert {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: slideDown 0.3s ease-out;
+}
+
+    .alert i {
+        font-size: 20px;
+    }
+
+.alert-success {
+    background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    border: 1px solid #10b981;
+    color: #065f46;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+    border: 1px solid #ef4444;
+    color: #991b1b;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
+    border: 1px solid #f59e0b;
+    color: #92400e;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+    border: 1px solid #3b82f6;
+    color: #1e40af;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Auto-dismiss after 5 seconds */
+.alert.auto-dismiss {
+    animation: slideDown 0.3s ease-out, fadeOut 0.5s ease-out 4.5s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
 }

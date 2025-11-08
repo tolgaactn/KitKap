@@ -1,91 +1,130 @@
 ﻿@model RegisterViewModel
 @{
-    Layout = null;
+    ViewData["Title"] = "Kayıt Ol";
 }
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="utf-8">
-    <title>KitKap Kayıt Ol</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="~/adminTemplate/css/bootstrap.css" />
-    <link rel="stylesheet" href="~/adminTemplate/css/style.css" />
-    <link rel="stylesheet" href="~/adminTemplate/icon/style.css" />
-</head>
-<body class="body">
-    <div id="wrapper">
-        <div id="page">
-            <div class="wrap-login-page sign-up" style="padding-top:34px">
-                <div class="flex-grow flex flex-column justify-center gap30">
-                    <a asp-controller="Home" asp-action="Index">
-                        <img src="~/template/assets/images/logo-black.png" alt="KitKap Logo" width="111" height="44">
-                    </a>
-                    <div class="login-box">
-                        <h3>Hesabını Oluştur</h3>
-                        <div class="body-text">Hesap oluşturmak için bilgilerini doldur.</div>
 
-                        <form asp-action="Register" method="post" class="form-login flex flex-column gap24">
-                            <div asp-validation-summary="All" class="text-danger"></div>
-
-                            <fieldset class="name">
-                                <div class="body-title mb-10">Ad Soyad <span class="tf-color-1">*</span></div>
-                                <div class="flex gap10">
-                                    <input asp-for="FirstName" class="form-control" placeholder="Ad" />
-                                    <input asp-for="LastName" class="form-control" placeholder="Soyad" />
-                                </div>
-                                <span asp-validation-for="FirstName" class="text-danger"></span>
-                                <span asp-validation-for="LastName" class="text-danger"></span>
-                            </fieldset>
-
-                            <fieldset class="userName">
-                                <div class="body-title mb-10">Kullanıcı Adı <span class="tf-color-1">*</span></div>
-                                <input asp-for="UserName" class="form-control" placeholder="Kullanıcı Adını Gir" />
-                                <span asp-validation-for="UserName" class="text-danger"></span>
-                            </fieldset>
-
-                            <fieldset class="email">
-                                <div class="body-title mb-10">Email Adresi <span class="tf-color-1">*</span></div>
-                                <input asp-for="Email" class="form-control" placeholder="Email Adresini Gir" />
-                                <span asp-validation-for="Email" class="text-danger"></span>
-                            </fieldset>
-
-                            <fieldset class="password">
-                                <div class="body-title mb-10">Şifre <span class="tf-color-1">*</span></div>
-                                <input asp-for="Password" type="password" class="form-control" placeholder="Şifreni Gir" />
-                                <span asp-validation-for="Password" class="text-danger"></span>
-                            </fieldset>
-
-                            <fieldset class="password">
-                                <div class="body-title mb-10">Şifreyi Onayla <span class="tf-color-1">*</span></div>
-                                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Şifreyi Tekrar Gir" />
-                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                            </fieldset>
-
-                            <div class="flex gap10">
-                                <input type="checkbox" required id="terms">
-                                <label for="terms">Kullanıcı Sözleşmesini okudum ve onaylıyorum.</label>
-                            </div>
-
-                            <button type="submit" class="tf-button w-full">Kayıt Ol</button>
-                        </form>
-
-                        <div class="text-center mt-3">
-                            <p>Zaten bir hesabın var mı? <a asp-controller="Auth" asp-action="Login">Giriş Yap</a></p>
-                        </div>
-
-                        <!-- Sosyal Medya Giriş Butonları -->
-                        <div class="text-center mt-4">
-                            <p>Veya sosyal medya ile giriş yap:</p>
-                            <a href="/auth/google-login" class="tf-button style-2 w-full">Google ile Giriş Yap</a>
-                        </div>
-                    </div>
+<main class="main">
+    <div class="page-header">
+        <div class="container d-flex flex-column align-items-center">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Kayıt Ol</li>
+                    </ol>
                 </div>
-            </div>
+            </nav>
+
+            <h1>Yeni Hesap Oluşturun</h1>
         </div>
     </div>
 
-    <script src="~/lib/jquery/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js"></script>
-</body>
-</html>
+    <div class="container register-container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="heading mb-3">
+                    <h2 class="title">Kişisel Bilgileriniz</h2>
+                    <p class="text-muted">Hesap oluşturmak için lütfen aşağıdaki bilgileri doldurun.</p>
+                </div>
+
+                <form asp-action="Register" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <!-- ✅ ReturnUrl Hidden Field -->
+                    <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+
+                    <!-- ✅ Hata Mesajları - SADECE HATA VARSA GÖSTER -->
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        </div>
+                    }
+
+                    <div class="row">
+                        <!-- Ad -->
+                        <div class="col-md-6">
+                            <label asp-for="FirstName">
+                                Ad *
+                            </label>
+                            <input asp-for="FirstName" type="text" class="form-input form-wide mb-3" required />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+
+                        <!-- Soyad -->
+                        <div class="col-md-6">
+                            <label asp-for="LastName">
+                                Soyad *
+                            </label>
+                            <input asp-for="LastName" type="text" class="form-input form-wide mb-3" required />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Kullanıcı Adı -->
+                    <label asp-for="UserName">
+                        Kullanıcı Adı *
+                    </label>
+                    <input asp-for="UserName" type="text" class="form-input form-wide mb-3" required />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+
+                    <!-- Email -->
+                    <label asp-for="Email">
+                        E-posta Adresi *
+                    </label>
+                    <input asp-for="Email" type="email" class="form-input form-wide mb-3" required />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+
+                    <!-- Şifre -->
+                    <label asp-for="Password">
+                        Şifre *
+                    </label>
+                    <input asp-for="Password" type="password" class="form-input form-wide mb-3" required />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+
+                    <!-- Şifre Onay -->
+                    <label asp-for="ConfirmPassword">
+                        Şifre Tekrar *
+                    </label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-input form-wide mb-3" required />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
+                    <!-- Kullanıcı Sözleşmesi -->
+                    <div class="form-group mb-3">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="terms" required />
+                            <label class="custom-control-label" for="terms">
+                                <a href="#" class="text-primary">Kullanıcı Sözleşmesi</a>'ni okudum ve kabul ediyorum. *
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- KVKK -->
+                    <div class="form-group mb-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="kvkk" />
+                            <label class="custom-control-label" for="kvkk">
+                                Kampanya ve yeniliklerden haberdar olmak istiyorum.
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-md w-100 mb-3">
+                        HESAP OLUŞTUR
+                    </button>
+
+                    <div class="text-center">
+                        <span class="text-muted">Zaten hesabınız var mı?</span>
+                        <a asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="text-primary font-weight-bold">
+                            Giriş Yapın
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
