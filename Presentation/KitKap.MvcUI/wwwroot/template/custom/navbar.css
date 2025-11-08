@@ -1,0 +1,157 @@
+﻿/* ✅ Profil Dropdown - Kurumsal Standart */
+.header-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+    .header-dropdown .dropdown-toggle {
+        cursor: pointer;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s;
+        padding: 10px;
+    }
+
+        .header-dropdown .dropdown-toggle:hover {
+            background-color: #f8f8f8;
+            border-radius: 4px;
+        }
+
+    /* Dropdown Menü */
+    .header-dropdown .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        min-width: 240px;
+        padding: 0.5rem 0;
+        margin-top: 0.5rem;
+        background: #fff;
+        border: 1px solid #e7e7e7;
+        border-radius: 4px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        display: none;
+        z-index: 9999;
+    }
+
+    /* ✅ SADECE .show CLASS'I İLE AÇ (hover'ı kaldırdık) */
+    .header-dropdown.show .dropdown-menu {
+        display: block;
+        animation: slideDown 0.2s ease-in-out;
+    }
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Dropdown Item */
+.header-dropdown .dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #333;
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    font-size: 14px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+    .header-dropdown .dropdown-item:hover {
+        background-color: #f8f8f8;
+        color: #c96;
+        padding-left: 1.85rem;
+    }
+
+    .header-dropdown .dropdown-item i {
+        width: 20px;
+        margin-right: 12px;
+        text-align: center;
+        font-size: 16px;
+        color: #777;
+        transition: color 0.3s;
+    }
+
+    .header-dropdown .dropdown-item:hover i {
+        color: #c96;
+    }
+
+    .header-dropdown .dropdown-item.text-danger {
+        color: #dc3545 !important;
+    }
+
+        .header-dropdown .dropdown-item.text-danger:hover {
+            background-color: #fff5f5;
+            color: #dc3545 !important;
+        }
+
+            .header-dropdown .dropdown-item.text-danger:hover i {
+                color: #dc3545 !important;
+            }
+
+.header-dropdown .dropdown-divider {
+    height: 0;
+    margin: 0.5rem 0;
+    overflow: hidden;
+    border-top: 1px solid #e9ecef;
+}
+
+.header-dropdown .dropdown-form {
+    margin: 0;
+    padding: 0;
+}
+
+    .header-dropdown .dropdown-form button {
+        width: 100%;
+        text-align: left;
+    }
+
+/* Header User Styling */
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .header-user i {
+        font-size: 26px;
+        color: #333;
+    }
+
+.header-userinfo {
+    display: flex;
+    flex-direction: column;
+}
+
+    .header-userinfo span {
+        font-size: 11px;
+        color: #777;
+        font-weight: 400;
+        text-transform: none;
+    }
+
+    .header-userinfo h4 {
+        font-size: 14px;
+        font-weight: 600;
+        margin: 0;
+        line-height: 1.2;
+        color: #333;
+    }
+
+/* Giriş yapılmış kullanıcı vurgusu */
+.header-dropdown.show .user-name {
+    color: #c96;
+}

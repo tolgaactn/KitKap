@@ -20,5 +20,9 @@ namespace Kitkap.Entity.Services
         Task UpdateUserAsync(UpdateUserDto model);
         Task DeactivateUserAsync(DeactivateUserDto model);
         Task LogoutAsync();
+
+        Task<ProfileDto?> GetUserProfileAsync(string userId);
+        Task<bool> UpdateUserProfileAsync(UpdateProfileDto model);
+        Task<bool> ChangePasswordAsync(ChangePasswordDto model);
     }
 }

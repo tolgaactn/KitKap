@@ -53,6 +53,7 @@ namespace KitKap.Service.Extensions
                 options.LoginPath = new PathString("/Account/Login");
                 options.LogoutPath = new PathString("/Account/Logout");
                 options.AccessDeniedPath = new PathString("/Account/AccessDenied");
+                options.ReturnUrlParameter = "returnUrl";
 
                 // Session Timeout
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // 1 saat oturum

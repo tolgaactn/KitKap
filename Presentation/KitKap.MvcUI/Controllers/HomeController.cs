@@ -15,12 +15,10 @@ namespace KitKap.MvcUI.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IAboutService _aboutService;
 
-        public HomeController(ILogger<HomeController> logger, IAboutService aboutService)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _aboutService = aboutService;
         }
 
         public IActionResult Index()

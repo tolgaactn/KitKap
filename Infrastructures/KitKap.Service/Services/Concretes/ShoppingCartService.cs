@@ -55,7 +55,7 @@ namespace KitKap.Service.Services.Concretes
                     Items = new List<ShoppingCartItem>()
                 };
                 await cartRepo.CreateAsync(cart);
-                await _uow.CommitAsync();
+                await _uow.CommitAsync(); // ✅ ÖNCE SEPETİ KAYDET
             }
 
             cart.Items ??= new List<ShoppingCartItem>();
@@ -82,7 +82,7 @@ namespace KitKap.Service.Services.Concretes
                 await cartItemRepo.CreateAsync(newItem);
             }
 
-            await _uow.CommitAsync();
+            await _uow.CommitAsync(); // ✅ İTEM'İ KAYDET
         }
         #endregion
 
@@ -106,20 +106,18 @@ namespace KitKap.Service.Services.Concretes
                             .ThenInclude(p => p.ProductImages)
             );
 
-            // ✅ Sepet yoksa yeni oluştur
+            // ✅ Sepet yoksa BOŞ DTO döndür (YENİ SEPET OLUŞTURMA!)
             if (cart == null)
             {
-                cart = new ShoppingCart
+                return new ShoppingCartDto
                 {
+                    Id = 0,
                     UserId = isUser ? userId : null,
                     GuestId = !isUser ? guestId : null,
                     CreatedAt = DateTime.UtcNow,
                     IsCheckedOut = false,
-                    Items = new List<ShoppingCartItem>()
+                    Items = new List<ShoppingCartItemDto>()
                 };
-
-                await cartRepo.CreateAsync(cart);
-                await _uow.CommitAsync();
             }
 
             cart.Items ??= new List<ShoppingCartItem>();
@@ -145,6 +143,7 @@ namespace KitKap.Service.Services.Concretes
 
             return dto;
         }
+        #endregion
 
         // ✅ Resim URL'sini güvenli şekilde al
         private string GetProductImageUrl(Product? product)
@@ -160,7 +159,7 @@ namespace KitKap.Service.Services.Concretes
             // Ana resim yoksa ilk resmi döndür
             return product.ProductImages.First().ImageUrl;
         }
-        #endregion
+        
 
         #region Remove Item
         public async Task RemoveFromCartAsync(string? userId, string? guestId, long productId)
@@ -294,7 +293,7 @@ namespace KitKap.Service.Services.Concretes
             if (guestCart == null || !guestCart.Items.Any())
                 return; // Misafir sepeti boş
 
-            // ✅ Kullanıcı sepetini çek
+            // ✅ Kullanıcı sepetini çek (VAR OLAN VEYA YENİ OLUŞTURULAN)
             var userCart = await cartRepo.GetWithIncludeForUpdateAsync(
                 c => c.UserId == userId && !c.IsCheckedOut,
                 q => q.Include(c => c.Items)
@@ -302,17 +301,18 @@ namespace KitKap.Service.Services.Concretes
 
             if (userCart == null)
             {
-                // Kullanıcı sepeti yoksa, misafir sepetini kullanıcıya ata
+                // ✅ Kullanıcı sepeti yoksa, misafir sepetini kullanıcıya ata
                 guestCart.UserId = userId;
                 guestCart.GuestId = null;
                 await cartRepo.UpdateAsync(guestCart);
+                await _uow.CommitAsync();
             }
             else
             {
-                // İki sepeti birleştir
+                // ✅ İki sepeti birleştir
                 foreach (var guestItem in guestCart.Items.ToList())
                 {
-                    var existingItem = userCart.Items.FirstOrDefault(i => i.ProductId == guestItem.ProductId);
+                    var existingItem = userCart.Items?.FirstOrDefault(i => i.ProductId == guestItem.ProductId);
 
                     if (existingItem != null)
                     {
@@ -328,11 +328,10 @@ namespace KitKap.Service.Services.Concretes
                     }
                 }
 
-                // Misafir sepetini sil
+                // ✅ Misafir sepetini sil
                 await cartRepo.DeleteAsync(guestCart);
+                await _uow.CommitAsync();
             }
-
-            await _uow.CommitAsync();
         }
         #endregion
     }

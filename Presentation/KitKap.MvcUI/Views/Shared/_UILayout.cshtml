@@ -4,12 +4,16 @@
 @await Component.InvokeAsync("_HeadUILayoutComponentPartial")
 
 <body class="boxed" style="margin:0px">
+    
     <div class="page-wrapper">
         
         @await Component.InvokeAsync("_TopbarUILayoutComponentPartial")
         @await Component.InvokeAsync("_NavbarUILayoutComponentPartial")
         <!-- End .header -->
-
+        <!-- ✅ GLOBAL TempData Mesajları (Tüm sayfalarda gösterilir) -->
+        <div id="toast-container" aria-live="polite" aria-atomic="true" style="position: fixed; top: 90px; right: 20px; z-index: 99999;">
+            <!-- Toast'lar buraya dinamik eklenecek -->
+        </div>
         <div class="container-fluid">
             <main role="main" class="main">
                 @RenderBody()
@@ -38,6 +42,40 @@
     <a id="scroll-top" href="#top" title="Top" role="button"><i class="icon-angle-up"></i></a>
 
     @await Component.InvokeAsync("_ScriptUILayoutComponentPartial")
+
+    @RenderSection("Scripts", required: false)
+
+    @if (TempData["Success"] != null || TempData["Error"] != null || TempData["Warning"] != null || TempData["Info"] != null)
+    {
+        <script>
+            $(document).ready(function() {
+                @if (TempData["Success"] != null)
+                {
+                        <text>
+                        showToast('success', '@Html.Raw(TempData["Success"])');
+                        </text>
+                }
+                @if (TempData["Error"] != null)
+                {
+                        <text>
+                        showToast('error', '@Html.Raw(TempData["Error"])');
+                        </text>
+                }
+                @if (TempData["Warning"] != null)
+                {
+                        <text>
+                        showToast('warning', '@Html.Raw(TempData["Warning"])');
+                        </text>
+                }
+                @if (TempData["Info"] != null)
+                {
+                        <text>
+                        showToast('info', '@Html.Raw(TempData["Info"])');
+                        </text>
+                }
+            });
+        </script>
+    }
 
 </body>
 

@@ -4,6 +4,7 @@ using KitKap.DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KitKap.DataAccess.Migrations
 {
     [DbContext(typeof(KitKapDbContext))]
-    partial class KitKapDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251105221214_Updates")]
+    partial class Updates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,7 +221,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2025, 11, 6, 15, 22, 14, 180, DateTimeKind.Local).AddTicks(2620),
+                            CreatedDate = new DateTime(2025, 11, 6, 1, 12, 14, 7, DateTimeKind.Local).AddTicks(7522),
                             Description = "Kitapların olduğu kategori",
                             IsDeleted = false,
                             Name = "Kitap"
@@ -226,7 +229,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2025, 11, 6, 15, 22, 14, 180, DateTimeKind.Local).AddTicks(2631),
+                            CreatedDate = new DateTime(2025, 11, 6, 1, 12, 14, 7, DateTimeKind.Local).AddTicks(7533),
                             Description = "Teknolojilerin  olduğu kategori",
                             IsDeleted = false,
                             Name = "Teknoloji"
@@ -234,7 +237,7 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2025, 11, 6, 15, 22, 14, 180, DateTimeKind.Local).AddTicks(2632),
+                            CreatedDate = new DateTime(2025, 11, 6, 1, 12, 14, 7, DateTimeKind.Local).AddTicks(7534),
                             Description = "Romanların olduğu kategori",
                             IsDeleted = false,
                             Name = "Roman",
@@ -508,7 +511,7 @@ namespace KitKap.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("GuestId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsCheckedOut")
                         .HasColumnType("bit");
@@ -518,11 +521,9 @@ namespace KitKap.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("GuestId", "IsCheckedOut");
-
-                    b.HasIndex("UserId", "IsCheckedOut");
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("ShoppingCarts");
                 });
@@ -855,8 +856,8 @@ namespace KitKap.DataAccess.Migrations
             modelBuilder.Entity("Kitkap.Entity.Entities.ShoppingCart", b =>
                 {
                     b.HasOne("KitKap.DataAccess.Identity.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .WithOne()
+                        .HasForeignKey("Kitkap.Entity.Entities.ShoppingCart", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

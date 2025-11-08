@@ -49,6 +49,9 @@ namespace KitKap.Service.Mapping
             CreateMap<AppUser, RegisterUserDto>().ReverseMap();
             CreateMap<AppUser, RequestUserDto>().ReverseMap();
             CreateMap<AppUser, JwtUserDto>().ReverseMap();
+            CreateMap<AppUser, ProfileDto>().ReverseMap();
+            CreateMap<AppUser, UpdateProfileDto>().ReverseMap();
+            CreateMap<AppUser, ChangePasswordDto>().ReverseMap();
 
             CreateMap<About, ResultAboutDto>().ReverseMap();
             CreateMap<About, CreateAboutDto>().ReverseMap();

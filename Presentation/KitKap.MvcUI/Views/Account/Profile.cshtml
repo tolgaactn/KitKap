@@ -1,0 +1,518 @@
+﻿@model ProfileViewModel
+@{
+    ViewData["Title"] = "Profilim";
+}
+
+<main class="main">
+    <!-- Breadcrumb -->
+    <div class="page-header">
+        <div class="container d-flex flex-column align-items-center">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Profilim</li>
+                    </ol>
+                </div>
+            </nav>
+            <h1>Hesabım</h1>
+        </div>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="container account-container">
+        <div class="row">
+            <!-- ✅ SOL: MENÜ -->
+            <aside class="col-lg-3 order-lg-first">
+                <div class="sidebar-account">
+                    <h4 class="title">Hesap Yönetimi</h4>
+                    <nav class="nav nav-pills flex-column">
+                        <a class="nav-link active" href="#profile-tab" data-bs-toggle="tab">
+                            <i class="icon-user-2"></i> Profil Bilgilerim
+                        </a>
+                        <a class="nav-link" href="#password-tab" data-bs-toggle="tab">
+                            <i class="icon-lock"></i> Şifre Değiştir
+                        </a>
+                        <!-- ✅ YENİ: ADRESLERİM TAB -->
+                        <a class="nav-link" href="#addresses-tab" data-bs-toggle="tab">
+                            <i class="icon-map-marker"></i> Adreslerim
+                            <span class="badge badge-secondary ml-2">@Model.Addresses.Count</span>
+                        </a>
+                        <a class="nav-link" asp-controller="Order" asp-action="MyOrders">
+                            <i class="icon-shopping-bag"></i> Siparişlerim
+                        </a>
+                        <hr>
+                        <a href="#" class="nav-link text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="icon-off"></i> Çıkış Yap
+                        </a>
+                        <form id="logout-form" asp-controller="Account" asp-action="Logout" method="post" style="display: none;">
+                            @Html.AntiForgeryToken()
+                        </form>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- ✅ SAĞ: TAB İÇERİK -->
+            <div class="col-lg-9 order-lg-last account-content">
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- ============================================
+                         TAB 1: PROFİL BİLGİLERİ (Mevcut)
+                         ============================================ -->
+                    <div class="tab-pane fade show active" id="profile-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="mb-0">Profil Bilgilerim</h3>
+                            </div>
+                            <div class="card-body">
+                                <form asp-action="UpdateProfile" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" asp-for="Id" />
+                                    <input type="hidden" asp-for="Email" />
+                                    <input type="hidden" asp-for="Balance" />
+
+                                    @if (!ViewData.ModelState.IsValid)
+                                    {
+                                        <div class="alert alert-danger">
+                                            <div asp-validation-summary="ModelOnly"></div>
+                                        </div>
+                                    }
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label asp-for="FirstName" class="form-label"></label>
+                                            <input asp-for="FirstName" class="form-control" />
+                                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label asp-for="LastName" class="form-label"></label>
+                                            <input asp-for="LastName" class="form-control" />
+                                            <span asp-validation-for="LastName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label asp-for="UserName" class="form-label"></label>
+                                        <input asp-for="UserName" class="form-control" />
+                                        <span asp-validation-for="UserName" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label asp-for="Email" class="form-label"></label>
+                                        <input asp-for="Email" class="form-control" readonly />
+                                        <small class="text-muted">E-posta adresiniz değiştirilemez.</small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label asp-for="PhoneNumber" class="form-label"></label>
+                                        <input asp-for="PhoneNumber" class="form-control" placeholder="(5XX) XXX XX XX" />
+                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label asp-for="Balance" class="form-label"></label>
+                                        <div class="input-group">
+                                            <input asp-for="Balance" class="form-control" readonly />
+                                            <span class="input-group-text">₺</span>
+                                        </div>
+                                        <small class="text-muted">Hesap bakiyeniz</small>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="icon-check"></i> Değişiklikleri Kaydet
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ============================================
+                         TAB 2: ŞİFRE DEĞİŞTİR (Mevcut)
+                         ============================================ -->
+                    <div class="tab-pane fade" id="password-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="mb-0">Şifre Değiştir</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted mb-4">
+                                    Güvenliğiniz için düzenli olarak şifrenizi değiştirmenizi öneririz.
+                                </p>
+
+                                <form asp-action="ChangePassword" method="post" id="changePasswordForm">
+                                    @Html.AntiForgeryToken()
+
+                                    <div class="mb-3">
+                                        <label for="CurrentPassword" class="form-label">Mevcut Şifre *</label>
+                                        <input type="password" class="form-control" id="CurrentPassword" name="CurrentPassword" required />
+                                        <span class="text-danger" data-valmsg-for="CurrentPassword"></span>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="NewPassword" class="form-label">Yeni Şifre *</label>
+                                        <input type="password" class="form-control" id="NewPassword" name="NewPassword" required minlength="6" />
+                                        <small class="text-muted">En az 6 karakter olmalıdır</small>
+                                        <span class="text-danger" data-valmsg-for="NewPassword"></span>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="ConfirmPassword" class="form-label">Yeni Şifre Tekrar *</label>
+                                        <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" required />
+                                        <span class="text-danger" data-valmsg-for="ConfirmPassword"></span>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <div class="password-strength">
+                                            <div class="strength-meter"></div>
+                                        </div>
+                                        <small class="strength-text text-muted"></small>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-danger btn-lg">
+                                        <i class="icon-lock"></i> Şifremi Değiştir
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ============================================
+                         TAB 3: ADRESLERİM (YENİ)
+                         ============================================ -->
+                    <div class="tab-pane fade" id="addresses-tab">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h3 class="mb-0">Adreslerim</h3>
+                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                    <i class="icon-plus"></i> Yeni Adres Ekle
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                @if (Model.Addresses.Any())
+                                {
+                                    <div class="row" id="addressList">
+                                        @foreach (var address in Model.Addresses)
+                                        {
+                                            <div class="col-md-6 mb-3" id="address-card-@address.Id">
+                                                <div class="address-item">
+                                                    <div class="address-header">
+                                                        <h5 class="address-title">
+                                                            <i class="icon-map-marker text-primary"></i>
+                                                            @address.City, @address.District
+                                                        </h5>
+                                                        <div class="address-actions">
+                                                            <button type="button" class="btn btn-icon btn-sm" onclick="editAddress(@address.Id)" title="Düzenle">
+                                                                <i class="icon-pencil"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-icon btn-sm text-danger" onclick="deleteAddress(@address.Id)" title="Sil">
+                                                                <i class="icon-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="address-body">
+                                                        <p class="address-detail">
+                                                            <strong>Ülke:</strong> @address.Country<br>
+                                                            <strong>Posta Kodu:</strong> @address.PostCode
+                                                        </p>
+                                                        @if (!string.IsNullOrEmpty(address.Description))
+                                                        {
+                                                            <p class="address-description">
+                                                                <i class="icon-info-circle"></i> @address.Description
+                                                            </p>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="empty-state text-center py-5">
+                                        <i class="icon-map-marker" style="font-size: 64px; color: #d1d5db;"></i>
+                                        <h4 class="mt-3">Henüz kayıtlı adresiniz yok</h4>
+                                        <p class="text-muted">Hızlı sipariş vermek için adres ekleyin</p>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                            <i class="icon-plus"></i> İlk Adresinizi Ekleyin
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ============================================
+     MODAL: YENİ ADRES EKLE
+     ============================================ -->
+<div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="addAddressForm" asp-controller="Address" asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addAddressModalLabel">Yeni Adres Ekle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="Country" class="form-label">Ülke *</label>
+                        <input type="text" class="form-control" id="Country" name="Country" required />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="City" class="form-label">Şehir *</label>
+                            <input type="text" class="form-control" id="City" name="City" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="District" class="form-label">İlçe *</label>
+                            <input type="text" class="form-control" id="District" name="District" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="PostCode" class="form-label">Posta Kodu *</label>
+                        <input type="number" class="form-control" id="PostCode" name="PostCode" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Description" class="form-label">Adres Tarifi (Opsiyonel)</label>
+                        <textarea class="form-control" id="Description" name="Description" rows="3" placeholder="Örn: Apartman girişi, daire no, kat bilgisi..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="icon-check"></i> Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================
+     MODAL: ADRES DÜZENLE
+     ============================================ -->
+<div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editAddressForm" asp-controller="Address" asp-action="Update" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="EditAddressId" name="Id" />
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAddressModalLabel">Adresi Düzenle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="EditCountry" class="form-label">Ülke *</label>
+                        <input type="text" class="form-control" id="EditCountry" name="Country" required />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="EditCity" class="form-label">Şehir *</label>
+                            <input type="text" class="form-control" id="EditCity" name="City" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="EditDistrict" class="form-label">İlçe *</label>
+                            <input type="text" class="form-control" id="EditDistrict" name="District" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="EditPostCode" class="form-label">Posta Kodu *</label>
+                        <input type="number" class="form-control" id="EditPostCode" name="PostCode" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="EditDescription" class="form-label">Adres Tarifi (Opsiyonel)</label>
+                        <textarea class="form-control" id="EditDescription" name="Description" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="icon-check"></i> Güncelle
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================
+     HIDDEN FORM: ADRES SİL
+     ============================================ -->
+<form id="deleteAddressForm" asp-controller="Address" asp-action="Delete" method="post" style="display: none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="DeleteAddressId" name="id" />
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function() {
+            console.log('🚀 Profile sayfası yüklendi');
+
+            // ✅ FONKSİYON: Tab'ı manuel aç
+            function openTab(tabId) {
+                console.log('Tab açılıyor:', tabId);
+
+                $('.tab-pane').removeClass('show active');
+                $('.nav-link').removeClass('active');
+
+                $(tabId).addClass('show active');
+                $('a[href="' + tabId + '"]').addClass('active');
+
+                console.log('✅ Tab açıldı:', tabId);
+            }
+
+            // ✅ 1. ÖNCELİK: URL Hash
+            var hash = window.location.hash;
+            if (hash) {
+                console.log('📍 URL Hash bulundu:', hash);
+                openTab(hash);
+            }
+            else {
+                var tempDataTab = '@TempData["ActiveTab"]';
+                if (tempDataTab && tempDataTab.trim() !== '') {
+                    console.log('📦 TempData tab bulundu:', tempDataTab);
+                    openTab('#' + tempDataTab);
+                }
+                else {
+                    var savedTab = localStorage.getItem('activeProfileTab');
+                    if (savedTab) {
+                        console.log('💾 LocalStorage tab bulundu:', savedTab);
+                        openTab(savedTab);
+                    }
+                }
+            }
+
+            // ✅ Tab'lara tıklama event'i
+            $('a[data-bs-toggle="tab"]').on('click', function(e) {
+                e.preventDefault();
+                var targetTab = $(this).attr('href');
+                console.log('🖱️ Tab tıklandı:', targetTab);
+
+                openTab(targetTab);
+                localStorage.setItem('activeProfileTab', targetTab);
+
+                if (history.pushState) {
+                    history.pushState(null, null, targetTab);
+                }
+            });
+
+            // ✅ ŞİFRE GÜCÜ GÖSTERGESİ
+            $('#NewPassword').on('keyup', function() {
+                var password = $(this).val();
+                var strength = 0;
+
+                if (password.length >= 6) strength++;
+                if (password.length >= 10) strength++;
+                if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+                if (/\d/.test(password)) strength++;
+                if (/[^a-zA-Z\d]/.test(password)) strength++;
+
+                var $meter = $('.strength-meter');
+                var $text = $('.strength-text');
+
+                $meter.removeClass('weak medium strong very-strong');
+
+                if (strength < 2) {
+                    $meter.addClass('weak').css('width', '25%');
+                    $text.text('Zayıf').css('color', '#dc3545');
+                } else if (strength < 3) {
+                    $meter.addClass('medium').css('width', '50%');
+                    $text.text('Orta').css('color', '#ffc107');
+                } else if (strength < 4) {
+                    $meter.addClass('strong').css('width', '75%');
+                    $text.text('Güçlü').css('color', '#28a745');
+                } else {
+                    $meter.addClass('very-strong').css('width', '100%');
+                    $text.text('Çok Güçlü').css('color', '#10b981');
+                }
+            });
+
+            // ✅ ŞİFRE EŞLEŞMESİ KONTROLÜ
+            $('#ConfirmPassword').on('keyup', function() {
+                var newPassword = $('#NewPassword').val();
+                var confirmPassword = $(this).val();
+
+                if (confirmPassword.length > 0) {
+                    if (newPassword === confirmPassword) {
+                        $(this).removeClass('is-invalid').addClass('is-valid');
+                        $('.password-match-message').remove();
+                        $(this).after('<small class="text-success password-match-message">✓ Şifreler eşleşiyor</small>');
+                    } else {
+                        $(this).removeClass('is-valid').addClass('is-invalid');
+                        $('.password-match-message').remove();
+                        $(this).after('<small class="text-danger password-match-message">✗ Şifreler eşleşmiyor</small>');
+                    }
+                } else {
+                    $(this).removeClass('is-valid is-invalid');
+                    $('.password-match-message').remove();
+                }
+            });
+
+            console.log('✅ JavaScript yüklendi');
+        });
+
+        // ============================================
+        // 📍 ADRES FONKSİYONLARI
+        // ============================================
+
+        // Adres düzenle
+        function editAddress(id) {
+            console.log('Adres düzenleniyor:', id);
+
+            $.ajax({
+                url: '/Address/GetAddress',
+                type: 'GET',
+                data: { id: id },
+                success: function(response) {
+                    if (response.success) {
+                        $('#EditAddressId').val(response.data.id);
+                        $('#EditCountry').val(response.data.country);
+                        $('#EditCity').val(response.data.city);
+                        $('#EditDistrict').val(response.data.district);
+                        $('#EditPostCode').val(response.data.postCode);
+                        $('#EditDescription').val(response.data.description);
+
+                        var editModal = new bootstrap.Modal(document.getElementById('editAddressModal'));
+                        editModal.show();
+                    } else {
+                        showToast('error', response.message);
+                    }
+                },
+                error: function() {
+                    showToast('error', 'Adres bilgileri yüklenirken hata oluştu.');
+                }
+            });
+        }
+
+        // Adres sil
+        function deleteAddress(id) {
+            if (confirm('Bu adresi silmek istediğinize emin misiniz?')) {
+                $('#DeleteAddressId').val(id);
+                $('#deleteAddressForm').submit();
+            }
+        }
+    </script>
+}

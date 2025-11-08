@@ -30,7 +30,7 @@ namespace KitKap.Service.Services.Concretes
 
         public async Task DeleteAsync(RemoveAddressDto model)
         {
-            var address = await _uow.GetRepository<Address>().GetByIdAsync(model.AddressId);
+            var address = await _uow.GetRepository<Address>().GetByIdAsync(model.Id);
 
             if (address == null)
                 throw new KeyNotFoundException("Address bulunamadı");
@@ -57,7 +57,7 @@ namespace KitKap.Service.Services.Concretes
         {
             var addresses = await _uow.GetRepository<Address>().GetAll(
                 filter: a => a.UserId == userId && !a.IsDeleted,
-                orderby: q => q.OrderByDescending(a => a.AddressId) // En yeni adres önce
+                orderby: q => q.OrderByDescending(a => a.Id) // En yeni adres önce
             );
 
             return _mapper.Map<List<RequestAddressDto>>(addresses);
@@ -65,7 +65,7 @@ namespace KitKap.Service.Services.Concretes
 
         public async Task UpdateAsync(UpdateAddressDto model)
         {
-            var address = await _uow.GetRepository<Address>().GetByIdAsync(model.AddressId);
+            var address = await _uow.GetRepository<Address>().GetByIdAsync(model.Id);
 
             if (address == null)
                 throw new KeyNotFoundException("Adres bulunamadı");

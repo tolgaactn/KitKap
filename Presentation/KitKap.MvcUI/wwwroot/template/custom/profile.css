@@ -1,0 +1,402 @@
+﻿/* ========================================
+   👤 PROFİL SAYFASI STİLLERİ
+   ======================================== */
+
+.account-container {
+    padding: 60px 0;
+}
+
+/* Sol Menü */
+.sidebar-account {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    position: sticky;
+    top: 100px;
+}
+
+    .sidebar-account .title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #1f2937;
+    }
+
+    .sidebar-account .nav-link {
+        padding: 12px 16px;
+        margin-bottom: 8px;
+        border-radius: 6px;
+        color: #6b7280;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .sidebar-account .nav-link i {
+            font-size: 18px;
+            width: 20px;
+        }
+
+        .sidebar-account .nav-link:hover {
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .sidebar-account .nav-link.active {
+            background: #10b981;
+            color: #fff;
+        }
+
+        .sidebar-account .nav-link.text-danger:hover {
+            background: #fee;
+            color: #dc3545;
+        }
+
+/* Content Area */
+.account-content {
+    padding-left: 30px;
+}
+
+    .account-content .card {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .account-content .card-header {
+        background: #fafafa;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 20px 25px;
+    }
+
+        .account-content .card-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+    .account-content .card-body {
+        padding: 30px 25px;
+    }
+
+/* Form Stilleri */
+.form-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.form-control {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+    .form-control:focus {
+        border-color: #10b981;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    .form-control:read-only {
+        background: #f9fafb;
+        color: #6b7280;
+    }
+
+/* Buttons */
+.btn-primary,
+.btn-danger {
+    padding: 12px 24px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: #10b981;
+    border-color: #10b981;
+}
+
+    .btn-primary:hover {
+        background: #059669;
+        border-color: #059669;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+.btn-danger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+/* Şifre Gücü Göstergesi */
+.password-strength {
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.strength-meter {
+    height: 100%;
+    width: 0;
+    transition: all 0.3s;
+}
+
+    .strength-meter.weak {
+        background: #dc3545;
+    }
+
+    .strength-meter.medium {
+        background: #ffc107;
+    }
+
+    .strength-meter.strong {
+        background: #28a745;
+    }
+
+    .strength-meter.very-strong {
+        background: #10b981;
+    }
+
+.strength-text {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Alert Mesajları */
+.alert {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .alert i {
+        font-size: 20px;
+    }
+
+/* Responsive */
+@media (max-width: 991px) {
+    .account-content {
+        padding-left: 0;
+        margin-top: 30px;
+    }
+
+    .sidebar-account {
+        position: relative;
+        top: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .account-container {
+        padding: 30px 0;
+    }
+
+    .sidebar-account .nav-link {
+        font-size: 13px;
+        padding: 10px 12px;
+    }
+
+    .account-content .card-body {
+        padding: 20px 15px;
+    }
+}
+
+/* Çıkış Yap Link'i Buton Gibi Gözüksün */
+.sidebar-account .nav-link.text-danger {
+    cursor: pointer;
+    text-align: left;
+}
+
+    .sidebar-account .nav-link.text-danger:hover {
+        background: #fee;
+        color: #dc3545 !important;
+    }
+
+/* Validation States */
+.form-control.is-valid {
+    border-color: #10b981;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2310b981' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.form-control.is-invalid {
+    border-color: #ef4444;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23ef4444'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23ef4444' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.password-match-message {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+/* ========================================
+   📍 ADRES KARTLARI
+   ======================================== */
+
+.address-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    height: 100%;
+    transition: all 0.2s;
+    background: #fff;
+}
+
+    .address-item:hover {
+        border-color: #10b981;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+        transform: translateY(-2px);
+    }
+
+.address-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.address-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.address-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #fff;
+    color: #6b7280;
+    transition: all 0.2s;
+}
+
+    .btn-icon:hover {
+        background: #f3f4f6;
+        border-color: #d1d5db;
+        color: #1f2937;
+    }
+
+    .btn-icon.text-danger:hover {
+        background: #fee;
+        border-color: #fecaca;
+        color: #dc3545;
+    }
+
+.address-body {
+    margin-top: 15px;
+}
+
+.address-detail {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.address-description {
+    font-size: 13px;
+    color: #9ca3af;
+    margin: 0;
+    padding: 10px;
+    background: #f9fafb;
+    border-radius: 6px;
+    border-left: 3px solid #10b981;
+}
+
+    .address-description i {
+        margin-right: 6px;
+        color: #10b981;
+    }
+
+/* Empty State */
+.empty-state {
+    padding: 60px 30px;
+}
+
+    .empty-state i {
+        display: block;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h4 {
+        color: #1f2937;
+        margin-bottom: 10px;
+    }
+
+/* Badge */
+.badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.badge-secondary {
+    background: #e5e7eb;
+    color: #6b7280;
+}
+
+/* Modal Styling */
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 20px 24px;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-footer {
+    border-top: 1px solid #e5e7eb;
+    padding: 16px 24px;
+}
