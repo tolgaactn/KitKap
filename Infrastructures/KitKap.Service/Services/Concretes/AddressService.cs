@@ -35,7 +35,11 @@ namespace KitKap.Service.Services.Concretes
             if (address == null)
                 throw new KeyNotFoundException("Address bulunamadı");
 
-            await _uow.GetRepository<Address>().DeleteAsync(address);
+            address.IsDeleted = true;
+
+            await _uow.GetRepository<Address>().UpdateAsync(address);
+
+            await _uow.CommitAsync();
         }
 
         public async Task<IEnumerable<RequestAddressDto>> GetAllAddresses()

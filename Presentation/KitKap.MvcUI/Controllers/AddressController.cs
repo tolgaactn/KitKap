@@ -1,5 +1,8 @@
-﻿using Kitkap.Entity.Services;
+﻿using AutoMapper;
+using Kitkap.Entity.Services;
 using Kitkap.Service.Dtos.AddressDtos;
+using KitKap.MvcUI.ViewModels.AddressViewModels;
+using KitKap.Service.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -10,59 +13,46 @@ namespace KitKap.MvcUI.Controllers
     public class AddressController : Controller
     {
         private readonly IAddressService _addressService;
+        private readonly IMapper _mapper;
 
-        public AddressController(IAddressService addressService)
+        public AddressController(IAddressService addressService, IMapper mapper)
         {
             _addressService = addressService;
-        }
-
-        // ========================================
-        // 📍 ADRESLERİM SAYFASI
-        // ========================================
-
-        /// <summary>
-        /// Kullanıcının tüm adreslerini listele
-        /// </summary>
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var addresses = await _addressService.GetByUserIdAsync(userId);
-
-            return View(addresses);
+            _mapper = mapper;
         }
 
         // ========================================
         // ➕ YENİ ADRES EKLE
         // ========================================
 
-        /// <summary>
-        /// Yeni adres ekle (AJAX POST)
-        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateAddressDto model)
+        public async Task<IActionResult> Create(CreateAddressViewModel model)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Lütfen tüm alanları doğru şekilde doldurunuz.";
-                return RedirectToAction("Index");
+                TempData["ActiveTab"] = "addresses-tab"; // ✅ Önemli
+                return RedirectToAction("Profile", "Account"); // ✅ Account/Profile'a dön
             }
 
             try
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                model.UserId = userId;
+                var createAddressDto = new CreateAddressDto { City = model.City, Country = model.Country, Description = model.Description, District = model.District, PostCode = model.PostCode, UserId = userId };
 
-                await _addressService.AddAsync(model);
+
+                await _addressService.AddAsync(createAddressDto);
 
                 TempData["Success"] = "Adres başarıyla eklendi! ✅";
-                return RedirectToAction("Index");
+                TempData["ActiveTab"] = "addresses-tab"; // ✅ Önemli
+                return RedirectToAction("Profile", "Account"); // ✅ Account/Profile'a dön
             }
             catch (Exception ex)
             {
                 TempData["Error"] = "Adres eklenirken bir hata oluştu: " + ex.Message;
-                return RedirectToAction("Index");
+                TempData["ActiveTab"] = "addresses-tab"; // ✅ Önemli
+                return RedirectToAction("Profile", "Account"); // ✅ Account/Profile'a dön
             }
         }
 
@@ -70,9 +60,6 @@ namespace KitKap.MvcUI.Controllers
         // ✏️ ADRES DÜZENLE
         // ========================================
 
-        /// <summary>
-        /// Adres detayını getir (AJAX)
-        /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetAddress(int id)
         {
@@ -80,7 +67,6 @@ namespace KitKap.MvcUI.Controllers
             {
                 var address = await _addressService.GetByIdAddress(id);
 
-                // Güvenlik kontrolü: Bu adres kullanıcıya ait mi?
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (address.UserId != userId)
                 {
@@ -95,40 +81,40 @@ namespace KitKap.MvcUI.Controllers
             }
         }
 
-        /// <summary>
-        /// Adresi güncelle (POST)
-        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(UpdateAddressDto model)
+        public async Task<IActionResult> Update(UpdateAddressViewModel model)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Lütfen tüm alanları doğru şekilde doldurunuz.";
-                return RedirectToAction("Index");
+                TempData["ActiveTab"] = "addresses-tab"; // ✅ Önemli
+                return RedirectToAction("Profile", "Account"); // ✅ Account/Profile'a dön
             }
 
             try
             {
-                // Güvenlik kontrolü
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var existingAddress = await _addressService.GetByIdAddress(model.Id);
 
                 if (existingAddress.UserId != userId)
                 {
                     TempData["Error"] = "Yetkisiz işlem!";
-                    return RedirectToAction("Index");
+                    TempData["ActiveTab"] = "addresses-tab"; // ✅ Önemli
+                    return RedirectToAction("Profile", "Account"); // ✅ Account/Profile'a dön
                 }
-
-                await _addressService.UpdateAsync(model);
+                var updateAddressDto = new UpdateAddressDto { City = model.City, Country = model.Country, Description = model.Description, District = model.District, Id = model.Id, PostCode = model.PostCode, UserId = userId };
+                await _addressService.UpdateAsync(updateAddressDto);
 
                 TempData["Success"] = "Adres başarıyla güncellendi! ✅";
-                return RedirectToAction("Index");
+                TempData["ActiveTab"] = "addresses-tab"; // ✅ Önemli
+                return RedirectToAction("Profile", "Account"); // ✅ Account/Profile'a dön
             }
             catch (Exception ex)
             {
                 TempData["Error"] = "Adres güncellenirken bir hata oluştu: " + ex.Message;
-                return RedirectToAction("Index");
+                TempData["ActiveTab"] = "addresses-tab"; // ✅ Önemli
+                return RedirectToAction("Profile", "Account"); // ✅ Account/Profile'a dön
             }
         }
 
@@ -136,37 +122,35 @@ namespace KitKap.MvcUI.Controllers
         // 🗑️ ADRES SİL
         // ========================================
 
-        /// <summary>
-        /// Adresi sil (POST)
-        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                // Güvenlik kontrolü
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var address = await _addressService.GetByIdAddress(id);
 
                 if (address.UserId != userId)
                 {
                     TempData["Error"] = "Yetkisiz işlem!";
-                    return RedirectToAction("Index");
+                    TempData["ActiveTab"] = "addresses-tab"; // ✅ Önemli
+                    return RedirectToAction("Profile", "Account"); // ✅ Account/Profile'a dön
                 }
 
                 var removeDto = new RemoveAddressDto { Id = id };
                 await _addressService.DeleteAsync(removeDto);
 
                 TempData["Success"] = "Adres başarıyla silindi! 🗑️";
-                return RedirectToAction("Index");
+                TempData["ActiveTab"] = "addresses-tab"; // ✅ Önemli
+                return RedirectToAction("Profile", "Account"); // ✅ Account/Profile'a dön
             }
             catch (Exception ex)
             {
                 TempData["Error"] = "Adres silinirken bir hata oluştu: " + ex.Message;
-                return RedirectToAction("Index");
+                TempData["ActiveTab"] = "addresses-tab"; // ✅ Önemli
+                return RedirectToAction("Profile", "Account"); // ✅ Account/Profile'a dön
             }
         }
     }
-
 }

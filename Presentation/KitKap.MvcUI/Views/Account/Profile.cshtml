@@ -184,9 +184,10 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h3 class="mb-0">Adreslerim</h3>
-                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="openAddModal()">
                                     <i class="icon-plus"></i> Yeni Adres Ekle
                                 </button>
+
                             </div>
                             <div class="card-body">
                                 @if (Model.Addresses.Any())
@@ -203,10 +204,10 @@
                                                         </h5>
                                                         <div class="address-actions">
                                                             <button type="button" class="btn btn-icon btn-sm" onclick="editAddress(@address.Id)" title="Düzenle">
-                                                                <i class="icon-pencil"></i>
+                                                                <i class="fas fa-edit"></i>
                                                             </button>
                                                             <button type="button" class="btn btn-icon btn-sm text-danger" onclick="deleteAddress(@address.Id)" title="Sil">
-                                                                <i class="icon-trash"></i>
+                                                                <i class="fas fa-trash-alt"></i>
                                                             </button>
                                                         </div>
                                                     </div>
@@ -368,58 +369,134 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        $(document).ready(function() {
-            console.log('🚀 Profile sayfası yüklendi');
+            function openAddModal() {
+            console.log('📍 Yeni adres modal açılıyor...');
+            try {
+                // Bootstrap kontrolü
+                if (typeof bootstrap === 'undefined') {
+                    console.error('❌ Bootstrap yüklü değil!');
+                    alert('Bootstrap yüklü değil! Lütfen sayfayı yenileyin.');
+                    return;
+                }
 
-            // ✅ FONKSİYON: Tab'ı manuel aç
+                var modalElement = document.getElementById('addAddressModal');
+                if (!modalElement) {
+                    console.error('❌ Modal element bulunamadı!');
+                    alert('Modal bulunamadı!');
+                    return;
+                }
+
+                var addModal = new bootstrap.Modal(modalElement, {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                addModal.show();
+                console.log('✅ Modal açıldı');
+            } catch (error) {
+                console.error('❌ Modal açılırken hata:', error);
+                alert('Modal açılamadı: ' + error.message);
+            }
+        }
+
+        function editAddress(id) {
+            console.log('✏️ Adres düzenleniyor:', id);
+
+            $.ajax({
+                url: '/Address/GetAddress',
+                type: 'GET',
+                data: { id: id },
+                success: function(response) {
+                    console.log('AJAX response:', response);
+
+                    if (response.success) {
+                        $('#EditAddressId').val(response.data.id);
+                        $('#EditCountry').val(response.data.country);
+                        $('#EditCity').val(response.data.city);
+                        $('#EditDistrict').val(response.data.district);
+                        $('#EditPostCode').val(response.data.postCode);
+                        $('#EditDescription').val(response.data.description || '');
+
+                        try {
+                            var editModal = new bootstrap.Modal(document.getElementById('editAddressModal'), {
+                                backdrop: 'static',
+                                keyboard: false
+                            });
+                            editModal.show();
+                            console.log('✅ Düzenleme modal açıldı');
+                        } catch (error) {
+                            console.error('❌ Modal açılırken hata:', error);
+                            alert('Modal açılamadı: ' + error.message);
+                        }
+                    } else {
+                        showToast('error', response.message || 'Adres bilgileri alınamadı');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', error);
+                    showToast('error', 'Adres bilgileri yüklenirken hata oluştu');
+                }
+            });
+        }
+
+        function deleteAddress(id) {
+            console.log('🗑️ Adres siliniyor:', id);
+
+            if (confirm('Bu adresi silmek istediğinize emin misiniz?')) {
+                $('#DeleteAddressId').val(id);
+                $('#deleteAddressForm').submit();
+            }
+        }
+
+        console.log('✅ Modal fonksiyonları yüklendi');
+
+        // ============================================
+        // 📝 TAB YÖNETİMİ
+        // ============================================
+
+        $(document).ready(function() {
+            console.log('🚀 Document ready');
+            console.log('Bootstrap:', typeof bootstrap !== 'undefined' ? 'Yüklü ✅' : 'YÜKLENMEMİŞ ❌');
+            console.log('jQuery:', typeof $ !== 'undefined' ? 'Yüklü ✅' : 'YÜKLENMEMİŞ ❌');
+
             function openTab(tabId) {
                 console.log('Tab açılıyor:', tabId);
-
                 $('.tab-pane').removeClass('show active');
                 $('.nav-link').removeClass('active');
-
                 $(tabId).addClass('show active');
                 $('a[href="' + tabId + '"]').addClass('active');
-
-                console.log('✅ Tab açıldı:', tabId);
             }
 
-            // ✅ 1. ÖNCELİK: URL Hash
             var hash = window.location.hash;
             if (hash) {
-                console.log('📍 URL Hash bulundu:', hash);
+                console.log('📍 URL Hash:', hash);
                 openTab(hash);
             }
             else {
                 var tempDataTab = '@TempData["ActiveTab"]';
                 if (tempDataTab && tempDataTab.trim() !== '') {
-                    console.log('📦 TempData tab bulundu:', tempDataTab);
+                    console.log('📦 TempData tab:', tempDataTab);
                     openTab('#' + tempDataTab);
                 }
                 else {
                     var savedTab = localStorage.getItem('activeProfileTab');
                     if (savedTab) {
-                        console.log('💾 LocalStorage tab bulundu:', savedTab);
+                        console.log('💾 LocalStorage tab:', savedTab);
                         openTab(savedTab);
                     }
                 }
             }
 
-            // ✅ Tab'lara tıklama event'i
             $('a[data-bs-toggle="tab"]').on('click', function(e) {
                 e.preventDefault();
                 var targetTab = $(this).attr('href');
-                console.log('🖱️ Tab tıklandı:', targetTab);
-
                 openTab(targetTab);
                 localStorage.setItem('activeProfileTab', targetTab);
-
                 if (history.pushState) {
                     history.pushState(null, null, targetTab);
                 }
             });
 
-            // ✅ ŞİFRE GÜCÜ GÖSTERGESİ
+            // Şifre gücü göstergesi
             $('#NewPassword').on('keyup', function() {
                 var password = $(this).val();
                 var strength = 0;
@@ -432,7 +509,6 @@
 
                 var $meter = $('.strength-meter');
                 var $text = $('.strength-text');
-
                 $meter.removeClass('weak medium strong very-strong');
 
                 if (strength < 2) {
@@ -450,7 +526,7 @@
                 }
             });
 
-            // ✅ ŞİFRE EŞLEŞMESİ KONTROLÜ
+            // Şifre eşleşme kontrolü
             $('#ConfirmPassword').on('keyup', function() {
                 var newPassword = $('#NewPassword').val();
                 var confirmPassword = $(this).val();
@@ -471,48 +547,7 @@
                 }
             });
 
-            console.log('✅ JavaScript yüklendi');
+            console.log('✅ Document ready tamamlandı');
         });
-
-        // ============================================
-        // 📍 ADRES FONKSİYONLARI
-        // ============================================
-
-        // Adres düzenle
-        function editAddress(id) {
-            console.log('Adres düzenleniyor:', id);
-
-            $.ajax({
-                url: '/Address/GetAddress',
-                type: 'GET',
-                data: { id: id },
-                success: function(response) {
-                    if (response.success) {
-                        $('#EditAddressId').val(response.data.id);
-                        $('#EditCountry').val(response.data.country);
-                        $('#EditCity').val(response.data.city);
-                        $('#EditDistrict').val(response.data.district);
-                        $('#EditPostCode').val(response.data.postCode);
-                        $('#EditDescription').val(response.data.description);
-
-                        var editModal = new bootstrap.Modal(document.getElementById('editAddressModal'));
-                        editModal.show();
-                    } else {
-                        showToast('error', response.message);
-                    }
-                },
-                error: function() {
-                    showToast('error', 'Adres bilgileri yüklenirken hata oluştu.');
-                }
-            });
-        }
-
-        // Adres sil
-        function deleteAddress(id) {
-            if (confirm('Bu adresi silmek istediğinize emin misiniz?')) {
-                $('#DeleteAddressId').val(id);
-                $('#deleteAddressForm').submit();
-            }
-        }
     </script>
 }
