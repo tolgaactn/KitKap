@@ -38,8 +38,9 @@
                             <i class="icon-map-marker"></i> Adreslerim
                             <span class="badge badge-secondary ml-2">@Model.Addresses.Count</span>
                         </a>
-                        <a class="nav-link" asp-controller="Order" asp-action="MyOrders">
+                        <a class="nav-link" href="#orders-tab" data-bs-toggle="tab">
                             <i class="icon-shopping-bag"></i> Siparişlerim
+                            <span class="badge badge-secondary ml-2">@Model.Orders.Count</span>
                         </a>
                         <hr>
                         <a href="#" class="nav-link text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -242,6 +243,149 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- ============================================
+                    TAB 4: SİPARİŞLERİM (YENİ)
+                    ============================================ -->
+                    <div class="tab-pane fade" id="orders-tab">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h3 class="mb-0">Siparişlerim</h3>
+                                <span class="text-muted">
+                                    Toplam <strong>@Model.Orders.Count</strong> sipariş
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                @if (Model.Orders.Any())
+                                {
+                                    <!-- Sipariş Filtreleme -->
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-white">
+                                                    <i class="icon-filter"></i>
+                                                </span>
+                                                <select class="form-control" id="statusFilter">
+                                                    <option value="all">Tüm Siparişler</option>
+                                                    <option value="0">Ödeme Bekleniyor</option>
+                                                    <option value="1">Ödeme Alındı</option>
+                                                    <option value="2">Hazırlanıyor</option>
+                                                    <option value="3">Kargoda</option>
+                                                    <option value="4">Teslim Edildi</option>
+                                                    <option value="5">İptal Edildi</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Sipariş Listesi -->
+                                    <div class="orders-list">
+                                        @foreach (var order in Model.Orders)
+                                        {
+                                            <div class="order-card mb-3" data-status="@((int)order.Status)">
+                                                <div class="card border">
+                                                    <div class="card-body">
+                                                        <div class="row align-items-center">
+                                                            <!-- Sol: Sipariş Bilgileri -->
+                                                            <div class="col-md-8">
+                                                                <div class="d-flex align-items-start">
+                                                                    <div class="order-icon me-3">
+                                                                        <i class="icon-bag" style="font-size: 32px; color: #0066cc;"></i>
+                                                                    </div>
+                                                                    <div class="flex-grow-1">
+                                                                        <div class="d-flex align-items-center mb-2">
+                                                                            <h6 class="mb-0 me-3">Sipariş #@order.Id</h6>
+                                                                            <span class="badge badge-@order.Status.ToString().ToLower()">
+                                                                                @order.StatusText
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="order-meta text-muted small">
+                                                                            <i class="icon-calendar"></i>
+                                                                            @order.CreatedAt?.ToString("dd MMMM yyyy, HH:mm")
+                                                                        </div>
+                                                                        <div class="order-meta text-muted small mt-1">
+                                                                            <i class="icon-bag"></i>
+                                                                            @order.Items.Count ürün
+                                                                            <span class="mx-2">•</span>
+                                                                            <i class="icon-credit-card"></i>
+                                                                            @order.PaymentMethodText
+                                                                        </div>
+                                                                        @if (!string.IsNullOrEmpty(order.TrackingNumber))
+                                                                        {
+                                                                            <div class="order-meta text-muted small mt-1">
+                                                                                <i class="icon-truck"></i>
+                                                                                Kargo: <strong>@order.CargoCompany</strong> - @order.TrackingNumber
+                                                                            </div>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Sağ: Fiyat ve Butonlar -->
+                                                            <div class="col-md-4 text-end">
+                                                                <div class="order-price mb-3">
+                                                                    <h5 class="text-primary mb-0">@order.TotalAmount.ToString("C2")</h5>
+                                                                </div>
+                                                                <button class="btn btn-outline-primary btn-sm" onclick="showOrderDetail(@order.Id)">
+                                                                    <i class="icon-eye"></i>
+                                                                    Detayları Gör
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Ürün Önizlemeleri (İlk 3 ürün) -->
+                                                        @if (order.Items.Any())
+                                                        {
+                                                            <div class="row mt-3 pt-3 border-top">
+                                                                @foreach (var item in order.Items.Take(3))
+                                                                {
+                                                                    <div class="col-md-4 col-6 mb-2">
+                                                                        <div class="d-flex align-items-center">
+                                                                            <img src="@item.ProductImageUrl"
+                                                                                 alt="@item.ProductName"
+                                                                                 class="rounded me-2"
+                                                                                 style="width: 50px; height: 50px; object-fit: cover;">
+                                                                            <div class="flex-grow-1 small">
+                                                                                <div class="text-truncate" title="@item.ProductName">
+                                                                                    @item.ProductName
+                                                                                </div>
+                                                                                <div class="text-muted">
+                                                                                    @item.Quantity adet
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                                @if (order.Items.Count > 3)
+                                                                {
+                                                                    <div class="col-md-12 text-center small text-muted">
+                                                                        + @(order.Items.Count - 3) ürün daha
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <!-- Sipariş Yok - Empty State -->
+                                    <div class="empty-state text-center py-5">
+                                        <i class="icon-bag" style="font-size: 64px; color: #d1d5db;"></i>
+                                        <h4 class="mt-3">Henüz siparişiniz bulunmuyor</h4>
+                                        <p class="text-muted">Alışverişe başlamak için ürünlerimize göz atabilirsiniz.</p>
+                                        <a href="@Url.Action("ProductList", "ProductList")" class="btn btn-primary mt-3">
+                                            <i class="icon-bag"></i>
+                                            Alışverişe Başla
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -365,6 +509,31 @@
     <input type="hidden" id="DeleteAddressId" name="id" />
 </form>
 
+<!-- ============================================
+     MODAL: SİPARİŞ DETAY
+     ============================================ -->
+<div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderDetailModalLabel">
+                    <i class="icon-bag me-2"></i>
+                    Sipariş Detayları
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="orderDetailContent">
+                <!-- AJAX ile yüklenecek -->
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Yükleniyor...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
@@ -397,6 +566,49 @@
                 alert('Modal açılamadı: ' + error.message);
             }
         }
+                // ============================================
+        // 📦 SİPARİŞ YÖNETİMİ
+        // ============================================
+
+        // Sipariş detayını göster
+                function showOrderDetail(orderId) {
+            console.log('📦 Sipariş detayı gösteriliyor:', orderId);
+
+            $.ajax({
+                url: '@Url.Action("GetOrderDetail", "Account")',
+                type: 'GET',
+                data: { id: orderId },
+                success: function(response) {
+                    $('#orderDetailContent').html(response);
+
+                    var orderModal = new bootstrap.Modal(document.getElementById('orderDetailModal'), {
+                        backdrop: true,  // 👈 true yap (veya 'static' yerine kaldır)
+                        keyboard: true    // 👈 ESC ile kapanmasına izin ver
+                    });
+                    orderModal.show();
+                    console.log('✅ Sipariş detayı modal açıldı');
+                },
+                error: function(xhr, status, error) {
+                    console.error('❌ AJAX error:', error);
+                    showToast('error', 'Sipariş detayı yüklenirken hata oluştu');
+                }
+            });
+        }
+
+        // Sipariş filtreleme
+        $('#statusFilter').on('change', function() {
+            var selectedStatus = $(this).val();
+            console.log('🔍 Filtreleme:', selectedStatus);
+
+            if (selectedStatus === 'all') {
+                $('.order-card').show();
+            } else {
+                $('.order-card').hide();
+                $('.order-card[data-status="' + selectedStatus + '"]').show();
+            }
+        });
+
+        console.log('✅ Sipariş JavaScript yüklendi');
 
         function editAddress(id) {
             console.log('✏️ Adres düzenleniyor:', id);

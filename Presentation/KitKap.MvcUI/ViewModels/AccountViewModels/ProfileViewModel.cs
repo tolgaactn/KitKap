@@ -1,4 +1,5 @@
 ﻿using Kitkap.Service.Dtos.AddressDtos;
+using KitKap.Service.Dtos.OrderDtos;
 using System.ComponentModel.DataAnnotations;
 
 namespace KitKap.MvcUI.ViewModels.AccountViewModels
@@ -30,5 +31,7 @@ namespace KitKap.MvcUI.ViewModels.AccountViewModels
         public decimal Balance { get; set; }
 
         public List<RequestAddressDto> Addresses { get; set; } = new();
+
+        public List<OrderDto> Orders { get; set; } = new();
     }
 }

@@ -190,6 +190,21 @@ namespace KitKap.Service.Services.Concretes
                 filter: a => addressIds.Contains(a.Id)
             );
 
+            // 👇 YENİ: Product'ları ve Seller'ları çek
+            var productIds = orders.SelectMany(o => o.Items.Select(i => i.ProductId)).Distinct().ToList();
+            var products = await _uow.GetRepository<Product>().GetAll(
+                filter: p => productIds.Contains(p.Id),
+                includes: new Expression<Func<Product, object>>[]
+                {
+            p => p.ProductImages
+                }
+            );
+
+            var sellerIds = orders.SelectMany(o => o.Items.Select(i => i.SellerId)).Distinct().ToList();
+            var sellers = await _uow.GetRepository<AppUser>().GetAll(
+                filter: u => sellerIds.Contains(u.Id)
+            );
+
             // 3. DTO'lara çevir
             var dtoList = new List<OrderDto>();
 
@@ -199,6 +214,16 @@ namespace KitKap.Service.Services.Concretes
                 var address = addresses.FirstOrDefault(a => a.Id == order.ShippingAddressId);
 
                 dto.EnrichDto(order, buyer, address);
+
+                // 👇 YENİ: Her OrderItem'ı zenginleştir
+                foreach (var itemDto in dto.Items)
+                {
+                    var item = order.Items.First(i => i.Id == itemDto.Id);
+                    var product = products.FirstOrDefault(p => p.Id == item.ProductId);
+                    var seller = sellers.FirstOrDefault(s => s.Id == item.SellerId);
+
+                    itemDto.EnrichDto(item, product, seller);
+                }
 
                 dtoList.Add(dto);
             }
