@@ -400,3 +400,107 @@
     border-top: 1px solid #e5e7eb;
     padding: 16px 24px;
 }
+
+/* ============================================
+   SİPARİŞ KARTLARI
+   ============================================ */
+
+.order-card {
+    transition: all 0.3s ease;
+}
+
+    .order-card .card {
+        border: 1px solid #e5e7eb;
+        transition: all 0.3s ease;
+    }
+
+        .order-card .card:hover {
+            border-color: #0066cc;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.1);
+            transform: translateY(-2px);
+        }
+
+    .order-card .order-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .order-card .order-meta {
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+
+    .order-card .order-price {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    /* Status Badge Renkleri - Sadece sipariş kartlarında */
+    .order-card .badge-pending {
+        background-color: #fbbf24;
+        color: #78350f;
+    }
+
+    .order-card .badge-paymentreceived {
+        background-color: #60a5fa;
+        color: #1e3a8a;
+    }
+
+    .order-card .badge-processing {
+        background-color: #a78bfa;
+        color: #4c1d95;
+    }
+
+    .order-card .badge-shipped {
+        background-color: #34d399;
+        color: #065f46;
+    }
+
+    .order-card .badge-delivered {
+        background-color: #10b981;
+        color: #064e3b;
+    }
+
+    .order-card .badge-cancelled {
+        background-color: #ef4444;
+        color: #7f1d1d;
+    }
+
+    .order-card .badge-refunded {
+        background-color: #94a3b8;
+        color: #1e293b;
+    }
+
+/* Sipariş Detay Modal - Sadece modal içinde */
+#orderDetailModal .order-detail-header {
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+#orderDetailModal .order-info-box {
+    padding: 0.75rem;
+    background-color: #f9fafb;
+    border-radius: 8px;
+}
+
+/* Empty State - Sadece orders tab'ında */
+#orders-tab .empty-state {
+    padding: 3rem 1rem;
+}
+
+    #orders-tab .empty-state i {
+        opacity: 0.3;
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .order-card .col-md-8,
+    .order-card .col-md-4 {
+        text-align: left !important;
+    }
+
+    .order-card .order-price {
+        margin-bottom: 1rem;
+    }
+}

@@ -15,15 +15,18 @@ namespace KitKap.MvcUI.Controllers
         private readonly IAccountService _accountService;
         private readonly IShoppingCartService _shoppingCartService;
         private readonly IAddressService _addressService;
+        private readonly IOrderService _orderService;
 
         public AccountController(
             IAccountService accountService,
             IShoppingCartService shoppingCartService,
-            IAddressService addressService)
+            IAddressService addressService,
+            IOrderService orderService)
         {
             _accountService = accountService;
             _shoppingCartService = shoppingCartService;
             _addressService = addressService;
+            _orderService = orderService;
         }
 
         [HttpGet]
@@ -210,6 +213,7 @@ namespace KitKap.MvcUI.Controllers
                 return RedirectToAction("Index", "Home");
             }
             var addresses = await _addressService.GetByUserIdAsync(userId);
+            var orders = await _orderService.GetOrdersByUserAsync(userId);
 
             var viewModel = new ProfileViewModel
             {
@@ -220,7 +224,8 @@ namespace KitKap.MvcUI.Controllers
                 PhoneNumber = profileDto.PhoneNumber,
                 UserName = profileDto.UserName,
                 Balance = profileDto.Balance,
-                Addresses = addresses.ToList()
+                Addresses = addresses.ToList(),
+                Orders = orders.ToList()
             };
 
             return View(viewModel);
@@ -339,6 +344,33 @@ namespace KitKap.MvcUI.Controllers
                 TempData["Error"] = "Şifre değiştirme sırasında bir hata oluştu: " + ex.Message;
                 TempData["ActiveTab"] = "password-tab";
                 return RedirectToAction("Profile");
+            }
+        }
+
+        /// <summary>
+        /// Sipariş detayını AJAX ile getir
+        /// </summary>
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetOrderDetail(int id)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                var order = await _orderService.GetOrderByIdAsync(id);
+
+                // Güvenlik: Kullanıcı sadece kendi siparişini görebilir
+                if (order.BuyerId != userId)
+                {
+                    return Json(new { success = false, message = "Bu siparişe erişim yetkiniz yok." });
+                }
+
+                return PartialView("_OrderDetailPartial", order);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Sipariş detayı yüklenirken hata oluştu: " + ex.Message });
             }
         }
     }

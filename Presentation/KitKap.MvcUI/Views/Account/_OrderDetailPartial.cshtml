@@ -1,0 +1,181 @@
+﻿@model KitKap.Service.Dtos.OrderDtos.OrderDto
+
+<!-- Sipariş Başlık Bilgileri -->
+<div class="order-detail-header mb-4">
+    <div class="row">
+        <div class="col-md-6">
+            <h6 class="text-muted mb-1">Sipariş Numarası</h6>
+            <h5 class="mb-3">#@Model.Id</h5>
+        </div>
+        <div class="col-md-6 text-end">
+            <span class="badge badge-@Model.Status.ToString().ToLower() fs-6">
+                @Model.StatusText
+            </span>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <div class="order-info-box">
+                <small class="text-muted d-block">Sipariş Tarihi</small>
+                <strong>@Model.CreatedAt?.ToString("dd MMMM yyyy")</strong>
+                <div class="small text-muted">@Model.CreatedAt?.ToString("HH:mm")</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="order-info-box">
+                <small class="text-muted d-block">Ödeme Yöntemi</small>
+                <strong>@Model.PaymentMethodText</strong>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="order-info-box">
+                <small class="text-muted d-block">Toplam Tutar</small>
+                <strong class="text-primary fs-5">@Model.TotalAmount.ToString("C2")</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Kargo Bilgileri (Varsa) -->
+@if (!string.IsNullOrEmpty(Model.TrackingNumber))
+{
+    <div class="alert alert-info mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h6 class="mb-1">
+                    <i class="icon-truck me-2"></i>
+                    Kargo Bilgileri
+                </h6>
+                <div>
+                    <strong>@Model.CargoCompany</strong>
+                    <span class="mx-2">•</span>
+                    Takip No: <strong>@Model.TrackingNumber</strong>
+                </div>
+            </div>
+            <div class="col-md-4 text-end">
+                @if (Model.ShippedAt.HasValue)
+                {
+                    <small class="text-muted d-block">Kargoya Verildi</small>
+                    <strong>@Model.ShippedAt?.ToString("dd MMM yyyy")</strong>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Teslimat Adresi -->
+<div class="card mb-4">
+    <div class="card-header bg-light">
+        <h6 class="mb-0">
+            <i class="icon-map-marker me-2"></i>
+            Teslimat Adresi
+        </h6>
+    </div>
+    <div class="card-body">
+        <p class="mb-0">@Model.ShippingAddressText</p>
+    </div>
+</div>
+
+<!-- Sipariş Kalemleri -->
+<div class="card mb-4">
+    <div class="card-header bg-light">
+        <h6 class="mb-0">
+            <i class="icon-bag me-2"></i>
+            Sipariş Detayları (@Model.Items.Count ürün)
+        </h6>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Ürün</th>
+                        <th class="text-center">Miktar</th>
+                        <th class="text-end">Birim Fiyat</th>
+                        <th class="text-end">Toplam</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="@item.ProductImageUrl"
+                                         alt="@item.ProductName"
+                                         class="rounded me-3"
+                                         style="width: 60px; height: 60px; object-fit: cover;">
+                                    <div>
+                                        <div class="fw-medium">@item.ProductName</div>
+                                        <small class="text-muted">
+                                            Satıcı: @item.SellerName
+                                        </small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center align-middle">
+                                <span class="badge bg-light text-dark">@item.Quantity</span>
+                            </td>
+                            <td class="text-end align-middle">
+                                @item.UnitPrice.ToString("C2")
+                            </td>
+                            <td class="text-end align-middle fw-medium">
+                                @item.TotalPrice.ToString("C2")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Fiyat Özeti -->
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 offset-md-6">
+                <table class="table table-borderless mb-0">
+                    <tbody>
+                        <tr>
+                            <td>Ara Toplam:</td>
+                            <td class="text-end">@Model.SubTotal.ToString("C2")</td>
+                        </tr>
+                        <tr>
+                            <td>Kargo Ücreti:</td>
+                            <td class="text-end">
+                                @if (Model.ShippingCost == 0)
+                                {
+                                    <span class="text-success">ÜCRETSİZ</span>
+                                }
+                                else
+                                {
+                                    @Model.ShippingCost.ToString("C2")
+                                }
+                            </td>
+                        </tr>
+                        <tr class="border-top">
+                            <td class="fw-bold fs-5">Toplam:</td>
+                            <td class="text-end fw-bold text-primary fs-5">
+                                @Model.TotalAmount.ToString("C2")
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Müşteri Notu (Varsa) -->
+@if (!string.IsNullOrEmpty(Model.CustomerNote))
+{
+    <div class="alert alert-secondary mt-3">
+        <h6 class="mb-2">
+            <i class="icon-info-circle me-2"></i>
+            Sipariş Notunuz
+        </h6>
+        <p class="mb-0">@Model.CustomerNote</p>
+    </div>
+}
