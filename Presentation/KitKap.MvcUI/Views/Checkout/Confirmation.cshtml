@@ -2,11 +2,26 @@
 @{
     ViewData["Title"] = "Sipariş Durumu";
 }
+<link rel="stylesheet" href="~/template/custom/checkout-cart.css">
+
+<div class="container">
+    <ul class="checkout-progress-bar d-flex justify-content-center flex-wrap">
+        <li>
+            <a asp-controller="ShoppingCart" asp-action="Index">Sepetim</a>
+        </li>
+        <li>
+            <a asp-controller="Checkout" asp-action="Index">Teslimat & Ödeme</a>
+        </li>
+        <li class="active">
+            <a href="#">Sipariş Özeti</a>
+        </li>
+    </ul>
+</div>
 
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-
+            
             @* Duruma göre mesaj *@
             @if (Model.Transaction?.Status == Kitkap.Entity.Entities.Transaction.PaymentStatus.Completed)
             {
@@ -63,30 +78,99 @@
                 </div>
             </div>
 
+            
             @* Havale/EFT için banka bilgileri *@
             @if (Model.Order.PaymentMethod == "BankTransfer" &&
                         Model.Transaction?.Status != Kitkap.Entity.Entities.Transaction.PaymentStatus.Failed)
             {
-                <div class="alert alert-warning">
-                    <h5><i class="fas fa-university me-2"></i>Banka Hesap Bilgileri</h5>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p class="mb-2"><strong>Banka:</strong> Ziraat Bankası</p>
-                            <p class="mb-2"><strong>Hesap Sahibi:</strong> KitKap E-Ticaret Ltd. Şti.</p>
-                        </div>
-                        <div class="col-md-6">
-                            <p class="mb-2"><strong>IBAN:</strong> TR00 0000 0000 0000 0000 0000 00</p>
-                            <p class="mb-2"><strong>Açıklama:</strong> <span class="badge bg-danger">Sipariş No: #@Model.Order.Id</span></p>
-                        </div>
+                <div class="card border-warning shadow-lg mb-4" style="border-width: 3px;">
+                    <div class="card-header bg-warning text-dark">
+                        <h4 class="mb-0">
+                            <i class="fas fa-university me-2"></i>
+                            ÖNEMLİ: Havale/EFT Bilgileri
+                        </h4>
                     </div>
-                    <div class="alert alert-danger mt-3 mb-0">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        <strong>ÖNEMLİ:</strong> Ödeme açıklamasına mutlaka sipariş numaranızı yazınız!
+                    <div class="card-body bg-light">
+                        <div class="warning-box bg-danger text-white p-3 rounded mb-3">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>DİKKAT:</strong> Ödemenizi yaparken açıklama kısmına mutlaka
+                            <span class="badge bg-dark fs-6">Sipariş No: #@Model.Order.Id</span>
+                            yazmanız gerekmektedir!
+                        </div>
+
+                        <h5 class="mb-3">Banka Hesap Bilgileri:</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-building text-primary me-2"></i>
+                                    <div>
+                                        <small class="text-muted d-block">Banka</small>
+                                        <strong>Ziraat Bankası</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-user text-primary me-2"></i>
+                                    <div>
+                                        <small class="text-muted d-block">Hesap Sahibi</small>
+                                        <strong>KitKap E-Ticaret Ltd. Şti.</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-credit-card text-primary me-2"></i>
+                                    <div class="flex-grow-1">
+                                        <small class="text-muted d-block">IBAN</small>
+                                        <div class="input-group">
+                                            <input type="text"
+                                                   class="form-control form-control-lg fw-bold"
+                                                   id="ibanNumber"
+                                                   value="TR00 0000 0000 0000 0000 0000 00"
+                                                   readonly>
+                                            <button class="btn btn-primary"
+                                                    type="button"
+                                                    onclick="copyIban()">
+                                                <i class="fas fa-copy me-1"></i> Kopyala
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-box bg-info text-dark p-3 rounded mt-3 mb-0">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Ödemeniz onaylandıktan sonra siparişiniz kargoya verilecektir.
+                            Ortalama onay süresi: <strong>1-2 iş günü</strong>
+                        </div>
                     </div>
                 </div>
-            }
 
+                <script>
+                    function copyIban() {
+                        var ibanInput = document.getElementById('ibanNumber');
+                        ibanInput.select();
+                        ibanInput.setSelectionRange(0, 99999); // Mobil için
+
+                        navigator.clipboard.writeText(ibanInput.value).then(function() {
+                            // Butonu geçici olarak değiştir
+                            var btn = event.currentTarget;
+                            var originalHTML = btn.innerHTML;
+                            btn.innerHTML = '<i class="fas fa-check me-1"></i> Kopyalandı!';
+                            btn.classList.remove('btn-primary');
+                            btn.classList.add('btn-success');
+
+                            setTimeout(function() {
+                                btn.innerHTML = originalHTML;
+                                btn.classList.remove('btn-success');
+                                btn.classList.add('btn-primary');
+                            }, 2000);
+                        });
+                    }
+                </script>
+            }
             @* Sipariş detayları *@
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-secondary text-white">
@@ -167,7 +251,7 @@
             <div class="text-center mt-4">
                 @if (Model.Transaction?.Status != Kitkap.Entity.Entities.Transaction.PaymentStatus.Failed)
                 {
-                    <a asp-controller="Account" asp-action="MyOrders" class="btn btn-primary btn-lg me-2">
+                    <a asp-controller="Account" asp-action="Profile" asp-fragment="orders-tab" class="btn btn-primary btn-lg me-2">
                         <i class="fas fa-list me-2"></i>Siparişlerime Git
                     </a>
                 }

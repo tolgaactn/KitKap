@@ -5,17 +5,22 @@
 
 <main class="main">
     <!-- Breadcrumb -->
-    <div class="page-header">
-        <div class="container d-flex flex-column align-items-center">
-            <nav aria-label="breadcrumb" class="breadcrumb-nav">
-                <div class="container">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Profilim</li>
-                    </ol>
-                </div>
+    <div class="page-header bg-white border-bottom mb-4">
+        <div class="container py-3">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent p-0 mb-2">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index">Ana Sayfa</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Hesabım</li>
+                </ol>
             </nav>
-            <h1>Hesabım</h1>
+
+            <!-- Başlık -->
+            <h1 class="mb-0" style="font-size: 1.75rem; font-weight: 600; color: #333;">
+                Hesabım
+            </h1>
         </div>
     </div>
 
@@ -28,23 +33,22 @@
                     <h4 class="title">Hesap Yönetimi</h4>
                     <nav class="nav nav-pills flex-column">
                         <a class="nav-link active" href="#profile-tab" data-bs-toggle="tab">
-                            <i class="icon-user-2"></i> Profil Bilgilerim
+                            <i class="fas fa-user"></i> Profil Bilgilerim
                         </a>
                         <a class="nav-link" href="#password-tab" data-bs-toggle="tab">
-                            <i class="icon-lock"></i> Şifre Değiştir
+                            <i class="fas fa-lock"></i> Şifre Değiştir
                         </a>
-                        <!-- ✅ YENİ: ADRESLERİM TAB -->
                         <a class="nav-link" href="#addresses-tab" data-bs-toggle="tab">
-                            <i class="icon-map-marker"></i> Adreslerim
+                            <i class="fas fa-map-marker-alt"></i> Adreslerim
                             <span class="badge badge-secondary ml-2">@Model.Addresses.Count</span>
                         </a>
                         <a class="nav-link" href="#orders-tab" data-bs-toggle="tab">
-                            <i class="icon-shopping-bag"></i> Siparişlerim
+                            <i class="fas fa-shopping-bag"></i> Siparişlerim
                             <span class="badge badge-secondary ml-2">@Model.Orders.Count</span>
                         </a>
                         <hr>
                         <a href="#" class="nav-link text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="icon-off"></i> Çıkış Yap
+                            <i class="fas fa-sign-out-alt"></i> Çıkış Yap
                         </a>
                         <form id="logout-form" asp-controller="Account" asp-action="Logout" method="post" style="display: none;">
                             @Html.AntiForgeryToken()
@@ -538,10 +542,13 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-            function openAddModal() {
+        // ============================================
+        // MODAL FONKSİYONLARI (Global scope'ta olmalı)
+        // ============================================
+
+        function openAddModal() {
             console.log('📍 Yeni adres modal açılıyor...');
             try {
-                // Bootstrap kontrolü
                 if (typeof bootstrap === 'undefined') {
                     console.error('❌ Bootstrap yüklü değil!');
                     alert('Bootstrap yüklü değil! Lütfen sayfayı yenileyin.');
@@ -566,49 +573,6 @@
                 alert('Modal açılamadı: ' + error.message);
             }
         }
-                // ============================================
-        // 📦 SİPARİŞ YÖNETİMİ
-        // ============================================
-
-        // Sipariş detayını göster
-                function showOrderDetail(orderId) {
-            console.log('📦 Sipariş detayı gösteriliyor:', orderId);
-
-            $.ajax({
-                url: '@Url.Action("GetOrderDetail", "Account")',
-                type: 'GET',
-                data: { id: orderId },
-                success: function(response) {
-                    $('#orderDetailContent').html(response);
-
-                    var orderModal = new bootstrap.Modal(document.getElementById('orderDetailModal'), {
-                        backdrop: true,  // 👈 true yap (veya 'static' yerine kaldır)
-                        keyboard: true    // 👈 ESC ile kapanmasına izin ver
-                    });
-                    orderModal.show();
-                    console.log('✅ Sipariş detayı modal açıldı');
-                },
-                error: function(xhr, status, error) {
-                    console.error('❌ AJAX error:', error);
-                    showToast('error', 'Sipariş detayı yüklenirken hata oluştu');
-                }
-            });
-        }
-
-        // Sipariş filtreleme
-        $('#statusFilter').on('change', function() {
-            var selectedStatus = $(this).val();
-            console.log('🔍 Filtreleme:', selectedStatus);
-
-            if (selectedStatus === 'all') {
-                $('.order-card').show();
-            } else {
-                $('.order-card').hide();
-                $('.order-card[data-status="' + selectedStatus + '"]').show();
-            }
-        });
-
-        console.log('✅ Sipariş JavaScript yüklendi');
 
         function editAddress(id) {
             console.log('✏️ Adres düzenleniyor:', id);
@@ -659,17 +623,41 @@
             }
         }
 
+        function showOrderDetail(orderId) {
+            console.log('📦 Sipariş detayı gösteriliyor:', orderId);
+
+            $.ajax({
+                url: '@Url.Action("GetOrderDetail", "Account")',
+                type: 'GET',
+                data: { id: orderId },
+                success: function(response) {
+                    $('#orderDetailContent').html(response);
+
+                    var orderModal = new bootstrap.Modal(document.getElementById('orderDetailModal'), {
+                        backdrop: true,
+                        keyboard: true
+                    });
+                    orderModal.show();
+                    console.log('✅ Sipariş detayı modal açıldı');
+                },
+                error: function(xhr, status, error) {
+                    console.error('❌ AJAX error:', error);
+                    showToast('error', 'Sipariş detayı yüklenirken hata oluştu');
+                }
+            });
+        }
+
         console.log('✅ Modal fonksiyonları yüklendi');
 
         // ============================================
-        // 📝 TAB YÖNETİMİ
+        // DOCUMENT READY
         // ============================================
-
         $(document).ready(function() {
-            console.log('🚀 Document ready');
-            console.log('Bootstrap:', typeof bootstrap !== 'undefined' ? 'Yüklü ✅' : 'YÜKLENMEMİŞ ❌');
-            console.log('jQuery:', typeof $ !== 'undefined' ? 'Yüklü ✅' : 'YÜKLENMEMİŞ ❌');
+            console.log('🚀 Document ready başladı');
 
+            // ============================================
+            // TAB YÖNETİMİ
+            // ============================================
             function openTab(tabId) {
                 console.log('Tab açılıyor:', tabId);
                 $('.tab-pane').removeClass('show active');
@@ -678,37 +666,57 @@
                 $('a[href="' + tabId + '"]').addClass('active');
             }
 
+            // 1. ÖNCELİK: URL Hash
             var hash = window.location.hash;
             if (hash) {
                 console.log('📍 URL Hash:', hash);
                 openTab(hash);
             }
+            // 2. ÖNCELİK: TempData
             else {
                 var tempDataTab = '@TempData["ActiveTab"]';
                 if (tempDataTab && tempDataTab.trim() !== '') {
                     console.log('📦 TempData tab:', tempDataTab);
                     openTab('#' + tempDataTab);
                 }
+                // 3. VARSAYILAN: Profil Bilgilerim
                 else {
-                    var savedTab = localStorage.getItem('activeProfileTab');
-                    if (savedTab) {
-                        console.log('💾 LocalStorage tab:', savedTab);
-                        openTab(savedTab);
-                    }
+                    console.log('✅ Varsayılan: Profil Bilgilerim');
+                    openTab('#profile-tab');
                 }
             }
 
+            // Tab tıklaması
             $('a[data-bs-toggle="tab"]').on('click', function(e) {
                 e.preventDefault();
                 var targetTab = $(this).attr('href');
+                console.log('👆 Tab tıklandı:', targetTab);
                 openTab(targetTab);
-                localStorage.setItem('activeProfileTab', targetTab);
+
+                // URL'i güncelle
                 if (history.pushState) {
                     history.pushState(null, null, targetTab);
                 }
             });
 
-            // Şifre gücü göstergesi
+            // ============================================
+            // SİPARİŞ FİLTRELEME
+            // ============================================
+            $('#statusFilter').on('change', function() {
+                var selectedStatus = $(this).val();
+                console.log('🔍 Filtreleme:', selectedStatus);
+
+                if (selectedStatus === 'all') {
+                    $('.order-card').show();
+                } else {
+                    $('.order-card').hide();
+                    $('.order-card[data-status="' + selectedStatus + '"]').show();
+                }
+            });
+
+            // ============================================
+            // ŞİFRE GÜCÜ GÖSTERGESİ
+            // ============================================
             $('#NewPassword').on('keyup', function() {
                 var password = $(this).val();
                 var strength = 0;
@@ -738,7 +746,9 @@
                 }
             });
 
-            // Şifre eşleşme kontrolü
+            // ============================================
+            // ŞİFRE EŞLEŞME KONTROLÜ
+            // ============================================
             $('#ConfirmPassword').on('keyup', function() {
                 var newPassword = $('#NewPassword').val();
                 var confirmPassword = $(this).val();

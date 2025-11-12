@@ -3,21 +3,25 @@
     ViewData["Title"] = "Sipariş Tamamla";
     Layout = "~/Views/Shared/_UILayout.cshtml";
 }
-
-<link rel="stylesheet" href="~/template/assets/css/style.min.css">
+<link rel="stylesheet" href="~/template/custom/checkout-cart.css">
 
 <main class="main">
     <div class="container">
         <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb" class="breadcrumb-nav">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
-                <li class="breadcrumb-item"><a asp-controller="ShoppingCart" asp-action="Index">Sepet</a></li>
-                <li class="breadcrumb-item active">Sipariş Tamamla</li>
-            </ol>
-        </nav>
+        <!-- Progress Bar (Breadcrumb yerine) -->
+        <ul class="checkout-progress-bar d-flex justify-content-center flex-wrap">
+            <li>
+                <a asp-controller="ShoppingCart" asp-action="Index">Sepetim</a>
+            </li>
+            <li class="active">
+                <a href="#">Teslimat & Ödeme</a>
+            </li>
+            <li class="disabled">
+                <a href="#">Sipariş Özeti</a>
+            </li>
+        </ul>
 
-        <h2 class="step-title mb-2">Sipariş Tamamla</h2>
+        <h2 class="step-title mb-2 text-center">Sipariş Tamamla</h2>
 
         @if (TempData["ErrorMessage"] != null)
         {
@@ -385,224 +389,4 @@
         });
     </script>
 
-    <style>
-        /* Checkout Genel */
-        .step-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 30px;
-        }
-
-        .checkout-step {
-            background: #fff;
-            border: 1px solid #e7e7e7;
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-
-        .checkout-step .step-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-        }
-
-        .step-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 50%;
-            margin-right: 12px;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        /* Adres Kartları */
-        .address-card {
-            border: 2px solid #e7e7e7;
-            border-radius: 8px;
-            padding: 18px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            height: 100%;
-        }
-
-        .address-card:hover {
-            border-color: #667eea;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-        }
-
-        .address-card.selected {
-            border-color: #667eea;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-        }
-
-        .address-content {
-            margin-left: 5px;
-        }
-
-        .address-title {
-            display: block;
-            font-size: 1.05rem;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        .address-desc {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 8px;
-        }
-
-        .address-meta {
-            font-size: 0.85rem;
-        }
-
-        /* Ödeme Yöntemleri */
-        .payment-methods {
-            display: grid;
-            gap: 15px;
-        }
-
-        .payment-method-card {
-            border: 2px solid #e7e7e7;
-            border-radius: 8px;
-            padding: 18px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .payment-method-card:hover {
-            border-color: #667eea;
-        }
-
-        .payment-method-card:has(input:checked) {
-            border-color: #667eea;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-        }
-
-        .payment-method-content {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .payment-icon {
-            font-size: 2rem;
-            color: #667eea;
-        }
-
-        .payment-info strong {
-            display: block;
-            font-size: 1.05rem;
-            margin-bottom: 5px;
-        }
-
-        .payment-info p {
-            font-size: 0.9rem;
-        }
-
-        /* Sipariş Özeti */
-        .order-summary {
-            position: sticky;
-            top: 20px;
-            background: #fff;
-            border: 1px solid #e7e7e7;
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-        }
-
-        .summary-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-align: center;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 12px;
-        }
-
-        .summary-items {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-
-        .summary-item {
-            display: flex;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .item-image img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
-
-        .item-details {
-            flex: 1;
-        }
-
-        .item-name {
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-            color: #333;
-        }
-
-        .item-quantity {
-            font-size: 0.85rem;
-            color: #999;
-            margin: 0;
-        }
-
-        .item-price {
-            text-align: right;
-            color: #667eea;
-        }
-
-        .summary-totals {
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .summary-totals td {
-            padding: 12px 0;
-            border-top: 1px solid #e7e7e7;
-        }
-
-        .summary-totals tfoot td {
-            border-top: 2px solid #333;
-            font-size: 1.2rem;
-            padding-top: 15px;
-        }
-
-        .btn-order {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            font-weight: 700;
-            padding: 16px;
-        }
-
-        .btn-order:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-
-        .security-badges {
-            padding-top: 15px;
-            border-top: 1px solid #e7e7e7;
-        }
-    </style>
 }
