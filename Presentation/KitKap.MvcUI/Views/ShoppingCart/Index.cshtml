@@ -1,54 +1,53 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_UILayout.cshtml";
 }
+<link rel="stylesheet" href="~/template/custom/checkout-cart.css">
 
-
-<link rel="stylesheet" href="~/template/assets/css/style.min.css">
 <main class="main">
-	
-		@await Component.InvokeAsync("_ShoppingCartBreadCrumbComponentPartial")
-		<div class="row">
-			<div class="col-lg-8">
-				<div class="cart-table-container">
-					<table class="table table-cart">
-						<thead>
-							@await Component.InvokeAsync("_ShoppingCartTableHeadComponentPartial")
-						</thead>
-						
-						<tbody>
-							@await Component.InvokeAsync("_ShoppingCartProductListComponentPartial")
-							
-						</tbody>
+    <div class="container">
+        @await Component.InvokeAsync("_ShoppingCartBreadCrumbComponentPartial")
 
-						<tfoot>
-							<tr>
-								<td colspan="5" class="clearfix">
-									@await Component.InvokeAsync("_ShoppingCartDiscountComponentPartial")<!-- End discount .float-left -->
-									
-									<div class="float-right">
-										<a asp-controller="ProductList" asp-action="Index" class="btn btn-shop btn-update-cart">
-											Alışverişe Devam
-										</a>
-									</div><!-- End .float-right -->
-									<div class="mx-3 float-right">
-										<button type="button"
-												class="btn btn-outline-danger btn-shop"
-												onclick="clearCart()">
-											<i class="icon-trash"></i> Sepeti Temizle
-										</button>
-									</div><!-- End .float-right -->
-								</td>
-							</tr>
-						</tfoot>
-					</table>
-				</div><!-- End .cart-table-container -->
-			</div><!-- End .col-lg-8 -->
-			@await Component.InvokeAsync("_ShoppingCartDetailComponentPartial") <!-- End cartdetail .col-lg-4 -->
-		</div><!-- End .row -->
-	</div><!-- End .container -->
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="cart-table-container">
+                    <table class="table table-cart">
+                        <thead>
+                            @await Component.InvokeAsync("_ShoppingCartTableHeadComponentPartial")
+                        </thead>
 
-	<div class="mb-6"></div><!-- margin -->
+                        <tbody>
+                            @await Component.InvokeAsync("_ShoppingCartProductListComponentPartial")
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <td colspan="5" class="clearfix">
+                                    @await Component.InvokeAsync("_ShoppingCartDiscountComponentPartial")
+
+                                    <div class="float-right">
+                                        <a asp-controller="ProductList" asp-action="Index" class="btn btn-shop btn-update-cart">
+                                            Alışverişe Devam
+                                        </a>
+                                    </div>
+
+                                    <div class="mx-3 float-right">
+                                        <button type="button"
+                                                class="btn btn-outline-danger btn-shop"
+                                                onclick="clearCart()">
+                                            <i class="icon-trash"></i> Sepeti Temizle
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            @await Component.InvokeAsync("_ShoppingCartDetailComponentPartial")
+        </div>
+
+        <div class="mb-6"></div>
+    </div>
 </main>
-

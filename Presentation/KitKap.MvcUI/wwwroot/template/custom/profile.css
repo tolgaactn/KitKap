@@ -504,3 +504,69 @@
         margin-bottom: 1rem;
     }
 }
+/* ========================================
+   PAGE HEADER - BREADCRUMB İYİLEŞTİRMELERİ
+   ======================================== */
+/* ========================================
+   KURUMSAL BREADCRUMB & HEADER
+   ======================================== */
+
+/* Breadcrumb */
+.breadcrumb {
+    background: transparent;
+    padding: 0;
+    margin-bottom: 0;
+    font-size: 0.875rem;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "›";
+    color: #999;
+    padding: 0 0.5rem;
+}
+
+.breadcrumb-item a {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+    .breadcrumb-item a:hover {
+        color: #667eea;
+    }
+
+.breadcrumb-item.active {
+    color: #333;
+}
+
+/* Page Header */
+.page-header {
+    margin-bottom: 2rem;
+}
+
+    .page-header h1 {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #333;
+        line-height: 1.2;
+    }
+
+/* Border Bottom Variants */
+.border-bottom {
+    border-bottom: 1px solid #e5e7eb !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .page-header {
+        margin-bottom: 1.5rem;
+    }
+
+        .page-header h1 {
+            font-size: 1.5rem;
+        }
+
+    .breadcrumb {
+        font-size: 0.8rem;
+    }
+}

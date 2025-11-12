@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="header-left">
                 <button class="mobile-menu-toggler pl-0" type="button">
-                    <i class="fas fa-bars"></i>
+                    <i class="icon-menu"></i>
                 </button>
                 <a asp-controller="Home" asp-action="Index" class="logo">
                     <img src="~/template/assets/images/logo-black.png" alt="KitKap Logo" width="111" height="44">
@@ -39,32 +39,36 @@
                 <!-- Arama -->
                 <div class="header-search header-search-inline header-search-category w-lg-max text-right d-none d-sm-flex">
                     <a href="#" class="search-toggle" role="button"><i class="icon-magnifier"></i></a>
-                    <form action="#" method="get">
+                    <form asp-controller="ProductList" asp-action="Search" method="get">
                         <div class="header-search-wrapper">
                             <input type="search" class="form-control" name="q" id="q"
                                    placeholder="Kitap, yazar, yayınevi ara..." required>
-                            <button class="btn icon-magnifier" title="search" type="submit"></button>
+                            <button class="btn icon-magnifier" title="Ara" type="submit"></button>
                         </div>
                     </form>
                 </div>
 
                 <span class="separator d-none d-lg-inline"></span>
 
-                <!-- ✅ PROFİL DROPDOWN (Kurumsal Standart) -->
+                <!-- ✅ PROFİL DROPDOWN -->
                 <div class="dropdown header-dropdown" id="profileDropdown">
-                    <a href="#" class="dropdown-toggle" id="profileToggle" role="button" aria-haspopup="true" aria-expanded="false">
+                    <a href="#"
+                       class="dropdown-toggle"
+                       id="profileToggle"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-haspopup="true"
+                       aria-expanded="false">
                         <div class="header-user">
                             <i class="icon-user-2"></i>
                             <div class="header-userinfo">
                                 @if (Model.IsSignedIn)
                                 {
-                                    <!-- ✅ GİRİŞ YAPILMIŞ -->
                                     <span class="d-inline-block font2 line-height-1">Merhaba,</span>
                                     <h4 class="mb-0 user-name">@Model.UserFirstName</h4>
                                 }
                                 else
                                 {
-                                    <!-- ✅ GİRİŞ YAPILMAMIŞ -->
                                     <span class="d-inline-block font2 line-height-1">Giriş Yap</span>
                                     <h4 class="mb-0">Hesabım</h4>
                                 }
@@ -75,36 +79,34 @@
                     <div class="dropdown-menu dropdown-menu-right" id="profileMenu">
                         @if (Model.IsSignedIn)
                         {
-                            <!-- ✅ GİRİŞ YAPMIŞ KULLANICI MENÜSÜ -->
                             <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
-                                <i class="icon-user-2"></i> Hesabım
+                                <i class="fas fa-user"></i> Hesabım
                             </a>
-                            <a class="dropdown-item" asp-controller="Order" asp-action="MyOrders">
-                                <i class="icon-shopping-bag"></i> Siparişlerim
+                            <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-fragment="orders-tab">
+                                <i class="fas fa-shopping-bag"></i> Siparişlerim
                             </a>
-                            <a class="dropdown-item" asp-controller="Account" asp-action="Addresses">
-                                <i class="icon-map-marker"></i> Adreslerim
+                            <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-fragment="addresses-tab">
+                                <i class="fas fa-map-marker-alt"></i> Adreslerim
                             </a>
                             <div class="dropdown-divider"></div>
                             <form asp-controller="Account" asp-action="Logout" method="post" class="dropdown-form">
                                 @Html.AntiForgeryToken()
                                 <button type="submit" class="dropdown-item text-danger">
-                                    <i class="icon-off"></i> Çıkış Yap
+                                    <i class="fas fa-sign-out-alt"></i> Çıkış Yap
                                 </button>
                             </form>
                         }
                         else
                         {
-                            <!-- ✅ GİRİŞ YAPMAMIŞ KULLANICI MENÜSÜ -->
                             <a class="dropdown-item" asp-controller="Account" asp-action="Login">
-                                <i class="icon-sign-in"></i> Giriş Yap
+                                <i class="fas fa-sign-in-alt"></i> Giriş Yap
                             </a>
                             <a class="dropdown-item" asp-controller="Account" asp-action="Register">
-                                <i class="icon-user-add"></i> Üye Ol
+                                <i class="fas fa-user-plus"></i> Üye Ol
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" asp-controller="Order" asp-action="TrackOrder">
-                                <i class="icon-magnifier"></i> Sipariş Takip
+                                <i class="fas fa-search"></i> Sipariş Takip
                             </a>
                         }
                     </div>
@@ -117,7 +119,13 @@
 
                 <!-- ✅ SEPET DROPDOWN -->
                 <div id="shoppingCart" class="dropdown cart-dropdown">
-                    <a href="#" title="Sepet" class="dropdown-toggle cart-toggle" role="button" aria-label="Sepet">
+                    <a href="#"
+                       title="Sepet"
+                       class="dropdown-toggle cart-toggle"
+                       role="button"
+                       aria-label="Sepet"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
                         <i class="minicart-icon"></i>
                         @if (Model.Cart.TotalItemCount > 0)
                         {
