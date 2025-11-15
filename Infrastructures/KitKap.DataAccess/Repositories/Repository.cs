@@ -125,6 +125,11 @@ namespace KitKap.DataAccess.Repositories
             return await query.ToListAsync();
         }
 
+        public IQueryable<T> GetQueryable()
+        {
+            return _dbSet.AsQueryable();
+        }
+
         public async Task<T?> GetWithIncludeAsync(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
         {
             IQueryable<T> query = _dbSet;

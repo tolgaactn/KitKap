@@ -1,8 +1,43 @@
-﻿<nav aria-label="breadcrumb" class="breadcrumb-nav">
-    <div class="container">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
-            <li class="breadcrumb-item active" aria-current="page"><a asp-controller="ProductList" asp-action="Index">Kitaplar</a></li>
-        </ol>
+﻿@model KitKap.MvcUI.ViewModels.ProductListViewModels.ProductListPageViewModel
+
+<div class="page-header bg-white border-bottom mb-4">
+    <div class="container py-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-transparent p-0 mb-2">
+                <li class="breadcrumb-item">
+                    <a asp-controller="Home" asp-action="Index">Ana Sayfa</a>
+                </li>
+                @if (Model.Filters.CategoryId.HasValue)
+                {
+                    var selectedCategory = Model.Categories.FirstOrDefault(c => c.Id == Model.Filters.CategoryId.Value);
+                    if (selectedCategory != null)
+                    {
+                        <li class="breadcrumb-item">
+                            <a asp-controller="ProductList" asp-action="Index">Kitaplar</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">@selectedCategory.Name</li>
+                    }
+                    else
+                    {
+                        <li class="breadcrumb-item active" aria-current="page">Kitaplar</li>
+                    }
+                }
+                else
+                {
+                    <li class="breadcrumb-item active" aria-current="page">Kitaplar</li>
+                }
+            </ol>
+        </nav>
+        <h1 class="mb-0" style="font-size: 1.75rem; font-weight: 600; color: #333;">
+            @if (Model.Filters.CategoryId.HasValue)
+            {
+                var selectedCategory = Model.Categories.FirstOrDefault(c => c.Id == Model.Filters.CategoryId.Value);
+                @(selectedCategory?.Name ?? "Kitaplar")
+            }
+            else
+            {
+                <text>Kitaplar</text>
+            }
+        </h1>
     </div>
-</nav>
+</div>

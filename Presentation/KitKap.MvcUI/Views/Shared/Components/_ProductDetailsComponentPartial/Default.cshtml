@@ -1,16 +1,15 @@
 ﻿@model ProductDetailViewModel
 
- 
-<div class="col-md-6 product-single-details font2">
-<form asp-controller="ShoppingCart" asp-action="AddStaySameAction" method="get" id="add-to-cart-form">
-<input type="hidden" name="id" value="@Model.Id" /> 
+<div class="col-md-7 product-single-details font2">
     <h1 class="product-title">@Model.Name</h1>
+
+    <!-- Ürün Navigasyonu (Önceki/Sonraki) -->
     <div class="product-nav">
-        @if(Model.IsLastProduct)
+        @if (Model.IsLastProduct)
         {
             <style>
                 .custom-before-content:before {
-                content: "" !important;
+                    content: "" !important;
                 }
             </style>
             <div class="product-next">
@@ -19,8 +18,8 @@
                     <span class="product-popup">
                         <span class="box-content">
                             <img alt="product" width="150" height="150"
-                            src="@Model.PreviousProduct.ThumbnailUrl"
-                            style="padding-top: 0px;">
+                                 src="@Model.PreviousProduct.ThumbnailUrl"
+                                 style="padding-top: 0px;">
                             <span>@Model.PreviousProduct.Name</span>
                         </span>
                     </span>
@@ -35,8 +34,8 @@
                     <span class="product-popup">
                         <span class="box-content">
                             <img alt="product" width="150" height="150"
-                            src="@Model.PreviousProduct.ThumbnailUrl"
-                            style="padding-top: 0px;">
+                                 src="@Model.PreviousProduct.ThumbnailUrl"
+                                 style="padding-top: 0px;">
                             <span>@Model.PreviousProduct.Name</span>
                         </span>
                     </span>
@@ -51,8 +50,8 @@
                     <span class="product-popup">
                         <span class="box-content">
                             <img alt="product" width="150" height="150"
-                            src="@Model.NextProduct.ThumbnailUrl"
-                            style="padding-top: 0px;">
+                                 src="@Model.NextProduct.ThumbnailUrl"
+                                 style="padding-top: 0px;">
                             <span>@Model.NextProduct.Name</span>
                         </span>
                     </span>
@@ -61,85 +60,171 @@
         }
     </div>
 
+    <!-- Değerlendirmeler -->
     <div class="ratings-container">
         <div class="product-ratings">
-            <span class="ratings" style="width:80%"></span><!-- End .ratings -->
+            <span class="ratings" style="width:80%"></span>
             <span class="tooltiptext tooltip-top"></span>
-        </div><!-- End .product-ratings -->
-
-        <a href="#" class="rating-link">( 6 Reviews )</a>
-    </div><!-- End .ratings-container -->
+        </div>
+        <a href="#" class="rating-link">( 6 Değerlendirme )</a>
+    </div>
 
     <hr class="short-divider">
 
+    <!-- Fiyat -->
     <div class="price-box">
-        <span class="product-price">@Model.Price &#x20BA;</span>
-    </div><!-- End .price-box -->
+        <span class="product-price">@Model.Price.ToString("N2") ₺</span>
+    </div>
 
+    <!-- Açıklama -->
     <div class="product-desc">
-        <p>
-            @Model.Description
-        </p>
-    </div><!-- End .product-desc -->
+        <p>@Model.Description</p>
+    </div>
 
+    <!-- Ürün Bilgileri -->
     <ul class="single-info-list">
-        <!---->
+        @if (!string.IsNullOrEmpty(Model.Author))
+        {
+            <li>
+                Yazar: <strong>@Model.Author</strong>
+            </li>
+        }
         <li>
-            Stok:
-            <strong>
-                <a href="#" class="product-category">@Model.Stock</a>
-            </strong>
+            Kategori: <strong><a href="#" class="product-category">@Model.CategoryName</a></strong>
         </li>
-
-        <li>
-            Kategori:
-            <strong>
-                <a href="#" class="product-category">@Model.CategoryName</a>
-            </strong>
-        </li>
-
-        <li>
-            ISBN:
-            <strong>@Model.ISBN</strong>
-        </li>
+        @if (Model.PublicationDate.HasValue)
+        {
+            <li>
+                Yayın Tarihi: <strong>@Model.PublicationDate.Value.ToString("dd/MM/yyyy")</strong>
+            </li>
+        }
+        @if (!string.IsNullOrEmpty(Model.Language))
+        {
+            <li>
+                Dil: <strong>@Model.Language</strong>
+            </li>
+        }
+        @if (!string.IsNullOrEmpty(Model.Condition))
+        {
+            <li>
+                Durum: <strong>@Model.Condition</strong>
+            </li>
+        }
     </ul>
 
+    <!-- Sepete Ekle Aksiyonu (Quantity Kaldırıldı) -->
     <div class="product-action">
-        <div class="product-single-qty">
-            <input class="horizontal-quantity form-control" type="number" name="Adet" value="1" min="1" max="@Model.Stock">
-        </div><!-- End .product-single-qty -->
+        <button type="button"
+                class="btn btn-dark add-cart icon-shopping-cart mr-2"
+                id="addToCartBtn"
+                onclick="addToCartDetail(@Model.Id)">
+            Sepete Ekle
+        </button>
 
-        <a href="#" onclick="document.getElementById('add-to-cart-form').submit(); return false;" class="btn btn-dark add-cart icon-shopping-cart mr-2"
-           title="Add to Cart">Sepete Ekle</a>
-
-            <a asp-controller="ShoppingCart" asp-action="Index" class="btn btn-gray view-cart @(TempData["AddedToCart"] != null ? "" : "d-none")">Sepeti Görüntüle</a>
-    </div><!-- End .product-action -->
+        <a asp-controller="ShoppingCart"
+           asp-action="Index"
+           class="btn btn-gray view-cart d-none"
+           id="viewCartBtn">
+            Sepeti Görüntüle
+        </a>
+    </div>
 
     <hr class="divider mb-0 mt-0">
 
+    <!-- Paylaşım -->
     <div class="product-single-share mb-2">
         <label class="sr-only">Paylaş:</label>
-
         <div class="social-icons mr-2">
-            <a href="#" class="social-icon social-facebook icon-facebook"
-               target="_blank" title="Facebook"></a>
-            <a href="#" class="social-icon social-twitter icon-twitter"
-               target="_blank" title="Twitter"></a>
-            <a href="#" class="social-icon social-linkedin fab fa-linkedin-in"
-               target="_blank" title="Linkedin"></a>
-            <a href="#" class="social-icon social-gplus fab fa-google-plus-g"
-               target="_blank" title="Google+"></a>
-            <a href="#" class="social-icon social-mail icon-mail-alt"
-               target="_blank" title="Mail"></a>
-        </div><!-- End .social-icons -->
+            <a href="#" class="social-icon social-facebook icon-facebook" target="_blank" title="Facebook"></a>
+            <a href="#" class="social-icon social-twitter icon-twitter" target="_blank" title="Twitter"></a>
+            <a href="#" class="social-icon social-linkedin fab fa-linkedin-in" target="_blank" title="Linkedin"></a>
+            <a href="#" class="social-icon social-mail icon-mail-alt" target="_blank" title="Mail"></a>
+        </div>
 
-        <a href="wishlist.html" class="btn-icon-wish add-wishlist"
-           title="Add to Wishlist">
-            <i class="icon-wishlist-2"></i><span>
-                İstek Listene Ekle
-            </span>
+        <a href="#" class="btn-icon-wish add-wishlist" title="İstek Listesine Ekle">
+            <i class="icon-wishlist-2"></i>
+            <span>İstek Listene Ekle</span>
         </a>
-        </div><!-- End .product single-share -->
-    </form>
+    </div>
 </div>
 
+<script>
+    function addToCartDetail(productId) {
+        var button = document.getElementById('addToCartBtn');
+        var viewCartBtn = document.getElementById('viewCartBtn');
+        var originalText = button.innerHTML;
+
+        // Loading state
+        button.disabled = true;
+        button.innerHTML = '<i class="icon-spinner"></i> Ekleniyor...';
+
+        $.ajax({
+            url: '/ShoppingCart/AddToCart',
+            type: 'POST',
+            data: {
+                productId: productId,
+                quantity: 1  // ✅ Her zaman 1
+            },
+            headers: {
+                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+            },
+            success: function(response) {
+                if(response.success) {
+                    // Başarılı animasyon
+                    button.innerHTML = '<i class="icon-check"></i> Eklendi!';
+
+                    // Sepeti Görüntüle butonunu göster
+                    viewCartBtn.classList.remove('d-none');
+
+                    // Toast göster
+                    if (typeof showToast === 'function') {
+                        showToast('success', 'Ürün sepete eklendi!');
+                    }
+
+                    // Sepet badge güncelle
+                    if (response.totalItemCount !== undefined) {
+                        $('.cart-count').text(response.totalItemCount);
+                    }
+
+                    // 2 saniye sonra orijinal haline dön
+                    setTimeout(function() {
+                        button.innerHTML = originalText;
+                        button.disabled = false;
+                    }, 2000);
+                } else {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+
+                    if (typeof showToast === 'function') {
+                        showToast('error', response.message || 'Bir hata oluştu');
+                    } else {
+                        alert(response.message || 'Bir hata oluştu');
+                    }
+                }
+            },
+            error: function(xhr) {
+                button.innerHTML = originalText;
+                button.disabled = false;
+
+                console.error('Sepete ekleme hatası:', xhr);
+                if (typeof showToast === 'function') {
+                    showToast('error', 'Ürün sepete eklenirken bir hata oluştu');
+                } else {
+                    alert('Ürün sepete eklenirken bir hata oluştu');
+                }
+            }
+        });
+    }
+</script>
+
+<style>
+    @@keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .icon-spinner {
+        animation: spin 1s linear infinite;
+    }
+</style>

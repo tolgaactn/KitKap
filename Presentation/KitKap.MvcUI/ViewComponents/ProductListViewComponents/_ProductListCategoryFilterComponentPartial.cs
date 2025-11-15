@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using KitKap.MvcUI.ViewModels.ProductListViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace KitKap.MvcUI.ViewComponents.ProductListViewComponents
 {
     public class _ProductListCategoryFilterComponentPartial : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(ProductListPageViewModel model)
         {
             return View();
         }

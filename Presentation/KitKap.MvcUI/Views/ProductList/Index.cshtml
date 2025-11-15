@@ -1,40 +1,44 @@
-﻿
+﻿@model KitKap.MvcUI.ViewModels.ProductListViewModels.ProductListPageViewModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Kitaplar";
     Layout = "~/Views/Shared/_UILayout.cshtml";
 }
 
 <main class="main">
+    @* Banner *@
     @await Component.InvokeAsync("_ProductListBannerComponentPartial")
 
-    @await Component.InvokeAsync("_ProductListBreadcrumbComponentPartial")
+    @* Breadcrumb *@
+    @await Component.InvokeAsync("_ProductListBreadcrumbComponentPartial", Model)
 
     <div class="bg-white">
         <div class="container">
+            @* Aktif Filtreler *@
+            @await Component.InvokeAsync("_ProductListActiveFiltersComponentPartial", Model)
+
             <div class="row main-content">
                 <div class="col-lg-9">
-                    @await Component.InvokeAsync("_ProductListStickyHeaderComponentPartial")<!-- End sticky.header -->
+                    @* Sıralama Bar *@
+                    @await Component.InvokeAsync("_ProductListStickyHeaderComponentPartial", Model)
 
-                    @await Component.InvokeAsync("_ProductListProductsComponentPartial")<!-- End .row -->
-                    @await Component.InvokeAsync("_ProductListPaginationComponentPartial")<!-- toolbox-pagination.row -->
-                </div><!-- End .col-lg-9 -->
+                    @* Ürün Listesi *@
+                    @await Component.InvokeAsync("_ProductListProductsComponentPartial", Model)
+
+                    @* Sayfalama *@
+                    @await Component.InvokeAsync("_ProductListPaginationComponentPartial", Model)
+                </div>
 
                 <div class="sidebar-overlay"></div>
                 <aside class="sidebar-shop col-lg-3 order-lg-first mobile-sidebar">
                     <div class="sidebar-wrapper">
+                        @* Kategori Filtresi *@
+                        @await Component.InvokeAsync("_ProductListCategoryFilterComponentPartial", Model)
 
-                        @await Component.InvokeAsync("_ProductListCategoryFilterComponentPartial")<!-- End category.widget -->
-
-                        @await Component.InvokeAsync("_ProductListPriceFilterComponentPartial")<!-- End price.widget -->
-
-                        @await Component.InvokeAsync("_ProductListDateFilterComponentPartial")<!-- End date.widget -->
-                        @await Component.InvokeAsync("_ProductListSizeFilterComponentPartial")<!-- End size.widget -->
-
-                        @await Component.InvokeAsync("_ProductListFeaturedComponentPartial")<!-- End .widget -->
-                    </div><!-- End .sidebar-wrapper -->
-                </aside><!-- End .col-lg-3 -->
-            </div><!-- End .row -->
-        </div><!-- End .container -->
+                        @* Fiyat, Durum ve Stok Filtreleri *@
+                        @await Component.InvokeAsync("_ProductListPriceFilterComponentPartial", Model)
+                    </div>
+                </aside>
+            </div>
+        </div>
     </div>
 </main>
-

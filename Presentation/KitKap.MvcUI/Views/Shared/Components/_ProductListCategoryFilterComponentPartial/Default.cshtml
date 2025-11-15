@@ -1,36 +1,53 @@
-﻿<div class="widget">
+﻿@model KitKap.MvcUI.ViewModels.ProductListViewModels.ProductListPageViewModel
+
+<div class="widget widget-categories">
     <h3 class="widget-title">
-        <a data-toggle="collapse" href="#widget-body-1" role="button"
-           aria-expanded="true" aria-controls="widget-body-1">Kategoriler</a>
+        <a href="#" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="widget-body-1">
+            Kategoriler
+        </a>
     </h3>
 
     <div class="collapse show" id="widget-body-1">
         <div class="widget-body">
             <ul class="cat-list">
+                <!-- Tümü -->
                 <li>
-                    <a href="#">
-                        Resim &amp; Sanat<span class="products-count">(2)</span>
+                    <a asp-controller="ProductList"
+                       asp-action="Index"
+                       asp-route-CategoryId=""
+                       asp-route-MinPrice="@Model.Filters.MinPrice"
+                       asp-route-MaxPrice="@Model.Filters.MaxPrice"
+                       asp-route-Condition="@Model.Filters.Condition"
+                       asp-route-InStockOnly="@Model.Filters.InStockOnly"
+                       asp-route-SortBy="@Model.Filters.SortBy"
+                       asp-route-SearchQuery="@Model.Filters.SearchQuery"
+                       class="@(!Model.Filters.CategoryId.HasValue ? "active" : "")">
+                        Tüm Kategoriler
                     </a>
                 </li>
-                <li>
-                    <a href="#">
-                        Business &amp; Investing<span class="products-count">(3)</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        Literature &amp; Fiction<span class="products-count">(4)</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        Mystery Suspense<span class="products-count">(4)</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">Scifi Fantasy<span class="products-count">(3)</span></a>
-                </li>
+
+                @foreach (var category in Model.Categories)
+                {
+                    <li>
+                        <a asp-controller="ProductList"
+                           asp-action="Index"
+                           asp-route-CategoryId="@category.Id"
+                           asp-route-MinPrice="@Model.Filters.MinPrice"
+                           asp-route-MaxPrice="@Model.Filters.MaxPrice"
+                           asp-route-Condition="@Model.Filters.Condition"
+                           asp-route-InStockOnly="@Model.Filters.InStockOnly"
+                           asp-route-SortBy="@Model.Filters.SortBy"
+                           asp-route-SearchQuery="@Model.Filters.SearchQuery"
+                           class="@(Model.Filters.CategoryId == category.Id ? "active" : "")">
+                            @category.Name
+                            @if (category.ProductCount > 0)
+                            {
+                                <span class="products-count">(@category.ProductCount)</span>
+                            }
+                        </a>
+                    </li>
+                }
             </ul>
-        </div><!-- End .widget-body -->
-    </div><!-- End .collapse -->
+        </div>
+    </div>
 </div>

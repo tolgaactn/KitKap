@@ -24,5 +24,6 @@ namespace Kitkap.Entity.Repositories
         Task<T?> GetWithIncludeAsync(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
         Task<T?> GetWithIncludeForUpdateAsync(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
         Task<List<T>> GetListWithIncludeAsync(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool asNoTracking = true);
+        IQueryable<T> GetQueryable();
     }
 }

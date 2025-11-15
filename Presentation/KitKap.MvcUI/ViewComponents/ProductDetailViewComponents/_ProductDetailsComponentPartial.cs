@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using KitKap.MvcUI.ViewModels.ProductDetailViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace KitKap.MvcUI.ViewComponents.ProductDetailViewComponents
 {
     public class _ProductDetailsComponentPartial : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(ProductDetailViewModel model)
         {
             return View();
         }
