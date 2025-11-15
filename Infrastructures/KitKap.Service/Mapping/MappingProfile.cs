@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Kitkap.Entity.Entities;
 using Kitkap.Service.Dtos.AddressDtos;
+using Kitkap.Service.Dtos.CategoryDtos;
 using Kitkap.Service.Dtos.UserDtos;
 using KitKap.DataAccess.Identity;
 using KitKap.Service.Dtos.AboutDtos;

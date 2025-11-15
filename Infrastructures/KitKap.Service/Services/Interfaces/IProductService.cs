@@ -1,4 +1,5 @@
 ﻿using Kitkap.Service.Dtos.AddressDtos;
+using KitKap.Service.Dtos.ProductDtos;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,5 +18,10 @@ namespace Kitkap.Service.Services
        Task UpdateAsync(UpdateProductDto model);
        Task<IEnumerable<GetByOwnerIdDto>> GetByOwnerIdProductsAsync(string id);
        Task UpdateDynamic<TViewModel>(TViewModel model) where TViewModel : UpdateProductDto;
+
+        Task<ProductFilterResultDto> GetFilteredProductsAsync(ProductFilterDto filters);
+        Task<decimal> GetMinPriceAsync();
+        Task<decimal> GetMaxPriceAsync();
+        Task<(decimal Min, decimal Max)> GetPriceRangeAsync();
     }
 }

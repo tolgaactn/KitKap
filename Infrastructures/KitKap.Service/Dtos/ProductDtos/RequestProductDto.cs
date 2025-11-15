@@ -24,6 +24,10 @@ namespace Kitkap.Service.Dtos.AddressDtos
         public DateTime? DeletedAt { get; set; }
 
         public ProductStatus Status { get; set; }
+        public ProductCondition Condition { get; set; } = ProductCondition.New;
+        public ProductApprovalStatus ApprovalStatus { get; set; } = ProductApprovalStatus.Approved;
+
+
         public Category Category { get; set; }
         public ICollection<ProductImage> ProductImages { get; set; }
 

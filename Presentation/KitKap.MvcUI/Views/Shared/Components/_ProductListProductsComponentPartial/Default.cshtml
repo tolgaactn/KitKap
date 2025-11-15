@@ -1,79 +1,88 @@
-﻿@model List<ProductListViewModel>
+﻿@model KitKap.MvcUI.ViewModels.ProductListViewModels.ProductListPageViewModel
 
-<div class="row">
-    @foreach (var item in Model)
-    {
-        <div class="col-6 col-sm-4 col-lg-3">
-            <div class="product-default inner-quickview inner-icon">
-                <figure>
-                    <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@item.Id">
-                        <img src="@item.ImageUrl" width="217" height="217" alt="@item.Name" title="@item.Name">
-                    </a>
-
-                    <div class="label-group">
-                        <div class="product-label label-hot">Popüler</div>
-                    </div>
-
-                    <!-- ✅ Resim üzerindeki sepet butonu -->
-                    <div class="btn-icon-group">
-                        <button type="button"
-                                class="btn-icon btn-add-cart product-type-simple"
-                                onclick="addToCart(@item.Id, this)"
-                                title="Sepete Ekle">
-                            <i class="icon-shopping-cart"></i>
-                        </button>
-                    </div>
-
-                    <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@item.Id"
-                       class="btn-quickview" title="Hızlı Gözat">
-                        Hızlı Gözat
-                    </a>
-                </figure>
-
-                <div class="product-details">
-                    <div class="category-wrap">
-                        <div class="category-list">
-                            <a asp-controller="ProductList" asp-action="Index">
-                                @item.CategoryName
+@if (Model.Products.Any())
+{
+    <div class="row">
+        @foreach (var item in Model.Products)
+        {
+            <div class="col-6 col-sm-4 col-lg-3">
+                <div class="product-default inner-quickview inner-icon">
+                    <figure>
+                        <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@item.Id">
+                            <img src="@item.ImageUrl" width="217" height="217" alt="@item.Name" title="@item.Name">
+                        </a>
+                        <div class="label-group">
+                            <div class="product-label label-hot">Popüler</div>
+                        </div>
+                        <!-- ✅ Resim üzerindeki sepet butonu -->
+                        <div class="btn-icon-group">
+                            <button type="button"
+                                    class="btn-icon btn-add-cart product-type-simple"
+                                    onclick="addToCart(@item.Id, this)"
+                                    title="Sepete Ekle">
+                                <i class="icon-shopping-cart"></i>
+                            </button>
+                        </div>
+                        <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@item.Id"
+                           class="btn-quickview" title="Hızlı Gözat">
+                            Hızlı Gözat
+                        </a>
+                    </figure>
+                    <div class="product-details">
+                        <div class="category-wrap">
+                            <div class="category-list">
+                                <a asp-controller="ProductList" asp-action="Index">
+                                    @item.CategoryName
+                                </a>
+                            </div>
+                        </div>
+                        <h3 class="product-title">
+                            <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@item.Id">
+                                @item.Name
+                            </a>
+                        </h3>
+                        <div class="ratings-container">
+                            <div class="product-ratings">
+                                <span class="ratings" style="width:80%"></span>
+                                <span class="tooltiptext tooltip-top"></span>
+                            </div>
+                        </div>
+                        <div class="price-box">
+                            <span class="product-price">@item.Price.ToString("N2") ₺</span>
+                        </div>
+                        <!-- ✅ Alt kısımdaki butonlar -->
+                        <div class="product-action">
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    onclick="addToCart(@item.Id, this)">
+                                <i class="icon-shopping-cart"></i>
+                                <span>Sepete Ekle</span>
+                            </button>
+                            <a asp-controller="ProductList"
+                               asp-action="ProductDetail"
+                               asp-route-id="@item.Id"
+                               class="btn btn-outline-primary">
+                                <span>Detaya Git</span>
                             </a>
                         </div>
                     </div>
-
-                    <h3 class="product-title">
-                        <a asp-controller="ProductList" asp-action="ProductDetail" asp-route-id="@item.Id">
-                            @item.Name
-                        </a>
-                    </h3>
-
-                    <div class="ratings-container">
-                        <div class="product-ratings">
-                            <span class="ratings" style="width:80%"></span>
-                            <span class="tooltiptext tooltip-top"></span>
-                        </div>
-                    </div>
-
-                    <div class="price-box">
-                        <span class="product-price">@item.Price.ToString("N2") ₺</span>
-                    </div>
-
-                    <!-- ✅ Alt kısımdaki butonlar -->
-                    <div class="product-action">
-                        <button type="button"
-                                class="btn btn-primary"
-                                onclick="addToCart(@item.Id, this)">
-                            <i class="icon-shopping-cart"></i>
-                            <span>Sepete Ekle</span>
-                        </button>
-
-                        <a asp-controller="ProductList"
-                           asp-action="ProductDetail"
-                           asp-route-id="@item.Id"
-                           class="btn btn-outline-primary">
-                            <span>Detaya Git</span>
-                        </a>
-                    </div>
                 </div>
             </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-center py-5">
+        <div style="font-size: 4rem; color: #ddd; margin-bottom: 20px;">
+            <i class="icon-bag"></i>
         </div>
-    }
-</div>
+        <h3 style="color: #666; margin-bottom: 10px;">Ürün Bulunamadı</h3>
+        <p style="color: #999; margin-bottom: 20px;">
+            Aradığınız kriterlerde ürün bulunamadı. Filtreleri değiştirmeyi deneyin.
+        </p>
+        <a asp-controller="ProductList" asp-action="Index" class="btn btn-primary">
+            <i class="icon-reload"></i> Tüm Ürünleri Göster
+        </a>
+    </div>
+}

@@ -3,6 +3,7 @@ using Kitkap.Entity.Entities;
 using Kitkap.Entity.Services;
 using Kitkap.Entity.UnitOfWorks;
 using Kitkap.Service.Dtos.AddressDtos;
+using Kitkap.Service.Dtos.CategoryDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

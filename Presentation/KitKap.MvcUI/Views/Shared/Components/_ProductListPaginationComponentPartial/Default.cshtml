@@ -1,28 +1,117 @@
-﻿<nav class="toolbox toolbox-pagination">
-    <div class="toolbox-item toolbox-show">
-        <label class="mt-0">Show:</label>
+﻿@model KitKap.MvcUI.ViewModels.ProductListViewModels.ProductListPageViewModel
 
-        <div class="select-custom">
-            <select name="count" class="form-control">
-                <option value="13">13</option>
-                <option value="24">24</option>
-                <option value="36">36</option>
-            </select>
-        </div><!-- End .select-custom -->
-    </div><!-- End .toolbox-item -->
+@if (Model.TotalPages > 1)
+{
+    <nav class="toolbox toolbox-pagination">
+        <div class="toolbox-item toolbox-show">
+            <label>Gösterilen:</label>
+            <div class="select-custom">
+                <span class="text-muted">
+                    Sayfa @Model.CurrentPage / @Model.TotalPages
+                    (@Model.TotalProducts ürün)
+                </span>
+            </div>
+        </div>
 
-    <ul class="pagination toolbox-item">
-        <li class="page-item disabled">
-            <a class="page-link page-link-btn" href="#"><i class="icon-angle-left"></i></a>
-        </li>
-        <li class="page-item active">
-            <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><span class="page-link">...</span></li>
-        <li class="page-item">
-            <a class="page-link page-link-btn" href="#"><i class="icon-angle-right"></i></a>
-        </li>
-    </ul>
-</nav>
+        <ul class="pagination toolbox-item">
+            <!-- İlk Sayfa -->
+            @if (Model.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link page-link-btn"
+                       asp-controller="ProductList"
+                       asp-action="Index"
+                       asp-route-CategoryId="@Model.Filters.CategoryId"
+                       asp-route-MinPrice="@Model.Filters.MinPrice"
+                       asp-route-MaxPrice="@Model.Filters.MaxPrice"
+                       asp-route-Condition="@Model.Filters.Condition"
+                       asp-route-InStockOnly="@Model.Filters.InStockOnly"
+                       asp-route-SortBy="@Model.Filters.SortBy"
+                       asp-route-SearchQuery="@Model.Filters.SearchQuery"
+                       asp-route-PageNumber="1">
+                        <i class="icon-angle-double-left"></i>
+                    </a>
+                </li>
+
+                <!-- Önceki Sayfa -->
+                <li class="page-item">
+                    <a class="page-link page-link-btn"
+                       asp-controller="ProductList"
+                       asp-action="Index"
+                       asp-route-CategoryId="@Model.Filters.CategoryId"
+                       asp-route-MinPrice="@Model.Filters.MinPrice"
+                       asp-route-MaxPrice="@Model.Filters.MaxPrice"
+                       asp-route-Condition="@Model.Filters.Condition"
+                       asp-route-InStockOnly="@Model.Filters.InStockOnly"
+                       asp-route-SortBy="@Model.Filters.SortBy"
+                       asp-route-SearchQuery="@Model.Filters.SearchQuery"
+                       asp-route-PageNumber="@(Model.CurrentPage - 1)">
+                        <i class="icon-angle-left"></i>
+                    </a>
+                </li>
+            }
+
+            @{
+                var startPage = Math.Max(1, Model.CurrentPage - 2);
+                var endPage = Math.Min(Model.TotalPages, Model.CurrentPage + 2);
+            }
+
+            <!-- Sayfa Numaraları -->
+            @for (var i = startPage; i <= endPage; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                    <a class="page-link"
+                       asp-controller="ProductList"
+                       asp-action="Index"
+                       asp-route-CategoryId="@Model.Filters.CategoryId"
+                       asp-route-MinPrice="@Model.Filters.MinPrice"
+                       asp-route-MaxPrice="@Model.Filters.MaxPrice"
+                       asp-route-Condition="@Model.Filters.Condition"
+                       asp-route-InStockOnly="@Model.Filters.InStockOnly"
+                       asp-route-SortBy="@Model.Filters.SortBy"
+                       asp-route-SearchQuery="@Model.Filters.SearchQuery"
+                       asp-route-PageNumber="@i">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <!-- Sonraki Sayfa -->
+            @if (Model.CurrentPage < Model.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link page-link-btn"
+                       asp-controller="ProductList"
+                       asp-action="Index"
+                       asp-route-CategoryId="@Model.Filters.CategoryId"
+                       asp-route-MinPrice="@Model.Filters.MinPrice"
+                       asp-route-MaxPrice="@Model.Filters.MaxPrice"
+                       asp-route-Condition="@Model.Filters.Condition"
+                       asp-route-InStockOnly="@Model.Filters.InStockOnly"
+                       asp-route-SortBy="@Model.Filters.SortBy"
+                       asp-route-SearchQuery="@Model.Filters.SearchQuery"
+                       asp-route-PageNumber="@(Model.CurrentPage + 1)">
+                        <i class="icon-angle-right"></i>
+                    </a>
+                </li>
+
+                <!-- Son Sayfa -->
+                <li class="page-item">
+                    <a class="page-link page-link-btn"
+                       asp-controller="ProductList"
+                       asp-action="Index"
+                       asp-route-CategoryId="@Model.Filters.CategoryId"
+                       asp-route-MinPrice="@Model.Filters.MinPrice"
+                       asp-route-MaxPrice="@Model.Filters.MaxPrice"
+                       asp-route-Condition="@Model.Filters.Condition"
+                       asp-route-InStockOnly="@Model.Filters.InStockOnly"
+                       asp-route-SortBy="@Model.Filters.SortBy"
+                       asp-route-SearchQuery="@Model.Filters.SearchQuery"
+                       asp-route-PageNumber="@Model.TotalPages">
+                        <i class="icon-angle-double-right"></i>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

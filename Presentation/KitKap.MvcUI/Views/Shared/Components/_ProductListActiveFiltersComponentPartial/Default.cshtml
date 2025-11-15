@@ -1,0 +1,30 @@
+﻿@model KitKap.MvcUI.ViewModels.ProductListViewModels.ProductListPageViewModel
+
+@if (Model.ActiveFilters.Any())
+{
+    <div class="toolbox toolbox-top mb-3">
+        <div class="toolbox-left">
+            <div class="toolbox-item">
+                <strong>Aktif Filtreler:</strong>
+            </div>
+        </div>
+        <div class="toolbox-right">
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+                @foreach (var filter in Model.ActiveFilters)
+                {
+                    <span class="badge badge-primary badge-pill d-inline-flex align-items-center" style="font-size: 0.875rem; padding: 0.5rem 0.75rem;">
+                        <strong>@filter.Label:</strong>&nbsp;@filter.Value
+                        <a href="@filter.RemoveUrl" class="text-white ms-2" style="text-decoration: none;">
+                            <i class="icon-close" style="font-size: 0.75rem;"></i>
+                        </a>
+                    </span>
+                }
+                <a asp-controller="ProductList"
+                   asp-action="Index"
+                   class="btn btn-sm btn-outline-secondary">
+                    <i class="icon-close"></i> Tümünü Temizle
+                </a>
+            </div>
+        </div>
+    </div>
+}
