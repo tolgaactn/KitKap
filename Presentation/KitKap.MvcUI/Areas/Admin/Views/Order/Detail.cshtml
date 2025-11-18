@@ -1,0 +1,278 @@
+﻿@using KitKap.MvcUI.ViewModels.OrderViewModels
+@model OrderDetailViewModel
+@{
+    ViewData["Title"] = "Sipariş Detayı";
+}
+
+<!-- main-content-wrap -->
+<div class="main-content-wrap">
+    <div class="flex items-center flex-wrap justify-between gap20 mb-27">
+        <h3>Sipariş Detayı - @Model.OrderNumber</h3>
+        <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+            <li>
+                <a asp-action="Index" asp-controller="AdminHome">
+                    <div class="text-tiny">Dashboard</div>
+                </a>
+            </li>
+            <li><i class="icon-chevron-right"></i></li>
+            <li>
+                <a asp-action="Index">
+                    <div class="text-tiny">Siparişler</div>
+                </a>
+            </li>
+            <li><i class="icon-chevron-right"></i></li>
+            <li>
+                <div class="text-tiny">@Model.OrderNumber</div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="flex gap20 flex-wrap-mobile">
+        <!-- Sol Taraf - Sipariş Bilgileri -->
+        <div class="wg-box w-half">
+            <h5>Sipariş Bilgileri</h5>
+            <div class="order-info mt-20">
+                <div class="info-item">
+                    <span class="label">Sipariş No:</span>
+                    <span class="value">@Model.OrderNumber</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Sipariş Tarihi:</span>
+                    <span class="value">@Model.OrderDate.ToString("dd.MM.yyyy HH:mm")</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Durum:</span>
+                    <span class="value">
+                        @if (Model.Status == "Pending")
+                        {
+                            <div class="block-status pending">@Model.StatusText</div>
+                        }
+                        else if (Model.Status == "Processing")
+                        {
+                            <div class="block-status processing">@Model.StatusText</div>
+                        }
+                        else if (Model.Status == "Shipped")
+                        {
+                            <div class="block-status shipped">@Model.StatusText</div>
+                        }
+                        else if (Model.Status == "Delivered")
+                        {
+                            <div class="block-status delivered">@Model.StatusText</div>
+                        }
+                        else if (Model.Status == "Cancelled")
+                        {
+                            <div class="block-status cancelled">@Model.StatusText</div>
+                        }
+                        else
+                        {
+                            <div class="block-status">@Model.StatusText</div>
+                        }
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Ödeme Yöntemi:</span>
+                    <span class="value">@Model.PaymentMethod</span>
+                </div>
+            </div>
+
+            <h5 class="mt-30">Müşteri Bilgileri</h5>
+            <div class="order-info mt-20">
+                <div class="info-item">
+                    <span class="label">Ad Soyad:</span>
+                    <span class="value">@Model.BuyerName</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Email:</span>
+                    <span class="value">@Model.BuyerEmail</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Telefon:</span>
+                    <span class="value">@Model.BuyerPhone</span>
+                </div>
+            </div>
+
+            <h5 class="mt-30">Teslimat Adresi</h5>
+            <div class="order-info mt-20">
+                <p class="body-text">@Model.ShippingAddress</p>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.CustomerNote))
+            {
+                <h5 class="mt-30">Müşteri Notu</h5>
+                <div class="order-info mt-20">
+                    <p class="body-text">@Model.CustomerNote</p>
+                </div>
+            }
+        </div>
+
+        <!-- Sağ Taraf - Ürünler ve Durum Güncelleme -->
+        <div class="wg-box w-half">
+            <h5>Sipariş Ürünleri</h5>
+            <div class="order-products mt-20">
+                @foreach (var item in Model.Items)
+                {
+                    <div class="product-item flex gap10 mb-14">
+                        <div class="image">
+                            <img src="@item.ProductImage" alt="@item.ProductName" width="60">
+                        </div>
+                        <div class="flex-grow">
+                            <div class="body-title-2">@item.ProductName</div>
+                            <div class="text-tiny mt-5">
+                                @item.Quantity x @item.UnitPrice.ToString("N2")₺
+                            </div>
+                        </div>
+                        <div class="body-title-2">
+                            @item.TotalPrice.ToString("N2")₺
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="order-summary">
+                <div class="summary-item">
+                    <span>Ara Toplam:</span>
+                    <span>@Model.SubTotal.ToString("N2")₺</span>
+                </div>
+                <div class="summary-item">
+                    <span>Kargo:</span>
+                    <span>@Model.ShippingCost.ToString("N2")₺</span>
+                </div>
+                <div class="summary-item total">
+                    <span><strong>Toplam:</strong></span>
+                    <span><strong>@Model.TotalAmount.ToString("N2")₺</strong></span>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Durum Güncelleme -->
+            <h5 class="mt-30">Sipariş Durumunu Güncelle</h5>
+            <form asp-action="UpdateStatus" method="post" class="form-update-status mt-20">
+                <input type="hidden" name="OrderId" value="@Model.Id" />
+
+                <div class="form-group">
+                    <label>Yeni Durum</label>
+                    <select name="NewStatus" class="form-control">
+                        <option value="Pending" selected="@(Model.Status == "Pending")">Beklemede</option>
+                        <option value="PaymentReceived" selected="@(Model.Status == "PaymentReceived")">Ödeme Alındı</option>
+                        <option value="Processing" selected="@(Model.Status == "Processing")">Hazırlanıyor</option>
+                        <option value="Shipped" selected="@(Model.Status == "Shipped")">Kargoya Verildi</option>
+                        <option value="Delivered" selected="@(Model.Status == "Delivered")">Teslim Edildi</option>
+                        <option value="Cancelled" selected="@(Model.Status == "Cancelled")">İptal Edildi</option>
+                    </select>
+                </div>
+
+                <div class="form-group mt-14">
+                    <label>Kargo Firması</label>
+                    <input type="text" name="CargoCompany" class="form-control"
+                           value="@Model.CargoCompany" placeholder="Örn: Aras Kargo">
+                </div>
+
+                <div class="form-group mt-14">
+                    <label>Takip Numarası</label>
+                    <input type="text" name="TrackingNumber" class="form-control"
+                           value="@Model.TrackingNumber" placeholder="Kargo takip numarası">
+                </div>
+
+                <button type="submit" class="tf-button w-full mt-20">
+                    <i class="icon-save"></i> Güncelle
+                </button>
+            </form>
+
+            @if (!string.IsNullOrEmpty(Model.TrackingNumber))
+            {
+                <div class="shipping-info mt-30">
+                    <h5>Kargo Bilgileri</h5>
+                    <div class="order-info mt-20">
+                        <div class="info-item">
+                            <span class="label">Kargo Firması:</span>
+                            <span class="value">@Model.CargoCompany</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Takip No:</span>
+                            <span class="value">@Model.TrackingNumber</span>
+                        </div>
+                        @if (Model.ShippedAt.HasValue)
+                        {
+                            <div class="info-item">
+                                <span class="label">Kargoya Verilme:</span>
+                                <span class="value">@Model.ShippedAt.Value.ToString("dd.MM.yyyy HH:mm")</span>
+                            </div>
+                        }
+                        @if (Model.DeliveredAt.HasValue)
+                        {
+                            <div class="info-item">
+                                <span class="label">Teslim Tarihi:</span>
+                                <span class="value">@Model.DeliveredAt.Value.ToString("dd.MM.yyyy HH:mm")</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- /main-content-wrap -->
+
+<style>
+    .order-info .info-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+        .order-info .info-item .label {
+            font-weight: 500;
+            color: #666;
+        }
+
+    .order-products .product-item {
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        align-items: center;
+    }
+
+    .order-summary {
+        padding: 20px 0;
+    }
+
+        .order-summary .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+            .order-summary .summary-item.total {
+                border-top: 2px solid #ddd;
+                padding-top: 15px;
+                margin-top: 10px;
+                font-size: 18px;
+            }
+
+    .divider {
+        height: 1px;
+        background: #e0e0e0;
+        margin: 20px 0;
+    }
+
+    .w-half {
+        width: 48%;
+    }
+
+    .form-update-status .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .form-update-status .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+</style>

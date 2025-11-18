@@ -24,5 +24,7 @@ namespace Kitkap.Entity.Services
         Task<ProfileDto?> GetUserProfileAsync(string userId);
         Task<bool> UpdateUserProfileAsync(UpdateProfileDto model);
         Task<bool> ChangePasswordAsync(ChangePasswordDto model);
+
+        Task<bool> AssignRoleAsync(string userId, string roleName);
     }
 }

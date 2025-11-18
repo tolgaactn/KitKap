@@ -2,148 +2,136 @@
 using KitKap.MvcUI.Areas.Admin.ViewModels.AboutViewModels;
 using KitKap.Service.Dtos.AboutDtos;
 using KitKap.Service.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KitKap.MvcUI.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    [AllowAnonymous]
-    [Route("Admin/[controller]/[action]/{id?}")]
-    public class AboutController : Controller
+    [Route("Admin/About")]
+    public class AboutController : BaseAdminController
     {
-            private readonly IAboutService _aboutService;
+        private readonly IAboutService _aboutService;
 
-            public AboutController(IAboutService aboutService)
+        public AboutController(IAboutService aboutService)
+        {
+            _aboutService = aboutService;
+        }
+
+        [HttpGet]
+        [Route("")]
+        [Route("Index")]
+        public async Task<IActionResult> Index(string? search)
+        {
+            var AboutDtos = await _aboutService.GetAllAboutAsync();
+
+            var viewModels = AboutDtos.Select(dto => new AboutViewModel
             {
-                _aboutService = aboutService;
+                AboutId = dto.AboutId,
+                Description = dto.Description,
+                Address = dto.Address,
+                Email = dto.Email,
+                Phone = dto.Phone
+            }).ToList();
+
+            ViewData["TotalCount"] = viewModels.Count();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                viewModels = viewModels.Where(a =>
+                    (a.Description != null && a.Description.ToLower().Contains(search.ToLower().Trim())) ||
+                    (int.TryParse(search.Trim(), out int Id) && a.AboutId == Id)
+                ).ToList();
             }
 
-            [HttpGet]
-            public async Task<IActionResult> Index(string? search)
+            return View(viewModels);
+        }
+
+        [HttpGet]
+        [Route("Create")]
+        public async Task<IActionResult> Create()
+        {
+            var abouts = await _aboutService.GetAllAboutAsync();
+            ViewBag.Abouts = abouts;
+            return View();
+        }
+
+        [HttpPost]
+        [Route("Create")]
+        public async Task<IActionResult> Create(CreateAboutViewModel model)
+        {
+            if (ModelState.IsValid)
             {
-
-                var AboutDtos = await _aboutService.GetAllAboutAsync();
-
-                var viewModels = AboutDtos.Select(dto => new AboutViewModel
+                var about = new CreateAboutDto
                 {
-                    AboutId = dto.AboutId,
-                    Description = dto.Description,
-                    Address = dto.Address,
-                    Email = dto.Email,
-                    Phone = dto.Phone
-                }).ToList();
-
-                ViewData["TotalCount"] = viewModels.Count();
-
-                //if (!string.IsNullOrWhiteSpace(search))
-                //{
-                //    if (int.TryParse(search.Trim(), out int Id))
-                //    {
-                //        viewModels = viewModels.Where(a => a.AboutId == Id).ToList();
-                //    }
-                //    else
-                //    {
-                //        viewModels = viewModels.Where(a => a.Description.ToLower().Contains(search.ToLower().Trim())).ToList();
-                //    }                    
-                //} Id ye veya descriptiona göre search yapıyor (yani id 1 ve description 1 olursa verimizde sadece id 1 olanı gösteriyor)
-
-                if(!string.IsNullOrWhiteSpace(search))
-                {
-                    viewModels = viewModels.Where(a => (a.Description != null && a.Description.ToLower().Contains(search.ToLower().Trim())) || (int.TryParse(search.Trim(), out int Id) && a.AboutId == Id)).ToList();
-                }
-
-                return View(viewModels);
-            }
-            [HttpGet]
-            public async Task<IActionResult> Create()
-            {
-                var abouts = await _aboutService.GetAllAboutAsync();
-                ViewBag.Abouts = abouts;
-                return View();
-            }
-
-            [HttpPost]
-            public async Task<IActionResult> Create(CreateAboutViewModel model)
-            {
-
-                if (ModelState.IsValid)
-                {
-                    var about = new CreateAboutDto
-                    {
-                        Description = model.Description,
-                        Address = model.Address,
-                        Email = model.Email,
-                        Phone = model.Phone
-                    };
-                    await _aboutService.CreateAboutAsync(about);
-
-                    return RedirectToAction("Index");
-                }
-
-                var categories = await _aboutService.GetAllAboutAsync();
-                ViewBag.Categories = categories;
-
-                return View(model);
-            }
-
-            [HttpPost]
-            public async Task<IActionResult> Delete(int id)
-            {
-                await _aboutService.DeleteAboutAsync(id);
-
+                    Description = model.Description,
+                    Address = model.Address,
+                    Email = model.Email,
+                    Phone = model.Phone
+                };
+                await _aboutService.CreateAboutAsync(about);
+                SetSuccessMessage("Hakkımızda bilgisi başarıyla eklendi!");
                 return RedirectToAction("Index");
             }
 
-            [HttpGet]
-            public async Task<IActionResult> Edit(int id)
+            var categories = await _aboutService.GetAllAboutAsync();
+            ViewBag.Categories = categories;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Route("Delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _aboutService.DeleteAboutAsync(id);
+            SetSuccessMessage("Hakkımızda bilgisi başarıyla silindi!");
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        [Route("Edit/{id}")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var AboutDto = await _aboutService.GetByIdAboutAsync(id);
+
+            if (AboutDto == null)
             {
-                var AboutDto = await _aboutService.GetByIdAboutAsync(id);
+                return NotFound();
+            }
 
-                if (AboutDto == null)
-                {
-                    return NotFound();
-                }
+            var model = new AboutViewModel
+            {
+                AboutId = AboutDto.AboutId,
+                Description = AboutDto.Description,
+                Address = AboutDto.Address,
+                Email = AboutDto.Email,
+                Phone = AboutDto.Phone
+            };
 
-                // AboutDto'yu AboutViewModel'e dönüştürüyoruz
-                var model = new AboutViewModel
+            return View(model);
+        }
+
+        [HttpPost]
+        [Route("Edit/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(AboutViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingAbout = new UpdateAboutDto
                 {
-                    AboutId = AboutDto.AboutId,
-                    Description = AboutDto.Description,
-                    Address = AboutDto.Address,
-                    Email = AboutDto.Email,
-                    Phone = AboutDto.Phone
+                    AboutId = model.AboutId,
+                    Description = model.Description,
+                    Address = model.Address,
+                    Email = model.Email,
+                    Phone = model.Phone
                 };
 
-                return View(model); // Düzenleme sayfasını gösterir
+                await _aboutService.UpdateAboutAsync(existingAbout);
+                SetSuccessMessage("Hakkımızda bilgisi başarıyla güncellendi!");
+                return RedirectToAction("Index");
             }
 
-            // Update (Düzenlenmiş kategoriyi kaydeder)
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public async Task<IActionResult> Edit(AboutViewModel model)
-            {
-                if (ModelState.IsValid)
-                {
-
-                    var existingAbout = new UpdateAboutDto
-                    {
-                        AboutId = model.AboutId,
-                        Description = model.Description,
-                        Address = model.Address,
-                        Email = model.Email,
-                        Phone = model.Phone
-                    };
-
-
-                    await _aboutService.UpdateAboutAsync(existingAbout); // Güncellemeyi servis üzerinden yap
-
-                    return RedirectToAction("Index");
-                }
-
-                // Model valid değilse, tekrar edit sayfasına dön
-                return View(model);
-            }
+            return View(model);
         }
     }
-
+}

@@ -21,6 +21,6 @@ namespace KitKap.DataAccess.Identity
         public List<Product> Products { get; set; }
         public List<LoginHistory> LoginHistories { get; set; }
         public bool IsActived { get; set; }
-
+        public DateTime? CreatedDate { get; set; }
     }
 }
