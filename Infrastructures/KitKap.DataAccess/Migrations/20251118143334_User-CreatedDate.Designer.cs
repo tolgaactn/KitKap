@@ -4,6 +4,7 @@ using KitKap.DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KitKap.DataAccess.Migrations
 {
     [DbContext(typeof(KitKapDbContext))]
-    partial class KitKapDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251118143334_User-CreatedDate")]
+    partial class UserCreatedDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,10 +144,10 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             AboutId = 1,
-                            Address = "Türkiye",
-                            Description = "KitKap, 2025 yılında kurulan ve ikinci el kitap alışverişini kolaylaştırmayı hedefleyen modern bir e-ticaret platformudur. \r\n\r\nMisyonumuz, kitap severlerin okudukları kitapları paylaşmalarını ve yeni kitaplara ulaşmalarını kolaylaştırmaktır. Sürdürülebilir okuma alışkanlıkları geliştirerek hem çevreye katkı sağlamayı hem de kitap kültürünü yaygınlaştırmayı amaçlıyoruz.\r\n\r\nKitKap olarak, her kitabın yeni bir okuyucuya ulaşması gerektiğine inanıyoruz. Platformumuz, güvenli ve kullanıcı dostu yapısıyla kitap alım-satımını herkes için erişilebilir hale getiriyor.",
-                            Email = "info@kitkap.com",
-                            Phone = "+90 (543) 905 71 36"
+                            Address = "dsd",
+                            Description = "as",
+                            Email = "sdas",
+                            Phone = "sdwq"
                         });
                 });
 
@@ -221,105 +224,27 @@ namespace KitKap.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2025, 11, 20, 13, 54, 52, 45, DateTimeKind.Local).AddTicks(7773),
-                            Description = "Roman, hikaye, şiir ve edebiyat eserleri",
+                            CreatedDate = new DateTime(2025, 11, 18, 17, 33, 31, 821, DateTimeKind.Local).AddTicks(9733),
+                            Description = "Kitapların olduğu kategori",
                             IsDeleted = false,
-                            Name = "Edebiyat"
+                            Name = "Kitap"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2025, 11, 20, 13, 54, 52, 45, DateTimeKind.Local).AddTicks(7787),
-                            Description = "Bilim, teknoloji ve mühendislik kitapları",
+                            CreatedDate = new DateTime(2025, 11, 18, 17, 33, 31, 821, DateTimeKind.Local).AddTicks(9744),
+                            Description = "Teknolojilerin  olduğu kategori",
                             IsDeleted = false,
-                            Name = "Bilim ve Teknoloji"
+                            Name = "Teknoloji"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2025, 11, 20, 13, 54, 52, 45, DateTimeKind.Local).AddTicks(7788),
-                            Description = "Kişisel gelişim ve motivasyon kitapları",
-                            IsDeleted = false,
-                            Name = "Kişisel Gelişim"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedDate = new DateTime(2025, 11, 20, 13, 54, 52, 45, DateTimeKind.Local).AddTicks(7789),
-                            Description = "Tarih ve biyografi kitapları",
-                            IsDeleted = false,
-                            Name = "Tarih"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedDate = new DateTime(2025, 11, 20, 13, 54, 52, 45, DateTimeKind.Local).AddTicks(7790),
-                            Description = "Çocuklar için hikaye ve eğitim kitapları",
-                            IsDeleted = false,
-                            Name = "Çocuk Kitapları"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedDate = new DateTime(2025, 11, 20, 13, 54, 52, 45, DateTimeKind.Local).AddTicks(7791),
-                            Description = "Türk ve dünya romanları",
+                            CreatedDate = new DateTime(2025, 11, 18, 17, 33, 31, 821, DateTimeKind.Local).AddTicks(9745),
+                            Description = "Romanların olduğu kategori",
                             IsDeleted = false,
                             Name = "Roman",
                             ParentCategoryId = 1
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedDate = new DateTime(2025, 11, 20, 13, 54, 52, 45, DateTimeKind.Local).AddTicks(7792),
-                            Description = "Kısa hikaye koleksiyonları",
-                            IsDeleted = false,
-                            Name = "Hikaye",
-                            ParentCategoryId = 1
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CreatedDate = new DateTime(2025, 11, 20, 13, 54, 52, 45, DateTimeKind.Local).AddTicks(7793),
-                            Description = "Şiir kitapları",
-                            IsDeleted = false,
-                            Name = "Şiir",
-                            ParentCategoryId = 1
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CreatedDate = new DateTime(2025, 11, 20, 13, 54, 52, 45, DateTimeKind.Local).AddTicks(7794),
-                            Description = "Dünya klasikleri",
-                            IsDeleted = false,
-                            Name = "Klasikler",
-                            ParentCategoryId = 1
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CreatedDate = new DateTime(2025, 11, 20, 13, 54, 52, 45, DateTimeKind.Local).AddTicks(7795),
-                            Description = "Programlama ve yazılım geliştirme",
-                            IsDeleted = false,
-                            Name = "Yazılım",
-                            ParentCategoryId = 2
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CreatedDate = new DateTime(2025, 11, 20, 13, 54, 52, 45, DateTimeKind.Local).AddTicks(7796),
-                            Description = "Bilim ve araştırma kitapları",
-                            IsDeleted = false,
-                            Name = "Bilim",
-                            ParentCategoryId = 2
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CreatedDate = new DateTime(2025, 11, 20, 13, 54, 52, 45, DateTimeKind.Local).AddTicks(7797),
-                            Description = "Matematik kitapları",
-                            IsDeleted = false,
-                            Name = "Matematik",
-                            ParentCategoryId = 2
                         });
                 });
 

@@ -16,21 +16,18 @@
                             var actionName = ViewContext.RouteData.Values["action"]?.ToString();
                             var controllerName = ViewContext.RouteData.Values["controller"]?.ToString();
                         }
-
                         <li class="@(actionName == "Index" && controllerName == "Home" ? "active" : "")">
                             <a asp-controller="Home" asp-action="Index">Ana Sayfa</a>
                         </li>
-
                         <li class="@((actionName == "Index" || actionName == "ProductDetail") && controllerName == "ProductList" ? "active" : "")">
-                            <a asp-controller="ProductList" asp-action="Index">Kitaplar</a>
+                            <a asp-controller="ProductList" asp-action="Index">KİTAPLAR</a>
                         </li>
-
-                        <li class="d-none d-lg-block">
-                            <a href="#">Kategoriler</a>
+                        <li class="d-none d-xl-block @(actionName == "Index" && controllerName == "ProductList" ? "active" : "")">
+                            <a asp-controller="ProductList" asp-action="Index" asp-route-SortBy="discount">İNDİRİMLİ ÜRÜNLER</a>
                         </li>
-
-                        <li class="d-none d-xl-block"><a href="#">İndirimli Ürünler</a></li>
-                        <li class="d-none d-xl-block"><a href="#">Satıcı Ol</a></li>
+                        <li class="d-none d-xl-block @(actionName == "About" && controllerName == "Home" ? "active" : "")">
+                            <a asp-controller="Home" asp-action="About">HAKKIMIZDA</a>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -105,7 +102,7 @@
                                 <i class="fas fa-user-plus"></i> Üye Ol
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" asp-controller="Order" asp-action="TrackOrder">
+                            <a class="dropdown-item" asp-controller="ProductList" asp-action="Index">
                                 <i class="fas fa-search"></i> Sipariş Takip
                             </a>
                         }

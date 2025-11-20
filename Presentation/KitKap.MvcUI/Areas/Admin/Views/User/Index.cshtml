@@ -1,0 +1,293 @@
+﻿@using KitKap.MvcUI.Areas.Admin.ViewModels.UserViewModels
+@model List<UserListViewModel>
+@{
+    ViewData["Title"] = "Kullanıcı Yönetimi";
+    var totalCount = ViewData["TotalCount"];
+    var selectedRole = ViewData["SelectedRole"]?.ToString() ?? "All";
+    var searchQuery = ViewData["SearchQuery"]?.ToString() ?? "";
+    var adminCount = ViewData["AdminCount"];
+    var kurumsalCount = ViewData["KurumsalCount"];
+    var bireyselCount = ViewData["BireyselCount"];
+}
+
+<!-- main-content-wrap -->
+<div class="main-content-wrap">
+    <div class="flex items-center flex-wrap justify-between gap20 mb-27">
+        <h3>Kullanıcı Yönetimi</h3>
+        <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+            <li>
+                <a href="@Url.Action("Index", "AdminHome")">
+                    <div class="text-tiny">Dashboard</div>
+                </a>
+            </li>
+            <li><i class="icon-chevron-right"></i></li>
+            <li>
+                <div class="text-tiny">Kullanıcılar</div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- İstatistikler -->
+    <div class="wg-box">
+        <div class="flex items-center justify-between gap10 flex-wrap">
+            <div class="wg-chart-default mb-20">
+                <div class="flex items-center justify-between gap10">
+                    <div class="image">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="52" viewBox="0 0 48 52" fill="none">
+                            <path d="M19.1094 2.12943C22.2034 0.343099 26.0154 0.343099 29.1094 2.12943L42.4921 9.85592C45.5861 11.6423 47.4921 14.9435 47.4921 18.5162V33.9692C47.4921 37.5418 45.5861 40.8431 42.4921 42.6294L29.1094 50.3559C26.0154 52.1423 22.2034 52.1423 19.1094 50.3559L5.72669 42.6294C2.63268 40.8431 0.726688 37.5418 0.726688 33.9692V18.5162C0.726688 14.9435 2.63268 11.6423 5.72669 9.85592L19.1094 2.12943Z" fill="#2377FC" />
+                        </svg>
+                        <i class="icon-users"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between gap10 flex-wrap">
+                            <div class="body-text mb-2">Toplam Kullanıcı</div>
+                        </div>
+                        <h4>@totalCount</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wg-chart-default mb-20">
+                <div class="flex items-center justify-between gap10">
+                    <div class="image">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="52" viewBox="0 0 48 52" fill="none">
+                            <path d="M19.1094 2.12943C22.2034 0.343099 26.0154 0.343099 29.1094 2.12943L42.4921 9.85592C45.5861 11.6423 47.4921 14.9435 47.4921 18.5162V33.9692C47.4921 37.5418 45.5861 40.8431 42.4921 42.6294L29.1094 50.3559C26.0154 52.1423 22.2034 52.1423 19.1094 50.3559L5.72669 42.6294C2.63268 40.8431 0.726688 37.5418 0.726688 33.9692V18.5162C0.726688 14.9435 2.63268 11.6423 5.72669 9.85592L19.1094 2.12943Z" fill="#FF5200" />
+                        </svg>
+                        <i class="icon-shield"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between gap10 flex-wrap">
+                            <div class="body-text mb-2">Admin</div>
+                        </div>
+                        <h4>@adminCount</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wg-chart-default mb-20">
+                <div class="flex items-center justify-between gap10">
+                    <div class="image">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="52" viewBox="0 0 48 52" fill="none">
+                            <path d="M19.1094 2.12943C22.2034 0.343099 26.0154 0.343099 29.1094 2.12943L42.4921 9.85592C45.5861 11.6423 47.4921 14.9435 47.4921 18.5162V33.9692C47.4921 37.5418 45.5861 40.8431 42.4921 42.6294L29.1094 50.3559C26.0154 52.1423 22.2034 52.1423 19.1094 50.3559L5.72669 42.6294C2.63268 40.8431 0.726688 37.5418 0.726688 33.9692V18.5162C0.726688 14.9435 2.63268 11.6423 5.72669 9.85592L19.1094 2.12943Z" fill="#FFB800" />
+                        </svg>
+                        <i class="icon-briefcase"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between gap10 flex-wrap">
+                            <div class="body-text mb-2">Kurumsal</div>
+                        </div>
+                        <h4>@kurumsalCount</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wg-chart-default mb-20">
+                <div class="flex items-center justify-between gap10">
+                    <div class="image">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="52" viewBox="0 0 48 52" fill="none">
+                            <path d="M19.1094 2.12943C22.2034 0.343099 26.0154 0.343099 29.1094 2.12943L42.4921 9.85592C45.5861 11.6423 47.4921 14.9435 47.4921 18.5162V33.9692C47.4921 37.5418 45.5861 40.8431 42.4921 42.6294L29.1094 50.3559C26.0154 52.1423 22.2034 52.1423 19.1094 50.3559L5.72669 42.6294C2.63268 40.8431 0.726688 37.5418 0.726688 33.9692V18.5162C0.726688 14.9435 2.63268 11.6423 5.72669 9.85592L19.1094 2.12943Z" fill="#22C55E" />
+                        </svg>
+                        <i class="icon-user"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between gap10 flex-wrap">
+                            <div class="body-text mb-2">Bireysel</div>
+                        </div>
+                        <h4>@bireyselCount</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtreler -->
+    <div class="wg-box mt-5">
+        <div class="flex items-center justify-between gap10 flex-wrap">
+            <div class="wg-filter flex-grow">
+                <form method="get" class="form-search">
+                    <fieldset class="name">
+                        <input type="text" placeholder="Kullanıcı ara..." name="search"
+                               value="@searchQuery" tabindex="2" aria-required="true">
+                    </fieldset>
+                    <div class="button-submit">
+                        <button type="submit"><i class="icon-search"></i></button>
+                    </div>
+                </form>
+            </div>
+            <div class="flex gap10">
+                <a class="tf-button style-1 w208 @(selectedRole == "All" ? "active" : "")"
+                   asp-action="Index" asp-route-role="All">
+                    Tümü
+                </a>
+                <a class="tf-button style-1 w208 @(selectedRole == "Admin" ? "active" : "")"
+                   asp-action="Index" asp-route-role="Admin">
+                    Admin
+                </a>
+                <a class="tf-button style-1 w208 @(selectedRole == "KurumsalMusteri" ? "active" : "")"
+                   asp-action="Index" asp-route-role="KurumsalMusteri">
+                    Kurumsal
+                </a>
+                <a class="tf-button style-1 w208 @(selectedRole == "BireyselMusteri" ? "active" : "")"
+                   asp-action="Index" asp-route-role="BireyselMusteri">
+                    Bireysel
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kullanıcı Listesi -->
+    <div class="wg-box mt-5">
+        <div class="flex items-center justify-between">
+            <h5>Kullanıcı Listesi</h5>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="wg-table table-all-user mt-20">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Kullanıcı</th>
+                                <th>Email</th>
+                                <th>Telefon</th>
+                                <th>Bakiye</th>
+                                <th>Roller</th>
+                                <th>Durum</th>
+                                <th>Kayıt Tarihi</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="body-title-2">@user.FirstName @user.LastName</div>
+                                        <div class="text-tiny mt-3">@@@user.UserName</div>
+                                    </td>
+                                    <td>
+                                        <div class="body-text">@user.Email</div>
+                                    </td>
+                                    <td>
+                                        <div class="body-text">@(user.PhoneNumber ?? "-")</div>
+                                    </td>
+                                    <td>
+                                        <div class="body-text">@user.Balance.ToString("N2")₺</div>
+                                    </td>
+                                    <td>
+                                        @foreach (var role in user.Roles)
+                                        {
+                                            @if (role == "Admin")
+                                            {
+                                                <span class="badge badge-danger">@role</span>
+                                            }
+                                            else if (role == "KurumsalMusteri")
+                                            {
+                                                <span class="badge badge-warning">Kurumsal</span>
+                                            }
+                                            else if (role == "BireyselMusteri")
+                                            {
+                                                <span class="badge badge-success">Bireysel</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-secondary">@role</span>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (user.IsLocked)
+                                        {
+                                            <div class="block-status cancelled">Kilitli</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="block-status delivered">Aktif</div>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="body-text">@(user.CreatedDate?.ToString("dd.MM.yyyy") ?? "-")</div>
+                                    </td>
+                                    <td>
+                                        <div class="list-icon-function">
+                                            <a asp-action="Detail" asp-route-id="@user.Id"
+                                               class="item eye" title="Detay">
+                                                <i class="icon-eye"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@user.Id"
+                                               class="item edit" title="Düzenle">
+                                                <i class="icon-edit"></i>
+                                            </a>
+                                            @if (!user.Roles.Contains("Admin"))
+                                            {
+                                                <div class="item text-danger delete"
+                                                     onclick="confirmDelete('@user.Id', '@user.FirstName @user.LastName')"
+                                                     title="Sil">
+                                                    <i class="icon-trash-2"></i>
+                                                </div>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="no-data">
+                <div class="text-tiny">Kullanıcı bulunamadı</div>
+            </div>
+        }
+    </div>
+</div>
+<!-- /main-content-wrap -->
+<!-- Delete Form -->
+<form id="delete-form" method="post" style="display: none;">
+    @Html.AntiForgeryToken()
+</form>
+
+<style>
+    .badge {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-right: 4px;
+    }
+
+    .badge-danger {
+        background: #dc3545;
+        color: white;
+    }
+
+    .badge-warning {
+        background: #ffc107;
+        color: #000;
+    }
+
+    .badge-success {
+        background: #28a745;
+        color: white;
+    }
+
+    .badge-secondary {
+        background: #6c757d;
+        color: white;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        function confirmDelete(userId, userName) {
+            if (confirm(`"${userName}" kullanıcısını silmek istediğinize emin misiniz?`)) {
+                const form = document.getElementById('delete-form');
+                form.action = '/Admin/User/Delete/' + userId;
+                form.submit();
+            }
+        }
+    </script>
+}

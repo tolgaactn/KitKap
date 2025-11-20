@@ -136,6 +136,14 @@ namespace KitKap.MvcUI.Controllers
 
             if (result == "OK")
             {
+                // ✅ YENİ KULLANICIYA ROL ATA
+                var userInfo = await _accountService.GetUserByEmailAsync(model.Email);
+                if (userInfo != null)
+                {
+                    // Varsayılan olarak "BireyselMusteri" rolü ata
+                    await _accountService.AssignRoleAsync(userInfo.Id, "BireyselMusteri");
+                }
+
                 // ✅ Kayıt sonrası otomatik giriş yap
                 var loginDto = new LoginUserDto
                 {
@@ -155,12 +163,8 @@ namespace KitKap.MvcUI.Controllers
                         var guestId = CookieHelper.GetGuestId(HttpContext);
                         if (!string.IsNullOrEmpty(guestId))
                         {
-                            var userInfo = await _accountService.GetUserByEmailAsync(model.Email);
-                            if (userInfo != null)
-                            {
-                                await _shoppingCartService.MergeGuestCartToUserAsync(userInfo.Id, guestId);
-                                CookieHelper.RemoveGuestId(HttpContext);
-                            }
+                            await _shoppingCartService.MergeGuestCartToUserAsync(userInfo.Id, guestId);
+                            CookieHelper.RemoveGuestId(HttpContext);
                         }
                     }
                     catch (Exception ex)

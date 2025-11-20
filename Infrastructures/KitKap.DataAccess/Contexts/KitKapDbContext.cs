@@ -61,17 +61,41 @@ namespace KitKap.DataAccess.Contexts
                     .HasForeignKey(p => p.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
 
+            // Kategoriler - KitKap için mantıklı kategoriler
             modelBuilder.Entity<Category>().HasData(
-                
-                new Category { Id=1, Name= "Kitap", Description="Kitapların olduğu kategori"},
-                new Category { Id=2, Name= "Teknoloji", Description="Teknolojilerin  olduğu kategori"},
-                new Category { Id=3, Name= "Roman", Description="Romanların olduğu kategori", ParentCategoryId=1}
+                // Ana Kategoriler
+                new Category { Id = 1, Name = "Edebiyat", Description = "Roman, hikaye, şiir ve edebiyat eserleri" },
+                new Category { Id = 2, Name = "Bilim ve Teknoloji", Description = "Bilim, teknoloji ve mühendislik kitapları" },
+                new Category { Id = 3, Name = "Kişisel Gelişim", Description = "Kişisel gelişim ve motivasyon kitapları" },
+                new Category { Id = 4, Name = "Tarih", Description = "Tarih ve biyografi kitapları" },
+                new Category { Id = 5, Name = "Çocuk Kitapları", Description = "Çocuklar için hikaye ve eğitim kitapları" },
 
-                );
+                // Alt Kategoriler (Edebiyat)
+                new Category { Id = 6, Name = "Roman", Description = "Türk ve dünya romanları", ParentCategoryId = 1 },
+                new Category { Id = 7, Name = "Hikaye", Description = "Kısa hikaye koleksiyonları", ParentCategoryId = 1 },
+                new Category { Id = 8, Name = "Şiir", Description = "Şiir kitapları", ParentCategoryId = 1 },
+                new Category { Id = 9, Name = "Klasikler", Description = "Dünya klasikleri", ParentCategoryId = 1 },
+
+                // Alt Kategoriler (Bilim ve Teknoloji)
+                new Category { Id = 10, Name = "Yazılım", Description = "Programlama ve yazılım geliştirme", ParentCategoryId = 2 },
+                new Category { Id = 11, Name = "Bilim", Description = "Bilim ve araştırma kitapları", ParentCategoryId = 2 },
+                new Category { Id = 12, Name = "Matematik", Description = "Matematik kitapları", ParentCategoryId = 2 }
+            );
+
+            // Hakkımızda Bilgileri
             modelBuilder.Entity<About>().HasData(
+                new About
+                {
+                    AboutId = 1,
+                    Description = @"KitKap, 2025 yılında kurulan ve ikinci el kitap alışverişini kolaylaştırmayı hedefleyen modern bir e-ticaret platformudur.",
 
-                new About { AboutId = 1, Description = "as", Address = "dsd", Email = "sdas", Phone = "sdwq" }
-                );
+                    Address = "İstanbul / Türkiye",
+
+                    Email = "info@kitkap.com",
+
+                    Phone = "+90 (543) 905 71 36"
+                }
+            );
             modelBuilder.Entity<Product>()
                     .HasOne<AppUser>()
                     .WithMany(u => u.Products)

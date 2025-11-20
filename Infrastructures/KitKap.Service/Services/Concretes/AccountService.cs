@@ -14,17 +14,20 @@ namespace KitKap.Service.Services.Concretes
         private readonly IMapper _mapper;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountService(
             UserManager<AppUser> userManager,
             IMapper mapper,
             SignInManager<AppUser> signInManager,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _mapper = mapper;
             _signInManager = signInManager;
             _httpContextAccessor = httpContextAccessor;
+            _roleManager = roleManager;
         }
 
         public async Task<string> CreateUserAsync(RegisterUserDto model)
@@ -117,6 +120,17 @@ namespace KitKap.Service.Services.Concretes
             };
         }
 
+        public async Task<bool> AssignRoleAsync(string userId, string roleName)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return false;
+
+            var roleExists = await _roleManager.RoleExistsAsync(roleName);
+            if (!roleExists) return false;
+
+            var result = await _userManager.AddToRoleAsync(user, roleName);
+            return result.Succeeded;
+        }
         private async Task SaveLoginHistoryAsync(string userId, bool isSuccessful, string ipAddress)
         {
             // Eğer LoginHistory kullanmak isterseniz:

@@ -1,5 +1,6 @@
 using Kitkap.Entity.Services;
 using Kitkap.Service.Services;
+using KitKap.MvcUI.Areas.Admin.ViewModels.AboutViewModels;
 using KitKap.MvcUI.Models;
 using KitKap.MvcUI.ViewModels.HomeViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -141,6 +142,12 @@ namespace KitKap.MvcUI.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public async Task<IActionResult> About()
+        {
+            
+            return View();
         }
     }
 }

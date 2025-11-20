@@ -3,37 +3,44 @@
     ViewData["Title"] = "Kitaplar";
     Layout = "~/Views/Shared/_UILayout.cshtml";
 }
-
 <main class="main">
     @* Banner *@
     @await Component.InvokeAsync("_ProductListBannerComponentPartial")
-
     @* Breadcrumb *@
     @await Component.InvokeAsync("_ProductListBreadcrumbComponentPartial", Model)
-
     <div class="bg-white">
         <div class="container">
             @* Aktif Filtreler *@
             @await Component.InvokeAsync("_ProductListActiveFiltersComponentPartial", Model)
 
+            @* ✅ MOBİL FİLTRE BUTONU (Sadece mobilde göster) *@
+            <div class="d-lg-none mb-3">
+                <button class="btn btn-outline-primary btn-block" type="button" data-toggle="sidebar">
+                    <i class="fas fa-sliders-h"></i> Filtreler
+                </button>
+            </div>
+
             <div class="row main-content">
                 <div class="col-lg-9">
                     @* Sıralama Bar *@
                     @await Component.InvokeAsync("_ProductListStickyHeaderComponentPartial", Model)
-
                     @* Ürün Listesi *@
                     @await Component.InvokeAsync("_ProductListProductsComponentPartial", Model)
-
                     @* Sayfalama *@
                     @await Component.InvokeAsync("_ProductListPaginationComponentPartial", Model)
                 </div>
-
                 <div class="sidebar-overlay"></div>
                 <aside class="sidebar-shop col-lg-3 order-lg-first mobile-sidebar">
                     <div class="sidebar-wrapper">
+                        @* ✅ MOBİL KAPAT BUTONU *@
+                        <div class="d-lg-none text-right mb-2">
+                            <button class="btn btn-link p-0" type="button" data-toggle="sidebar">
+                                <i class="fas fa-times"></i> Kapat
+                            </button>
+                        </div>
+
                         @* Kategori Filtresi *@
                         @await Component.InvokeAsync("_ProductListCategoryFilterComponentPartial", Model)
-
                         @* Fiyat, Durum ve Stok Filtreleri *@
                         @await Component.InvokeAsync("_ProductListPriceFilterComponentPartial", Model)
                     </div>
@@ -42,3 +49,22 @@
         </div>
     </div>
 </main>
+
+@section Scripts {
+    <script>
+        // Mobil sidebar toggle
+        $(document).ready(function() {
+            $('[data-toggle="sidebar"]').on('click', function() {
+                $('.mobile-sidebar').toggleClass('opened');
+                $('.sidebar-overlay').toggleClass('active');
+                $('body').toggleClass('sidebar-opened');
+            });
+
+            $('.sidebar-overlay').on('click', function() {
+                $('.mobile-sidebar').removeClass('opened');
+                $('.sidebar-overlay').removeClass('active');
+                $('body').removeClass('sidebar-opened');
+            });
+        });
+    </script>
+}
