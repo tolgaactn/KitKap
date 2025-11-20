@@ -1,0 +1,296 @@
+﻿@{
+    ViewData["Title"] = "Hakkımızda - KitKap";
+    Layout = "~/Views/Shared/_UILayout.cshtml";
+}
+
+<main class="main about-page">
+    <!-- Demo Uyarı Banner - KALICI -->
+    <div class="bg-warning text-dark text-center py-3 mb-0" style="border-bottom: 3px solid #ffc107;">
+        <div class="container">
+            <strong>⚠️ DEMO PROJE UYARISI:</strong> Bu site portföy projesidir. Gerçek ödeme yapılamaz, ürün satışı yoktur.
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Hakkımızda</li>
+            </ol>
+        </div>
+    </nav>
+
+    <div class="container mt-5 mb-5">
+        <!-- Proje Tanıtımı -->
+        <section class="mb-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="mb-4">KitKap - İkinci El Kitap Platformu</h1>
+                    <p class="lead text-muted">
+                        Modern teknolojilerle geliştirilmiş, tam kapsamlı bir e-ticaret demo projesi.
+                    </p>
+                    <div class="card border-info mb-4">
+                        <div class="card-body bg-light">
+                            <h5 class="text-info">🎯 Proje Amacı</h5>
+                            <p class="mb-0">
+                                KitKap, ASP.NET Core MVC framework'ü kullanarak profesyonel bir e-ticaret
+                                platformunun tüm özelliklerini içeren, portföy amaçlı geliştirilmiş bir demo projedir.
+                                Gerçek dünya senaryolarını simüle ederek modern web geliştirme becerilerimi
+                                sergilemek için tasarlanmıştır.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="/template/assets/images/about-illustration.svg"
+                         alt="KitKap Proje"
+                         class="img-fluid"
+                         style="max-height: 400px;"
+                         onerror="this.style.display='none'">
+                </div>
+            </div>
+        </section>
+
+        <!-- Özellikler -->
+        <section class="mb-5">
+            <h2 class="text-center mb-4">✨ Proje Özellikleri</h2>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-user-shield fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Güvenli Kimlik Doğrulama</h5>
+                            <p class="card-text">
+                                ASP.NET Core Identity ile rol tabanlı yetkilendirme,
+                                kullanıcı kayıt/giriş sistemi ve güvenli oturum yönetimi.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-filter fa-3x text-success mb-3"></i>
+                            <h5 class="card-title">Gelişmiş Filtreleme</h5>
+                            <p class="card-text">
+                                Kategori, fiyat aralığı, ürün durumu, stok durumu ve
+                                arama sorgusu ile çoklu filtreleme sistemi.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-shopping-cart fa-3x text-warning mb-3"></i>
+                            <h5 class="card-title">Sepet Yönetimi</h5>
+                            <p class="card-text">
+                                AJAX ile dinamik sepet işlemleri, miktar güncelleme,
+                                ürün silme ve toplam hesaplama.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-cog fa-3x text-danger mb-3"></i>
+                            <h5 class="card-title">Admin Paneli</h5>
+                            <p class="card-text">
+                                Ürün, kategori, kullanıcı ve sipariş yönetimi için
+                                tam yetkili admin kontrol paneli.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-mobile-alt fa-3x text-info mb-3"></i>
+                            <h5 class="card-title">Responsive Tasarım</h5>
+                            <p class="card-text">
+                                Mobil, tablet ve masaüstü cihazlarda mükemmel
+                                görünüm için tam responsive Bootstrap tasarım.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-database fa-3x text-secondary mb-3"></i>
+                            <h5 class="card-title">N-Tier Mimari</h5>
+                            <p class="card-text">
+                                Entity, DataAccess, Service ve Presentation katmanları
+                                ile temiz kod mimarisi.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Teknolojiler -->
+        <section class="mb-5 bg-light p-5 rounded">
+            <h2 class="text-center mb-4">🛠️ Kullanılan Teknolojiler</h2>
+
+            <div class="row">
+                <!-- Backend -->
+                <div class="col-md-6 mb-4">
+                    <h4 class="mb-3"><i class="fas fa-server text-primary"></i> Backend</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <strong>ASP.NET Core 8.0 MVC</strong>
+                            <p class="text-muted mb-0">Modern web uygulamaları için Microsoft'un açık kaynak framework'ü</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Entity Framework Core 8.0</strong>
+                            <p class="text-muted mb-0">Code-First yaklaşımı ile ORM (Object-Relational Mapping)</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>ASP.NET Core Identity</strong>
+                            <p class="text-muted mb-0">Kimlik doğrulama ve yetkilendirme sistemi</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>LINQ & Lambda Expressions</strong>
+                            <p class="text-muted mb-0">Veri sorgulama ve manipülasyon</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Dependency Injection</strong>
+                            <p class="text-muted mb-0">Gevşek bağlılık ve test edilebilirlik</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Database -->
+                <div class="col-md-6 mb-4">
+                    <h4 class="mb-3"><i class="fas fa-database text-success"></i> Veritabanı</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <strong>Microsoft SQL Server</strong>
+                            <p class="text-muted mb-0">İlişkisel veritabanı yönetim sistemi</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Code-First Migrations</strong>
+                            <p class="text-muted mb-0">Otomatik veritabanı şema yönetimi</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Seed Data</strong>
+                            <p class="text-muted mb-0">Başlangıç verilerinin otomatik eklenmesi</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Frontend -->
+                <div class="col-md-6 mb-4">
+                    <h4 class="mb-3"><i class="fas fa-paint-brush text-warning"></i> Frontend</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <strong>Razor View Engine</strong>
+                            <p class="text-muted mb-0">Server-side rendering ile dinamik HTML oluşturma</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Bootstrap 5</strong>
+                            <p class="text-muted mb-0">Responsive ve modern UI framework</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>jQuery & AJAX</strong>
+                            <p class="text-muted mb-0">Dinamik içerik yükleme ve kullanıcı etkileşimleri</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Font Awesome</strong>
+                            <p class="text-muted mb-0">İkon kütüphanesi</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Custom CSS & JavaScript</strong>
+                            <p class="text-muted mb-0">Özel stil ve etkileşimler</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Architecture -->
+                <div class="col-md-6 mb-4">
+                    <h4 class="mb-3"><i class="fas fa-layer-group text-danger"></i> Mimari & Patterns</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <strong>N-Tier Architecture</strong>
+                            <p class="text-muted mb-0">Katmanlı mimari (Entity, DataAccess, Service, UI)</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Repository Pattern</strong>
+                            <p class="text-muted mb-0">Veri erişim katmanı soyutlaması</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Service Layer Pattern</strong>
+                            <p class="text-muted mb-0">İş mantığının ayrıştırılması</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>DTO (Data Transfer Objects)</strong>
+                            <p class="text-muted mb-0">Katmanlar arası veri taşıma</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>ViewModels</strong>
+                            <p class="text-muted mb-0">View'a özel veri modelleri</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Güvenlik Uyarısı - KALICI KUTU -->
+        <section class="mb-5">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">⚠️ ÖNEMLİ UYARI</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="text-danger">Bu Site Demo Bir Projedir</h5>
+                    <ul class="mb-3">
+                        <li><strong>Gerçek bir e-ticaret sitesi DEĞİLDİR</strong></li>
+                        <li>Ürün satışı yapılmaz, teslimat olmaz</li>
+                        <li>ASLA gerçek ödeme bilgisi girmeyiniz</li>
+                        <li>Tüm IBAN ve ödeme bilgileri demo amaçlıdır</li>
+                        <li>Kayıt olan kullanıcılar demo test amaçlıdır</li>
+                        <li>Veriler herhangi bir zamanda sıfırlanabilir</li>
+                    </ul>
+                    <hr>
+                    <p class="mb-0">
+                        Bu proje, yazılım geliştirme becerilerimi sergilemek ve
+                        portföyümü zenginleştirmek amacıyla oluşturulmuştur.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- İletişim -->
+        <section class="text-center">
+            <h3 class="mb-4">📬 İletişim & Sosyal Medya</h3>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <p><i class="fas fa-envelope"></i> <strong>E-posta:</strong> info@kitkap.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> <strong>Konum:</strong> İstanbul , Türkiye</p>
+                    <div class="mt-4">
+                        <a href="https://www.linkedin.com/in/tolgactn/" target="_blank" class="btn btn-primary btn-lg mx-2">
+                            <i class="fab fa-linkedin"></i> LinkedIn
+                        </a>
+                        <a href="https://github.com/tolgaactn" target="_blank" class="btn btn-dark btn-lg mx-2">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<style>
+    .about-page .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .about-page .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        }
+</style>
